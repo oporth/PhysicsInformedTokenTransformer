@@ -249,7 +249,7 @@ def run_training(config, prefix):
     # Train the transformer for the specified number of epochs.
     train_losses = []
     val_losses = []
-    loss_val_min = np.infty
+    loss_val_min = np.inf
     lrs = []
     shift = 0
     for epoch in tqdm(range(config['epochs'])):

@@ -240,7 +240,7 @@ def run_training(model, config, prefix):
     
     loss_fn = nn.L1Loss(reduction="mean")
     #loss_fn = nn.MSELoss(reduction="mean")
-    loss_val_min = np.infty
+    loss_val_min = np.inf
     
     start_epoch = 0
     

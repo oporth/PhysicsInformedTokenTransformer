@@ -12,7 +12,7 @@ args:
     flnm: 'Heat'
     #flnm: 'Burgers'
     #flnm: 'KdV'
-    data_name: 'varied_heat_10000.h5'
+    data_name: 'heat_1000.h5'
     #data_name: 'varied_burgers_2500.h5'
     #data_name: 'varied_kdv_2500.h5'
     base_path: './pde_data/'

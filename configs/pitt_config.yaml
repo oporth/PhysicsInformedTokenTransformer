@@ -2,10 +2,10 @@ args:
     if_training: True
     results_dir: './1D_results/'
 
-    train_style: 'next_step'
+    train_style: 'next_step' # 'next_step', 'arbitrary_step', 'rollout', 'fixed_future'
 
     transformer: 'pitt'
-    neural_operator: 'oformer' # fno, oformer, deeponet
+    neural_operator: 'fno' # fno, oformer, deeponet
 
     #embedding: 'standard'
     embedding: 'novel'
@@ -20,10 +20,10 @@ args:
     t_train: 200
     model_update: 1
 
-    #flnm: 'Heat'
-    #data_name: 'varied_heat_10000.h5'
-    flnm: 'Burgers'
-    data_name: 'varied_burgers_2500.h5'
+    flnm: 'Heat'
+    data_name: 'heat_1000.h5'
+    #flnm: 'Burgers'
+    #data_name: 'varied_burgers_2500.h5'
     #flnm: 'KdV'
     #data_name: 'varied_kdv_2500.h5'
 
