@@ -289,11 +289,13 @@ class TransformerOperatorDataset(Dataset):
             if(self.train_style == 'next_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
+            elif(self.train_style == 'interpolate'):
+#                idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time-self.initial_step-1]
+                idxs = np.arange(1, len(seed_group[self.name][0])-1)
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time+self.initial_step]
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[:self.sim_time+self.initial_step]
-            
             elif(self.train_style == 'rollout'):
                 length = len(seed_group[self.name][0])
                 idxs = np.arange(0, length)[self.initial_step:length-self.rollout_length]
@@ -305,10 +307,18 @@ class TransformerOperatorDataset(Dataset):
             if(len(self.available_idxs) != 0 and self.train_style != 'fixed_future'):
                 # Needs to make sure it wraps all the way back around...
                 #TODO Make sure this is right
-                #print(self.available_idxs[-1])
-                idxs += self.available_idxs[-1] + 1 if(self.train_style == 'next_step') else \
-                        self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
-						self.available_idxs[-1] + 100 - self.sim_time#self.available_idxs[-1] + 1
+                match self.train_style:
+                    case 'next_step':
+                        idxs += self.available_idxs[-1] + 1
+                    case 'interpolate':
+                        idxs += len(seed_group[self.name][0])
+                    case 'rollout':
+                        idxs += self.available_idxs[-1] + 1 + self.rollout_length
+                    case _:
+                        self.available_idxs[-1] + 100 - self.sim_time
+#                idxs += self.available_idxs[-1] + 1 if (self.train_style == 'next_step' or self.train_style == 'interpolate' ) else \
+#                        self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
+#						self.available_idxs[-1] + 100 - self.sim_time#self.available_idxs[-1] + 1
             self.available_idxs.extend(idxs)
 
             self.grid.append(np.array(seed_group[self.name].attrs["x"], dtype='f'))
@@ -319,7 +329,7 @@ class TransformerOperatorDataset(Dataset):
         self.data = torch.Tensor(np.array(self.data)).to(device=device)#, dtype=torch.float).cuda()
         self.grid = torch.Tensor(np.array(self.grid)).to(device=device)#.cuda()
         self.h5_file.close()
-        #print(self.available_idxs)
+#        print(self.available_idxs)
         #raise
 
         print("\nNUMBER OF SAMPLES: {}".format(len(self.available_idxs)))
@@ -373,7 +383,7 @@ class TransformerOperatorDataset(Dataset):
                 return_tokens = torch.cat((return_tokens, torch.Tensor([len(self.WORDS)]*(500 - len(return_tokens)))))
                 self.all_tokens[idx] = return_tokens.to(device=device)#.cuda()
 
-        elif(self.train_style in ['next_step', 'arbitrary_step'] and self.return_text):
+        elif(self.train_style in ['next_step', 'arbitrary_step', 'interpolate'] and self.return_text):
             # Create array of all legal encodings, pdes, and data
             self.all_tokens = torch.empty(len(self.available_idxs), 500).to(device=device)#.cuda()
 
@@ -502,7 +512,7 @@ class TransformerOperatorDataset(Dataset):
     def __len__(self):
         if(self.train_style == 'fixed_future'):
             return len(self.data_list)
-        elif(self.train_style in ['next_step', 'arbitrary_step']):
+        elif(self.train_style in ['next_step', 'arbitrary_step', 'interpolate']):
             return len(self.available_idxs)
         elif(self.train_style == 'rollout'):
             return len(self.available_idxs)
@@ -545,6 +555,26 @@ class TransformerOperatorDataset(Dataset):
                 return self.data[sim_num][sim_time - self.initial_step:sim_time], \
                                self.data[sim_num][sim_time][np.newaxis], \
                                self.grid[sim_num][np.newaxis]
+
+        elif(self.train_style == 'interpolate'):
+            sim_idx = self.available_idxs[idx]      # Get valid prestored index
+            sim_num = sim_idx // self.data.shape[1] # Get simulation number
+            sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
+
+#            print('shape1 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step:sim_time]).shape))
+#            print('shape2 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step,sim_time+self.initial_step]).shape))
+#            print('shape3 in getitem={}'.format((self.data[sim_num].shape)))
+#            print('shape4 in getitem={}'.format((torch.stack((self.data[sim_num][sim_time-self.initial_step],self.data[sim_num][sim_time+self.initial_step]),dim=0)).shape))
+#            print('type A={}, B={}, C={}, value={}'.format(type(0.5),type(self.time[sim_num][sim_time]),type(self.time[sim_num][sim_time]*0+0.5), self.time[sim_num][sim_time]*0+0.5))
+            if(self.return_text):
+                return torch.stack((self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1]),dim=0),\
+                        self.data[sim_num][sim_time][...,np.newaxis], \
+                        self.grid[sim_num], \
+                        self.all_tokens[idx].to(device=device), \
+                        self.time[sim_num][sim_time]*0+0.5
+            else:
+                raise ValueError("WHOOPSIE, not implemented, is it needed?")
+        
 
         elif(self.train_style == 'arbitrary_step'):
             sim_idx = self.available_idxs[idx]      # Get valid prestored index

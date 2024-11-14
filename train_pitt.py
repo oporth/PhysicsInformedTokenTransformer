@@ -261,6 +261,7 @@ def run_training(config, prefix):
         transformer.train()
         for bn, (x0, y, grid, tokens, t) in enumerate(train_loader):
 
+#            print('shapes x0={}, y={}, grid={}, tokens={}, t={}'.format(x0.shape, y.shape, grid.shape, tokens.shape, t.shape))
             start = time.time()
             y_pred = transformer(grid.to(device=device), tokens.to(device=device), x0.to(device=device), t.to(device=device))
             y = y[...,0].to(device=device)#.cuda()

@@ -104,6 +104,7 @@ class FNO1d(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, grid):
+
         x = torch.cat((x, grid), dim=-1)
         x = self.fc0(x)
         x = x.permute(0, 2, 1)
