@@ -32,7 +32,7 @@ args:
     reduced_resolution: 1
     reduced_resolution_t: 1
     reduced_batch: 1
-    epochs: 200
+    epochs: 100
     num_seeds: 5
 
     # Optimizer

@@ -42,14 +42,17 @@ def custom_collate(batch):
     return x0, y, grid, tokens, forcing, time
 
 
-def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path="progress_plots", seed=None):
+def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path="progress_plots", seed=None):
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
         ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu())
         ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu())
+        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+        
         ax[1][i].plot(y_val_true[i].reshape(100,).detach().cpu())
         ax[1][i].plot(y_val_pred[i].reshape(100,).detach().cpu())
+        ax[1][i].plot(x0_val[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
 
     fname = str(ep)
     while(len(fname) < 8):
@@ -243,8 +246,8 @@ def run_training(config, prefix):
                                                     steps_per_epoch=len(train_loader), epochs=config['epochs'])
     
     # Use mean squared error as the loss function.
-    #loss_fn = nn.MSELoss(reduction='mean')
-    loss_fn = nn.L1Loss(reduction='mean')
+    loss_fn = nn.MSELoss(reduction='mean')
+    #loss_fn = nn.L1Loss(reduction='mean')
     
     # Train the transformer for the specified number of epochs.
     train_losses = []
@@ -280,6 +283,7 @@ def run_training(config, prefix):
             if(bn == 0):
                 y_train_true = y.clone()
                 y_train_pred = y_pred.clone()
+                x0_train     = x0.clone()
 
             scheduler.step()
 
@@ -304,6 +308,7 @@ def run_training(config, prefix):
                 if(bn == 0):
                     y_val_true = y.clone()
                     y_val_pred = y_pred.clone()
+                    x0_val     = x0.clone()
                 all_val_preds.append(y_pred.detach())
     
                 # Compute the loss.
@@ -329,7 +334,7 @@ def run_training(config, prefix):
             print(f"Epoch {epoch+1}: loss = {train_loss:.4f}\t val loss = {val_loss:.4f}")
 
         if(epoch%config['progress_plot_freq'] == 0 and len(y_train_true) >= 4):
-            progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
+            progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path, seed=seed)
 
     try:
         fig, ax = plt.subplots(ncols=3, nrows=2, figsize=(22,15))
