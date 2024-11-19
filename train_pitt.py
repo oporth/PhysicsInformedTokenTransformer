@@ -197,13 +197,13 @@ def get_data(f, config):
 
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=config['batch_size'],
                                                num_workers=config['num_workers'], shuffle=True,
-                                               generator=torch.Generator(device='cuda'))
+                                               generator=torch.Generator(device=device))
     val_loader = torch.utils.data.DataLoader(val_data, batch_size=config['batch_size'],
                                              num_workers=config['num_workers'], shuffle=False,
-                                             generator=torch.Generator(device='cuda'))
+                                             generator=torch.Generator(device=device))
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
                                              num_workers=config['num_workers'], shuffle=False,
-                                             generator=torch.Generator(device='cuda'))
+                                             generator=torch.Generator(device=device))
 
     # Check against data leaks
     assert not (bool(set(train_data.data_list) & \

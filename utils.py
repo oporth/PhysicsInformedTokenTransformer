@@ -483,8 +483,8 @@ class TransformerOperatorDataset(Dataset):
         if(self.return_text):
             self.all_tokens = self.all_tokens.to(device=device)#.cuda()
         self.time = torch.Tensor(self.time).to(device=device)
-        self.data = self.data.cuda()
-        self.grid = self.grid.cuda()
+        self.data = torch.Tensor(np.array(self.data)).to(device=device)#, dtype=torch.float).cuda()
+        self.grid = torch.Tensor(np.array(self.grid)).to(device=device)#.cuda()
 
     def _encode_tokens(self, all_tokens):
         encoded_tokens = []
