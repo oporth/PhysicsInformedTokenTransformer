@@ -1,6 +1,6 @@
 args:
     if_training: True
-    results_dir: './1D_results/'
+    results_dir: './1D_results_sim_time2/'
 
     train_style: 'interpolate' # 'interpolate', 'next_step', 'arbitrary_step', 'rollout', 'fixed_future'
 
@@ -33,7 +33,7 @@ args:
     reduced_resolution_t: 1
     reduced_batch: 1
     epochs: 100
-    num_seeds: 5
+    num_seeds: 3
 
     # Optimizer
     learning_rate: 1.e-3
@@ -45,14 +45,14 @@ args:
     #
     num_x: 100
     num_t: 100
-    sim_time: 1000
-    num_samples: 10
+    sim_time: 4
+    num_samples:
 
     # Transformer
     hidden: 64
     layers: 1
     heads: 1
-    dropout: 0.05
+    dropout: 0.2
 
     # Tracking
     log_freq: 1
