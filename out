@@ -1,0 +1,29 @@
+
+SEED: 0
+
+Filename: Heat, Seed: 0
+
+
+SEED: 0
+Gathering data...
+
+NUMBER OF SAMPLES: 331200
+Processing data...
+
+SEED: 0
+Gathering data...
+
+NUMBER OF SAMPLES: 110400
+Processing data...
+
+SEED: 0
+Gathering data...
+
+NUMBER OF SAMPLES: 110400
+Processing data...
+
+USING NOVEL EMBEDDING
+Total parameters = 227826
+
+WEIGHT DECAY: 1e-05
+

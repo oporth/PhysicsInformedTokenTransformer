@@ -291,7 +291,7 @@ class TransformerOperatorDataset(Dataset):
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
             elif(self.train_style == 'interpolate'):
 #                idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time-self.initial_step-1]
-                idxs = np.arange(1, len(seed_group[self.name][0])-1)
+                idxs = np.arange(self.initial_step//2, len(seed_group[self.name][0])-self.initial_step//2)
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time+self.initial_step]
@@ -562,12 +562,12 @@ class TransformerOperatorDataset(Dataset):
             sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
 
 #            print('shape1 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step:sim_time]).shape))
-#            print('shape2 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step,sim_time+self.initial_step]).shape))
+#            print('shape2 in getitem={}'.format((self.data[sim_num][np.r_[sim_time-(self.initial_step//2):sim_time, sim_time+1:(sim_time+self.initial_step//2)+1], :]).shape))
 #            print('shape3 in getitem={}'.format((self.data[sim_num].shape)))
-#            print('shape4 in getitem={}'.format((torch.stack((self.data[sim_num][sim_time-self.initial_step],self.data[sim_num][sim_time+self.initial_step]),dim=0)).shape))
+#            print('shape4 in getitem={}'.format((torch.stack((self.data[sim_num][sim_time-2],self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1],self.data[sim_num][sim_time+2]),dim=0)).shape))
 #            print('type A={}, B={}, C={}, value={}'.format(type(0.5),type(self.time[sim_num][sim_time]),type(self.time[sim_num][sim_time]*0+0.5), self.time[sim_num][sim_time]*0+0.5))
             if(self.return_text):
-                return torch.stack((self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1]),dim=0),\
+                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*1:sim_time:1, sim_time+1:sim_time+(self.initial_step//2)*1+1:1], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \

@@ -1,0 +1,13 @@
+Using backend: pytorch
+Other supported backends: tensorflow.compat.v1, tensorflow, jax, paddle.
+paddle supports more examples now and is recommended.
+  0%|          | 0/6 [00:00<?, ?it/s]100%|██████████| 6/6 [00:00<00:00, 140.06it/s]
+0it [00:00, ?it/s]137it [00:00, 1365.45it/s]306it [00:00, 1554.07it/s]475it [00:00, 1614.82it/s]576it [00:00, 1596.74it/s]
+/home/13422855/code/PhysicsInformedTokenTransformer/utils.py:485: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/conda/conda-bld/pytorch_1729647378361/work/torch/csrc/utils/tensor_new.cpp:278.)
+  self.time = torch.Tensor(self.time).to(device=device)
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 390.86it/s]
+0it [00:00, ?it/s]170it [00:00, 1695.69it/s]192it [00:00, 1695.23it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 403.94it/s]
+0it [00:00, ?it/s]170it [00:00, 1699.66it/s]192it [00:00, 1698.63it/s]
+  0%|          | 0/100 [00:00<?, ?it/s]/home/13422855/.conda/envs/pitt/lib/python3.12/site-packages/torch/nn/modules/instancenorm.py:115: UserWarning: input's size at dim=1 does not match num_features. You can silence this warning by not passing in num_features, which is not used because affine=False
+  warnings.warn(
