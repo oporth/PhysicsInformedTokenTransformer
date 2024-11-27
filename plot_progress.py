@@ -5,6 +5,7 @@ fig, ax = plt.subplots()
 test_l2s = []
 for i in range(5):
     try:
+        ax.set_yscale('log')
         ax.plot(np.load("./train_l2s_{}.npy".format(i)))
         ax.plot(np.load("./val_l2s_{}.npy".format(i)))
         train_vals = np.load("./train_l2s_{}.npy".format(i))
@@ -23,3 +24,4 @@ try:
 except IndexError:
     print("No completed runs.")
 plt.show()
+fig.savefig('progress.png')

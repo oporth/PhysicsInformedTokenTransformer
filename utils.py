@@ -291,7 +291,7 @@ class TransformerOperatorDataset(Dataset):
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
             elif(self.train_style == 'interpolate'):
 #                idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time-self.initial_step-1]
-                idxs = np.arange(self.initial_step//2*2, len(seed_group[self.name][0])-self.initial_step//2*2)
+                idxs = np.arange(self.initial_step//2*2, min(len(seed_group[self.name][0]),self.sim_time)-self.initial_step//2*2)
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time+self.initial_step]
