@@ -291,7 +291,7 @@ class TransformerOperatorDataset(Dataset):
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
             elif(self.train_style == 'interpolate'):
 #                idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time-self.initial_step-1]
-                idxs = np.arange(self.initial_step//2*2, min(len(seed_group[self.name][0]),self.sim_time)-self.initial_step//2*2)
+                idxs = np.arange(self.initial_step//2*4, min(len(seed_group[self.name][0])-self.initial_step//2*4,self.sim_time))
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time+self.initial_step]
@@ -567,7 +567,7 @@ class TransformerOperatorDataset(Dataset):
 #            print('shape4 in getitem={}'.format((torch.stack((self.data[sim_num][sim_time-2],self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1],self.data[sim_num][sim_time+2]),dim=0)).shape))
 #            print('type A={}, B={}, C={}, value={}'.format(type(0.5),type(self.time[sim_num][sim_time]),type(self.time[sim_num][sim_time]*0+0.5), self.time[sim_num][sim_time]*0+0.5))
             if(self.return_text):
-                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*2:sim_time:2, sim_time+1:sim_time+(self.initial_step//2)*2+1:2], :],\
+                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*4:sim_time:4, sim_time+1:sim_time+(self.initial_step//2)*4+1:4], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \
