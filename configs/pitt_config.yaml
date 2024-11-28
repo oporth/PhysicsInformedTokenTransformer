@@ -1,6 +1,6 @@
 args:
     if_training: True
-    results_dir: './1D_results_sim_time2/'
+    results_dir: './1D_results_after_utilbugfix/'
 
     train_style: 'interpolate' # 'interpolate', 'next_step', 'arbitrary_step', 'rollout', 'fixed_future'
 

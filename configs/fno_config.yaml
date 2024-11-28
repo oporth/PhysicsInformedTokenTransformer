@@ -1,11 +1,11 @@
 args:
     device: 'cuda:0'
-    train_style: 'next_step' 
-    results_dir: './1D_results/'
+    train_style: 'interpolate' 
+    results_dir: './1D_results_fnodebug/'
     num_workers: 0
     batch_size: 256
     #initial_step: 10
-    initial_step: 10
+    initial_step: 2
     rollout_length: 5
     t_train: 200
     validate: 1
@@ -26,7 +26,7 @@ args:
     weight_decay: 1.e-7
     scheduler_step: 50
     scheduler_gamma: 0.5
-    epochs: 11
+    epochs: 101
     num_seeds: 2
 
     # Sim samples
