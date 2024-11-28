@@ -29,14 +29,16 @@ import h5py
 from matplotlib import pyplot as plt
 
 
-def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path="progress_plots", seed=None):
-    ncols = 4
+def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path="progress_plots", seed=None):
+    ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
         ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu())
         ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu())
+        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
         ax[1][i].plot(y_val_true[i].reshape(100,).detach().cpu())
         ax[1][i].plot(y_val_pred[i].reshape(100,).detach().cpu())
+        ax[1][i].plot(x0_val[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
 
     fname = str(ep)
     while(len(fname) < 8):
@@ -267,6 +269,7 @@ def run_training(model, config, prefix):
             if(bn == 0):
                 y_train_true = yy[:,0,:].clone()
                 y_train_pred = im.clone()
+                x0_train     = xx.clone()
 
             train_l2_step += loss.item()
             train_l2_full += loss.item()
@@ -302,6 +305,7 @@ def run_training(model, config, prefix):
                     if(bn == 0):
                         y_val_true = yy[:,0,:].clone()
                         y_val_pred = im.clone()
+                        x0_val     = xx.clone()
 
                     val_l2_step += loss.item()
                     val_l2_full += loss.item()
@@ -334,7 +338,7 @@ def run_training(model, config, prefix):
             np.save("./{}/val_l2s_{}.npy".format(path, seed), val_l2s)
 
         if(ep%config['progress_plot_freq'] == 0 and len(y_train_true) >= 4):
-            progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
+            progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path, seed=seed)
 
 
     # Make sure to capture last
@@ -342,7 +346,7 @@ def run_training(model, config, prefix):
           .format(ep, loss.item(), t2 - t1, train_l2s[-1], val_l2s[-1]))
     np.save("./{}/train_l2s_{}.npy".format(path, seed), train_l2s)
     np.save("./{}/val_l2s_{}.npy".format(path, seed), val_l2s)
-    progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
+    progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path, seed=seed)
 
     test_vals = []
     #model.eval()

@@ -281,6 +281,7 @@ class TransformerOperatorDataset(Dataset):
         #print(len(self.data_list))
         #raise
         print("Gathering data...")
+        nsets=1
         for i in tqdm(range(len(self.data_list))):
             #print(self.data_list[i])
             seed_group = self.h5_file[self.data_list[i]]
@@ -290,7 +291,6 @@ class TransformerOperatorDataset(Dataset):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
             elif(self.train_style == 'interpolate'):
-#                idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time-self.initial_step-1]
                 idxs = np.arange(1, min(len(seed_group[self.name][0]),self.sim_time)-1)
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
@@ -311,7 +311,8 @@ class TransformerOperatorDataset(Dataset):
                     case 'next_step':
                         idxs += self.available_idxs[-1] + 1
                     case 'interpolate':
-                        idxs += len(seed_group[self.name][0])
+                        idxs += nsets * len(seed_group[self.name][0])
+                        nsets += 1
                     case 'rollout':
                         idxs += self.available_idxs[-1] + 1 + self.rollout_length
                     case _:
@@ -560,12 +561,7 @@ class TransformerOperatorDataset(Dataset):
             sim_idx = self.available_idxs[idx]      # Get valid prestored index
             sim_num = sim_idx // self.data.shape[1] # Get simulation number
             sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
-
-#            print('shape1 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step:sim_time]).shape))
-#            print('shape2 in getitem={}'.format((self.data[sim_num][sim_time-self.initial_step,sim_time+self.initial_step]).shape))
-#            print('shape3 in getitem={}'.format((self.data[sim_num].shape)))
-#            print('shape4 in getitem={}'.format((torch.stack((self.data[sim_num][sim_time-self.initial_step],self.data[sim_num][sim_time+self.initial_step]),dim=0)).shape))
-#            print('type A={}, B={}, C={}, value={}'.format(type(0.5),type(self.time[sim_num][sim_time]),type(self.time[sim_num][sim_time]*0+0.5), self.time[sim_num][sim_time]*0+0.5))
+            
             if(self.return_text):
                 return torch.stack((self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1]),dim=0),\
                         self.data[sim_num][sim_time][...,np.newaxis], \
@@ -573,8 +569,9 @@ class TransformerOperatorDataset(Dataset):
                         self.all_tokens[idx].to(device=device), \
                         self.time[sim_num][sim_time]*0+0.5
             else:
-                raise ValueError("WHOOPSIE, not implemented, is it needed?")
-        
+                return torch.stack((self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1]),dim=0),\
+                        self.data[sim_num][sim_time][np.newaxis], \
+                        self.grid[sim_num][np.newaxis]        
 
         elif(self.train_style == 'arbitrary_step'):
             sim_idx = self.available_idxs[idx]      # Get valid prestored index
