@@ -154,6 +154,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'],
     )
     train_data.data = train_data.data.to(device)
@@ -172,6 +173,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'],
     )
     val_data.data = val_data.data.to(device)
@@ -190,6 +192,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'], 
     )
     test_data.data = test_data.data.to(device)

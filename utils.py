@@ -183,6 +183,7 @@ class TransformerOperatorDataset(Dataset):
                  num_samples=None,
                  return_text=False,
                  rollout_length=10,
+                 interval=1,
                  train_style='fixed_future',
                  ssl=False, forcing=False, seed=0,
                  ):
@@ -258,6 +259,7 @@ class TransformerOperatorDataset(Dataset):
         # Time steps used as initial conditions
         self.initial_step = initial_step
         self.rollout_length = rollout_length
+        self.interval = interval
 
         self.WORDS = ['(', ')', '+', '-', '*', '/', 'Derivative', 'Sum', 'j', 'A_j', 'l_j',
                  'omega_j', 'phi_j'    , 'sin', 't', 'u', 'x', 'dirichlet', 'neumann',
@@ -563,7 +565,7 @@ class TransformerOperatorDataset(Dataset):
             sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
 
             if(self.return_text):
-                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*4:sim_time:4, sim_time+1:sim_time+(self.initial_step//2)*4+1:4], :],\
+                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+1:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \
