@@ -293,7 +293,8 @@ class TransformerOperatorDataset(Dataset):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
             elif(self.train_style == 'interpolate'):
-                idxs = np.arange(self.initial_step//2*4, min(len(seed_group[self.name][0])-self.initial_step//2*4,self.sim_time))
+                start_idx = self.initial_step//2*self.interval
+                idxs = np.arange(start_idx, min(len(seed_group[self.name][0])-start_idx,start_idx+self.sim_time))
             elif(self.train_style == 'arbitrary_step'):
                 #idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time]
                 idxs = np.arange(0, len(seed_group[self.name][0]))[self.initial_step:self.sim_time+self.initial_step]
@@ -565,7 +566,7 @@ class TransformerOperatorDataset(Dataset):
             sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
 
             if(self.return_text):
-                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+1:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
+                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \

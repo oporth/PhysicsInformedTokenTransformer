@@ -7,23 +7,11 @@ Filename: Heat, Seed: 0
 SEED: 0
 Gathering data...
 
-NUMBER OF SAMPLES: 43200
+NUMBER OF SAMPLES: 36000
 Processing data...
 
 SEED: 0
 Gathering data...
 
-NUMBER OF SAMPLES: 14400
+NUMBER OF SAMPLES: 12000
 Processing data...
-
-SEED: 0
-Gathering data...
-
-NUMBER OF SAMPLES: 14400
-Processing data...
-
-USING NOVEL EMBEDDING
-Total parameters = 227826
-
-WEIGHT DECAY: 1e-05
-

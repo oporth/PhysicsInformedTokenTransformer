@@ -12,6 +12,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import os
 import shutil
+import csv
 
 from models.pitt import PhysicsInformedTokenTransformer
 from models.pitt import StandardPhysicsInformedTokenTransformer
@@ -24,6 +25,9 @@ import sys
 
 device = 'cuda' if(torch.cuda.is_available()) else 'cpu'
 
+best_loss = []
+mean_val_loss = []
+lin_loss = []
 
 def custom_collate(batch):
     x0 = torch.empty((len(batch), batch[0][0].shape[0]))
@@ -64,6 +68,28 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_tr
     plt.close()
 
 
+def progress_plot_test(y_test_true, y_test_pred, x0_test, path="progress_plots", seed=None):
+    ncols = 8
+    fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
+    for i in range(ncols):
+        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu())
+        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu())
+        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+   
+        ax[1][i].plot(y_test_true[i+ncols].reshape(100,).detach().cpu())
+        ax[1][i].plot(y_test_pred[i+ncols].reshape(100,).detach().cpu())
+        ax[1][i].plot(x0_test[i+ncols].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+
+    fname='test'
+    while(len(fname) < 8):
+        fname = '0' + fname
+    if(seed is not None):
+        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+    else:
+        plt.savefig("./{}/{}.png".format(path, fname))
+    plt.close()
+
+
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
     im_num = 0
     for vals in val_loader:
@@ -81,12 +107,16 @@ def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
 
             im_num += 1
 
+def lin_interpolation(x0):
+    mid_frame = torch.mean(x0, dim=1)
+    return mid_frame
 
-def evaluate(test_loader, transformer, loss_fn):
+def evaluate(test_loader, transformer, loss_fn, path, plot=False):
     #src_mask = generate_square_subsequent_mask(640).cuda()
     with torch.no_grad():
         transformer.eval()
         test_loss = 0
+        lin_loss = 0
         for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
         #for bn, (x, y, grid, tokens, x0) in enumerate(test_loader):
             # Forward pass: compute predictions by passing the input sequence
@@ -96,11 +126,16 @@ def evaluate(test_loader, transformer, loss_fn):
             #y_pred = transformer(grid.to(device=device), x0.to(device=device), x0.to(device=device), t.to(device=device))
             #y_pred = transformer(grid.cuda(), tokens.cuda(), x0.cuda())#, src_mask)#[:,0,:]
             y = y[...,0].to(device=device)
+
+            #y_lin = lin_interpolation(x0)    
     
             # Compute the loss.
             test_loss += loss_fn(y_pred, y).item()
-
-    return test_loss/(bn+1)
+            #lin_loss += loss_fn(y_lin, y).item()
+        
+        if plot==True:
+            progress_plot_test(y, y_pred, x0, path, seed=seed)
+    return test_loss/(bn+1), lin_loss/(bn+1)
 
 
 def generate_square_subsequent_mask(sz: int):
@@ -255,6 +290,7 @@ def run_training(config, prefix):
     # Train the transformer for the specified number of epochs.
     train_losses = []
     val_losses = []
+    test_losses = []
     loss_val_min = np.inf
     lrs = []
     shift = 0
@@ -329,12 +365,16 @@ def run_training(config, prefix):
         val_loss /= (bn + 1)
         val_losses.append(val_loss)
 
+        test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path)
+        test_losses.append(test_value)
+
         # Print the loss at the end of each epoch.
         if(epoch%config['log_freq'] == 0):
             np.save("./{}/train_l2s_{}.npy".format(path, seed), train_losses)
             np.save("./{}/val_l2s_{}.npy".format(path, seed), val_losses)
             np.save("./{}/lrs_{}.npy".format(path, seed), lrs)
-            print(f"Epoch {epoch+1}: loss = {train_loss:.4f}\t val loss = {val_loss:.4f}")
+            np.save("./{}/test_l2s_{}.npy".format(path, seed), test_losses)
+            print(f"Epoch {epoch+1}: loss = {train_loss:.5f}\t val loss = {val_loss:.5f}\t test loss = {test_value:.5f}")
 
         if(epoch%config['progress_plot_freq'] == 0 and len(y_train_true) >= 4):
             progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path, seed=seed)
@@ -387,13 +427,18 @@ def run_training(config, prefix):
         pass
 
     test_vals = []
-    test_value = evaluate(test_loader, transformer, loss_fn)
+    test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
+#   model_path = path + "/" + "Heat_pitt_4.pt"
     transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
-    test_value = evaluate(test_loader, transformer, loss_fn)
+    test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
+    print("test value for linear interpolation: {0:5f}".format(lin_value))
+    best_loss.append(test_value)
+    lin_loss.append(lin_value)
+    mean_val_loss.append(sum(val_losses[-50:])/len(val_losses[-50:]))
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['transformer'],
                                                  config['neural_operator'],  prefix, seed), test_vals)
 
@@ -424,9 +469,19 @@ if __name__ == '__main__':
     for seed in range(train_args.pop('num_seeds')):
         #if(seed == 0):
         #    continue
+        #seed = 2
         print("\nSEED: {}\n".format(seed))
         torch.manual_seed(seed)
         np.random.seed(seed)
         train_args['seed'] = seed
         run_training(train_args, prefix)
+
+        
+    csv_file_path = "{}{}_{}_{}/test_vals_step{}_int{}.csv".format(train_args['results_dir'], train_args['transformer'], train_args['neural_operator'], prefix, train_args['initial_step'], train_args['interval'])
+
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(best_loss)
+        writer.writerow(mean_val_loss)
+        writer.writerow(lin_loss)
     

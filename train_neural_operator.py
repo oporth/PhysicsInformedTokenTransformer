@@ -28,6 +28,8 @@ from tqdm import tqdm
 import h5py
 from matplotlib import pyplot as plt
 
+best_loss = []
+mean_val_loss = []
 
 def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path="progress_plots", seed=None):
     ncols = 8
@@ -123,6 +125,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'],
     )
     train_data.data = train_data.data.to(device)
@@ -142,6 +145,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'],
     )
     val_data.data = val_data.data.to(device)
@@ -161,6 +165,7 @@ def get_data(f, config):
                             num_samples=config['num_samples'],
                             train_style=config['train_style'],
                             rollout_length=config['rollout_length'],
+                            interval=config['interval'],
                             seed=config['seed'],
     )
     test_data.data = test_data.data.to(device)
@@ -240,8 +245,8 @@ def run_training(model, config, prefix):
     else:
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=config['scheduler_step'], gamma=config['scheduler_gamma'])
     
-    loss_fn = nn.L1Loss(reduction="mean")
-    #loss_fn = nn.MSELoss(reduction="mean")
+    #loss_fn = nn.L1Loss(reduction="mean")
+    loss_fn = nn.MSELoss(reduction="mean")
     loss_val_min = np.inf
     
     start_epoch = 0
@@ -358,6 +363,8 @@ def run_training(model, config, prefix):
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("./{}/test_vals_{}.npy".format(path, seed), test_vals)
+    best_loss.append(test_value)
+    mean_val_loss.append(sum(val_l2s[-50:])/len(val_l2s[-50:]))
     model.train()
             
 if __name__ == "__main__":
@@ -380,7 +387,8 @@ if __name__ == "__main__":
     # Get arguments and get rid of unnecessary ones
     train_args = config['args']
     train_args['model_name'] = model_name
-    device = train_args['device']
+    #device = train_args['device']
+    device = 'cuda' if(torch.cuda.is_available()) else 'cpu'
     prefix = train_args['flnm'] + "_" + train_args['data_name'].split("_")[0] + "_" + train_args['train_style']
     os.makedirs("{}{}_{}".format(train_args['results_dir'], model_name, prefix), exist_ok=True)
     shutil.copy("./configs/{}_config.yaml".format(model_name),
@@ -398,3 +406,11 @@ if __name__ == "__main__":
         model = get_model(model_name, train_args)
         run_training(model, train_args, prefix)
     print("Done.")
+
+    csv_file_path = "{}{}_{}/test_vals_step{}_int{}.csv".format(train_args['results_dir'], model_name, prefix, train_args['initial_step'], train_args['interval'])
+
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(best_loss)
+        writer.writerow(mean_val_loss)
+        

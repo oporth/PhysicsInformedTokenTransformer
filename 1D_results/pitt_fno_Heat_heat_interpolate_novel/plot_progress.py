@@ -24,3 +24,4 @@ try:
 except IndexError:
     print("No completed runs.")
 plt.show()
+fig.savefig('progress.png')

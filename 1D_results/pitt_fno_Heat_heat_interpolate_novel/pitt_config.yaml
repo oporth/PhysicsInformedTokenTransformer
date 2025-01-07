@@ -16,7 +16,7 @@ args:
     rollout_length: 1
     num_workers: 0
     batch_size: 128
-    initial_step: 8
+    initial_step: 2
     t_train: 200
     model_update: 1
 
@@ -33,7 +33,7 @@ args:
     reduced_resolution_t: 1
     reduced_batch: 1
     epochs: 100
-    num_seeds: 2
+    num_seeds: 5
 
     # Optimizer
     learning_rate: 1.e-3
@@ -45,8 +45,9 @@ args:
     #
     num_x: 100
     num_t: 100
-    sim_time: 4
-    num_samples: 200
+    sim_time: 2
+    num_samples:
+    interval: 1
 
     # Transformer
     hidden: 64
