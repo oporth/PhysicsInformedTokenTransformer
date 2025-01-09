@@ -572,6 +572,10 @@ class TransformerOperatorDataset(Dataset):
                         self.all_tokens[idx].to(device=device), \
                         self.time[sim_num][sim_time]*0+0.5
             else:
+                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
+                        self.data[sim_num][sim_time][np.newaxis], \
+                        self.grid[sim_num][np.newaxis]  
+            
                 return torch.stack((self.data[sim_num][sim_time-1],self.data[sim_num][sim_time+1]),dim=0),\
                         self.data[sim_num][sim_time][np.newaxis], \
                         self.grid[sim_num][np.newaxis]        
