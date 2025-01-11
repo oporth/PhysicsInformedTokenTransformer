@@ -1,11 +1,11 @@
 args:
     device: 'cuda:0'
     train_style: 'interpolate' 
-    results_dir: './1D_results_fnodebug/'
+    results_dir: './1D_results_fno_nodropout_fix_4s/'
     num_workers: 0
-    batch_size: 256
-    #initial_step: 10
-    initial_step: 2
+    batch_size: 128
+    initial_step: 4
+    interval: 16
     rollout_length: 1
     t_train: 200
     validate: 1
@@ -21,12 +21,14 @@ args:
     reduced_resolution_t: 1
     reduced_batch: 1
 
+
     # Optimizer
-    learning_rate: 1.e-2
-    weight_decay: 1.e-7
-    scheduler_step: 50
-    scheduler_gamma: 0.5
-    epochs: 101
+    learning_rate: 1.e-3
+    weight_decay: 1.e-5
+    scheduler_step: 200
+    scheduler_gamma: 0.1
+    training_type: single
+    epochs: 100
     num_seeds: 5
 
     # Sim samples
@@ -34,14 +36,13 @@ args:
     num_x: 100
     sim_time: 1
     num_samples:
-    interval: 48
 
     # FNO
     num_channels: 1
-    modes: 8
-    width: 256
+    modes: 4
+    width: 64
     #width: 100
-    dropout: 0. # Default
+    dropout: 0.0 # Default
 
     # Tracking
     log_freq: 1
