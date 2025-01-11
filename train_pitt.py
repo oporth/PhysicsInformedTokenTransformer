@@ -127,14 +127,14 @@ def evaluate(test_loader, transformer, loss_fn, path, plot=False):
             #y_pred = transformer(grid.cuda(), tokens.cuda(), x0.cuda())#, src_mask)#[:,0,:]
             y = y[...,0].to(device=device)
 
-            #y_lin = lin_interpolation(x0)    
-    
             # Compute the loss.
             test_loss += loss_fn(y_pred, y).item()
-            #lin_loss += loss_fn(y_lin, y).item()
+
+            y_lin = lin_interpolation(x0)
+            lin_loss += loss_fn(y_lin, y).item()
         
-        if plot==True:
-            progress_plot_test(y, y_pred, x0, path, seed=seed)
+    if plot==True:
+        progress_plot_test(y, y_pred, x0, path, seed=seed)
     return test_loss/(bn+1), lin_loss/(bn+1)
 
 

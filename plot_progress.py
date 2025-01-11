@@ -6,8 +6,9 @@ test_l2s = []
 for i in range(5):
     try:
         ax.set_yscale('log')
-        ax.plot(np.load("./train_l2s_{}.npy".format(i)))
-        ax.plot(np.load("./val_l2s_{}.npy".format(i)))
+        ax.plot(np.load("./train_l2s_{}.npy".format(i)), label="train seed {}".format(i))
+        ax.plot(np.load("./val_l2s_{}.npy".format(i)), label="validation seed {}".format(i))
+        ax.plot(np.load("./test_l2s_{}.npy".format(i)), label="test seed {}".format(i))
         train_vals = np.load("./train_l2s_{}.npy".format(i))
         val_vals = np.load("./val_l2s_{}.npy".format(i))
         test_per_epoch = np.load("./test_l2s_{}.npy".format(i))
@@ -24,5 +25,6 @@ try:
     print("TEST MSE: {0:.6f} \t {1:.6f}".format(np.mean(test_l2s, axis=0)[1], np.std(test_l2s, axis=0)[1]))
 except IndexError:
     print("No completed runs.")
+plt.legend()
 plt.show()
 fig.savefig('progress.png')

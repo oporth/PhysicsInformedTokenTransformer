@@ -1,3 +1,23 @@
+Thu Jan  9 09:22:12 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.03              Driver Version: 560.35.03      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L4                      On  |   00000000:02:00.0 Off |                    0 |
+| N/A   38C    P8             16W /   72W |       1MiB /  23034MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
 
 SEED: 0
 
@@ -8,10 +28,619 @@ SEED: 0
 Gathering data...
 
 NUMBER OF SAMPLES: 36000
-Processing data...
 
 SEED: 0
 Gathering data...
 
 NUMBER OF SAMPLES: 12000
-Processing data...
+
+SEED: 0
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+Total parameters = 2394369
+epoch: 0, loss: 0.01706, time: 5.53257s, trainL2: 0.58418, testL2: 0.01778
+epoch: 1, loss: 0.00639, time: 5.18517s, trainL2: 0.01391, testL2: 0.00694
+epoch: 2, loss: 0.00253, time: 5.19344s, trainL2: 0.00747, testL2: 0.00284
+epoch: 3, loss: 0.00259, time: 5.17727s, trainL2: 0.00405, testL2: 0.00284
+epoch: 4, loss: 0.00294, time: 5.18351s, trainL2: 0.00309, testL2: 0.00309
+epoch: 5, loss: 0.00116, time: 5.22679s, trainL2: 0.00251, testL2: 0.00132
+epoch: 6, loss: 0.00096, time: 5.33785s, trainL2: 0.00228, testL2: 0.00109
+epoch: 7, loss: 0.00126, time: 5.20502s, trainL2: 0.00226, testL2: 0.00140
+epoch: 8, loss: 0.00188, time: 5.21223s, trainL2: 0.00119, testL2: 0.00201
+epoch: 9, loss: 0.00100, time: 5.24664s, trainL2: 0.00147, testL2: 0.00109
+epoch: 10, loss: 0.00099, time: 5.22358s, trainL2: 0.00170, testL2: 0.00111
+epoch: 11, loss: 0.00059, time: 5.25704s, trainL2: 0.00135, testL2: 0.00069
+epoch: 12, loss: 0.00160, time: 5.22628s, trainL2: 0.00151, testL2: 0.00167
+epoch: 13, loss: 0.00073, time: 5.23206s, trainL2: 0.00080, testL2: 0.00082
+epoch: 14, loss: 0.00056, time: 5.37342s, trainL2: 0.00125, testL2: 0.00063
+epoch: 15, loss: 0.00063, time: 5.23598s, trainL2: 0.00136, testL2: 0.00072
+epoch: 16, loss: 0.00066, time: 5.24625s, trainL2: 0.00066, testL2: 0.00072
+epoch: 17, loss: 0.00145, time: 5.24363s, trainL2: 0.00124, testL2: 0.00155
+epoch: 18, loss: 0.00041, time: 5.28052s, trainL2: 0.00069, testL2: 0.00047
+epoch: 19, loss: 0.00075, time: 5.25343s, trainL2: 0.00123, testL2: 0.00083
+epoch: 20, loss: 0.00058, time: 5.35030s, trainL2: 0.00052, testL2: 0.00063
+epoch: 21, loss: 0.00035, time: 5.27822s, trainL2: 0.00109, testL2: 0.00041
+epoch: 22, loss: 0.00074, time: 5.37829s, trainL2: 0.00052, testL2: 0.00078
+epoch: 23, loss: 0.00046, time: 5.25733s, trainL2: 0.00097, testL2: 0.00052
+epoch: 24, loss: 0.00083, time: 5.26485s, trainL2: 0.00065, testL2: 0.00086
+epoch: 25, loss: 0.00050, time: 5.26152s, trainL2: 0.00063, testL2: 0.00056
+epoch: 26, loss: 0.00044, time: 5.25626s, trainL2: 0.00090, testL2: 0.00048
+epoch: 27, loss: 0.00032, time: 5.39838s, trainL2: 0.00060, testL2: 0.00037
+epoch: 28, loss: 0.00069, time: 5.26647s, trainL2: 0.00069, testL2: 0.00072
+epoch: 29, loss: 0.00029, time: 5.30404s, trainL2: 0.00039, testL2: 0.00032
+epoch: 30, loss: 0.00039, time: 5.26868s, trainL2: 0.00101, testL2: 0.00045
+epoch: 31, loss: 0.00024, time: 5.29414s, trainL2: 0.00032, testL2: 0.00028
+epoch: 32, loss: 0.00169, time: 5.26254s, trainL2: 0.00056, testL2: 0.00170
+epoch: 33, loss: 0.00022, time: 5.29163s, trainL2: 0.00070, testL2: 0.00026
+epoch: 34, loss: 0.00036, time: 5.26566s, trainL2: 0.00030, testL2: 0.00040
+epoch: 35, loss: 0.00066, time: 5.26898s, trainL2: 0.00084, testL2: 0.00067
+epoch: 36, loss: 0.00028, time: 5.38953s, trainL2: 0.00037, testL2: 0.00033
+epoch: 37, loss: 0.00038, time: 5.27691s, trainL2: 0.00035, testL2: 0.00040
+epoch: 38, loss: 0.00060, time: 5.27299s, trainL2: 0.00065, testL2: 0.00065
+epoch: 39, loss: 0.00027, time: 5.27235s, trainL2: 0.00043, testL2: 0.00030
+epoch: 40, loss: 0.00049, time: 5.27385s, trainL2: 0.00043, testL2: 0.00054
+epoch: 41, loss: 0.00018, time: 5.30084s, trainL2: 0.00040, testL2: 0.00021
+epoch: 42, loss: 0.00026, time: 5.27084s, trainL2: 0.00021, testL2: 0.00028
+epoch: 43, loss: 0.00017, time: 5.30278s, trainL2: 0.00096, testL2: 0.00020
+epoch: 44, loss: 0.00016, time: 5.42316s, trainL2: 0.00022, testL2: 0.00019
+epoch: 45, loss: 0.00035, time: 5.27837s, trainL2: 0.00025, testL2: 0.00037
+epoch: 46, loss: 0.00016, time: 5.31205s, trainL2: 0.00064, testL2: 0.00019
+epoch: 47, loss: 0.00024, time: 5.28367s, trainL2: 0.00021, testL2: 0.00027
+epoch: 48, loss: 0.00020, time: 5.28133s, trainL2: 0.00063, testL2: 0.00022
+epoch: 49, loss: 0.00047, time: 5.27744s, trainL2: 0.00022, testL2: 0.00051
+epoch: 50, loss: 0.00014, time: 5.40270s, trainL2: 0.00017, testL2: 0.00017
+epoch: 51, loss: 0.00014, time: 5.30828s, trainL2: 0.00017, testL2: 0.00017
+epoch: 52, loss: 0.00014, time: 5.42271s, trainL2: 0.00016, testL2: 0.00016
+epoch: 53, loss: 0.00014, time: 5.30979s, trainL2: 0.00016, testL2: 0.00016
+epoch: 54, loss: 0.00014, time: 5.31097s, trainL2: 0.00016, testL2: 0.00016
+epoch: 55, loss: 0.00013, time: 5.31130s, trainL2: 0.00016, testL2: 0.00016
+epoch: 56, loss: 0.00013, time: 5.30983s, trainL2: 0.00015, testL2: 0.00015
+epoch: 57, loss: 0.00013, time: 5.41759s, trainL2: 0.00015, testL2: 0.00015
+epoch: 58, loss: 0.00013, time: 5.31453s, trainL2: 0.00015, testL2: 0.00015
+epoch: 59, loss: 0.00013, time: 5.31721s, trainL2: 0.00015, testL2: 0.00015
+epoch: 60, loss: 0.00012, time: 5.31330s, trainL2: 0.00014, testL2: 0.00015
+epoch: 61, loss: 0.00012, time: 5.30491s, trainL2: 0.00014, testL2: 0.00014
+epoch: 62, loss: 0.00012, time: 5.31190s, trainL2: 0.00014, testL2: 0.00014
+epoch: 63, loss: 0.00012, time: 5.30488s, trainL2: 0.00014, testL2: 0.00014
+epoch: 64, loss: 0.00012, time: 5.30794s, trainL2: 0.00014, testL2: 0.00014
+epoch: 65, loss: 0.00012, time: 5.30666s, trainL2: 0.00013, testL2: 0.00014
+epoch: 66, loss: 0.00012, time: 5.42469s, trainL2: 0.00013, testL2: 0.00013
+epoch: 67, loss: 0.00011, time: 5.31264s, trainL2: 0.00013, testL2: 0.00013
+epoch: 68, loss: 0.00011, time: 5.31164s, trainL2: 0.00013, testL2: 0.00013
+epoch: 69, loss: 0.00011, time: 5.31006s, trainL2: 0.00013, testL2: 0.00013
+epoch: 70, loss: 0.00011, time: 5.31229s, trainL2: 0.00012, testL2: 0.00013
+epoch: 71, loss: 0.00011, time: 5.30489s, trainL2: 0.00012, testL2: 0.00012
+epoch: 72, loss: 0.00011, time: 5.30646s, trainL2: 0.00012, testL2: 0.00012
+epoch: 73, loss: 0.00010, time: 5.30749s, trainL2: 0.00012, testL2: 0.00012
+epoch: 74, loss: 0.00010, time: 5.43639s, trainL2: 0.00012, testL2: 0.00012
+epoch: 75, loss: 0.00010, time: 5.31233s, trainL2: 0.00012, testL2: 0.00012
+epoch: 76, loss: 0.00010, time: 5.31086s, trainL2: 0.00012, testL2: 0.00012
+epoch: 77, loss: 0.00010, time: 5.31731s, trainL2: 0.00011, testL2: 0.00012
+epoch: 78, loss: 0.00010, time: 5.31471s, trainL2: 0.00011, testL2: 0.00011
+epoch: 79, loss: 0.00010, time: 5.30659s, trainL2: 0.00011, testL2: 0.00011
+epoch: 80, loss: 0.00010, time: 5.39150s, trainL2: 0.00011, testL2: 0.00011
+epoch: 81, loss: 0.00010, time: 5.30307s, trainL2: 0.00011, testL2: 0.00011
+epoch: 82, loss: 0.00009, time: 5.41718s, trainL2: 0.00011, testL2: 0.00011
+epoch: 83, loss: 0.00009, time: 5.31356s, trainL2: 0.00011, testL2: 0.00011
+epoch: 84, loss: 0.00009, time: 5.31168s, trainL2: 0.00011, testL2: 0.00011
+epoch: 85, loss: 0.00009, time: 5.31379s, trainL2: 0.00010, testL2: 0.00011
+epoch: 86, loss: 0.00009, time: 5.31283s, trainL2: 0.00010, testL2: 0.00011
+epoch: 87, loss: 0.00009, time: 5.30963s, trainL2: 0.00010, testL2: 0.00010
+epoch: 88, loss: 0.00009, time: 5.39800s, trainL2: 0.00010, testL2: 0.00010
+epoch: 89, loss: 0.00009, time: 5.30811s, trainL2: 0.00010, testL2: 0.00010
+epoch: 90, loss: 0.00009, time: 5.30902s, trainL2: 0.00010, testL2: 0.00010
+epoch: 91, loss: 0.00009, time: 5.30613s, trainL2: 0.00010, testL2: 0.00010
+epoch: 92, loss: 0.00009, time: 5.30547s, trainL2: 0.00010, testL2: 0.00010
+epoch: 93, loss: 0.00009, time: 5.30769s, trainL2: 0.00010, testL2: 0.00010
+epoch: 94, loss: 0.00008, time: 5.31138s, trainL2: 0.00010, testL2: 0.00010
+epoch: 95, loss: 0.00008, time: 5.30641s, trainL2: 0.00009, testL2: 0.00010
+epoch: 96, loss: 0.00008, time: 5.43014s, trainL2: 0.00009, testL2: 0.00010
+epoch: 97, loss: 0.00008, time: 5.30307s, trainL2: 0.00009, testL2: 0.00009
+epoch: 98, loss: 0.00008, time: 5.31311s, trainL2: 0.00009, testL2: 0.00009
+epoch: 99, loss: 0.00008, time: 5.30906s, trainL2: 0.00009, testL2: 0.00009
+epoch: 100, loss: 0.00008, time: 5.30808s, trainL2: 0.00009, testL2: 0.00009
+epoch: 100, loss: 0.00008, time: 5.30808s, trainL2: 0.00009, testL2: 0.00009
+TEST VALUE FROM LAST EPOCH: 0.000093
+TEST VALUE BEST LAST EPOCH: 0.000093
+
+SEED: 1
+
+Filename: Heat, Seed: 1
+
+
+SEED: 1
+Gathering data...
+
+NUMBER OF SAMPLES: 36000
+
+SEED: 1
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+
+SEED: 1
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+Total parameters = 2394369
+epoch: 0, loss: 0.02643, time: 5.28216s, trainL2: 0.59232, testL2: 0.02434
+epoch: 1, loss: 0.01114, time: 5.29488s, trainL2: 0.01527, testL2: 0.01046
+epoch: 2, loss: 0.00649, time: 5.41584s, trainL2: 0.00732, testL2: 0.00583
+epoch: 3, loss: 0.00374, time: 5.30337s, trainL2: 0.00408, testL2: 0.00336
+epoch: 4, loss: 0.00287, time: 5.31182s, trainL2: 0.00305, testL2: 0.00252
+epoch: 5, loss: 0.00207, time: 5.31549s, trainL2: 0.00258, testL2: 0.00183
+epoch: 6, loss: 0.00219, time: 5.28349s, trainL2: 0.00216, testL2: 0.00193
+epoch: 7, loss: 0.00269, time: 5.38403s, trainL2: 0.00192, testL2: 0.00251
+epoch: 8, loss: 0.00115, time: 5.32278s, trainL2: 0.00147, testL2: 0.00096
+epoch: 9, loss: 0.00103, time: 5.32223s, trainL2: 0.00201, testL2: 0.00087
+epoch: 10, loss: 0.00216, time: 5.30073s, trainL2: 0.00149, testL2: 0.00197
+epoch: 11, loss: 0.00240, time: 5.29331s, trainL2: 0.00141, testL2: 0.00229
+epoch: 12, loss: 0.00102, time: 5.29486s, trainL2: 0.00103, testL2: 0.00089
+epoch: 13, loss: 0.00088, time: 5.32770s, trainL2: 0.00153, testL2: 0.00078
+epoch: 14, loss: 0.00180, time: 5.29971s, trainL2: 0.00108, testL2: 0.00166
+epoch: 15, loss: 0.00069, time: 5.33057s, trainL2: 0.00120, testL2: 0.00059
+epoch: 16, loss: 0.00201, time: 5.41090s, trainL2: 0.00092, testL2: 0.00189
+epoch: 17, loss: 0.00059, time: 5.32939s, trainL2: 0.00099, testL2: 0.00051
+epoch: 18, loss: 0.00386, time: 5.30330s, trainL2: 0.00085, testL2: 0.00374
+epoch: 19, loss: 0.00058, time: 5.33651s, trainL2: 0.00111, testL2: 0.00051
+epoch: 20, loss: 0.00161, time: 5.29927s, trainL2: 0.00075, testL2: 0.00152
+epoch: 21, loss: 0.00054, time: 5.32887s, trainL2: 0.00083, testL2: 0.00048
+epoch: 22, loss: 0.00156, time: 5.31006s, trainL2: 0.00052, testL2: 0.00148
+epoch: 23, loss: 0.00044, time: 5.33667s, trainL2: 0.00127, testL2: 0.00038
+epoch: 24, loss: 0.00049, time: 5.42747s, trainL2: 0.00037, testL2: 0.00044
+epoch: 25, loss: 0.00043, time: 5.30826s, trainL2: 0.00093, testL2: 0.00039
+epoch: 26, loss: 0.00109, time: 5.30408s, trainL2: 0.00070, testL2: 0.00102
+epoch: 27, loss: 0.00051, time: 5.30786s, trainL2: 0.00077, testL2: 0.00047
+epoch: 28, loss: 0.00076, time: 5.30520s, trainL2: 0.00048, testL2: 0.00073
+epoch: 29, loss: 0.00038, time: 5.42761s, trainL2: 0.00065, testL2: 0.00034
+epoch: 30, loss: 0.00054, time: 5.30919s, trainL2: 0.00033, testL2: 0.00051
+epoch: 31, loss: 0.00044, time: 5.44654s, trainL2: 0.00095, testL2: 0.00040
+epoch: 32, loss: 0.00036, time: 5.33828s, trainL2: 0.00045, testL2: 0.00033
+epoch: 33, loss: 0.00085, time: 5.30550s, trainL2: 0.00063, testL2: 0.00081
+epoch: 34, loss: 0.00069, time: 5.30852s, trainL2: 0.00053, testL2: 0.00066
+epoch: 35, loss: 0.00056, time: 5.30708s, trainL2: 0.00050, testL2: 0.00052
+epoch: 36, loss: 0.00075, time: 5.30791s, trainL2: 0.00057, testL2: 0.00073
+epoch: 37, loss: 0.00035, time: 5.42118s, trainL2: 0.00050, testL2: 0.00031
+epoch: 38, loss: 0.00073, time: 5.31046s, trainL2: 0.00044, testL2: 0.00071
+epoch: 39, loss: 0.00029, time: 5.34141s, trainL2: 0.00053, testL2: 0.00026
+epoch: 40, loss: 0.00028, time: 5.34315s, trainL2: 0.00033, testL2: 0.00025
+epoch: 41, loss: 0.00049, time: 5.30606s, trainL2: 0.00024, testL2: 0.00046
+epoch: 42, loss: 0.00046, time: 5.30812s, trainL2: 0.00069, testL2: 0.00044
+epoch: 43, loss: 0.00082, time: 5.31189s, trainL2: 0.00045, testL2: 0.00078
+epoch: 44, loss: 0.00022, time: 5.33884s, trainL2: 0.00041, testL2: 0.00020
+epoch: 45, loss: 0.00030, time: 5.30981s, trainL2: 0.00022, testL2: 0.00028
+epoch: 46, loss: 0.00057, time: 5.42153s, trainL2: 0.00069, testL2: 0.00054
+epoch: 47, loss: 0.00021, time: 5.33332s, trainL2: 0.00024, testL2: 0.00019
+epoch: 48, loss: 0.00032, time: 5.30612s, trainL2: 0.00022, testL2: 0.00030
+epoch: 49, loss: 0.00028, time: 5.31139s, trainL2: 0.00047, testL2: 0.00026
+epoch: 50, loss: 0.00019, time: 5.33790s, trainL2: 0.00016, testL2: 0.00017
+epoch: 51, loss: 0.00019, time: 5.33666s, trainL2: 0.00016, testL2: 0.00017
+epoch: 52, loss: 0.00019, time: 5.33721s, trainL2: 0.00016, testL2: 0.00017
+epoch: 53, loss: 0.00018, time: 5.33697s, trainL2: 0.00015, testL2: 0.00016
+epoch: 54, loss: 0.00018, time: 5.46367s, trainL2: 0.00015, testL2: 0.00016
+epoch: 55, loss: 0.00018, time: 5.33697s, trainL2: 0.00015, testL2: 0.00016
+epoch: 56, loss: 0.00017, time: 5.33842s, trainL2: 0.00015, testL2: 0.00016
+epoch: 57, loss: 0.00017, time: 5.33678s, trainL2: 0.00014, testL2: 0.00015
+epoch: 58, loss: 0.00017, time: 5.33900s, trainL2: 0.00014, testL2: 0.00015
+epoch: 59, loss: 0.00017, time: 5.44556s, trainL2: 0.00014, testL2: 0.00015
+epoch: 60, loss: 0.00016, time: 5.33779s, trainL2: 0.00014, testL2: 0.00015
+epoch: 61, loss: 0.00016, time: 5.33413s, trainL2: 0.00014, testL2: 0.00015
+epoch: 62, loss: 0.00016, time: 5.45315s, trainL2: 0.00013, testL2: 0.00014
+epoch: 63, loss: 0.00016, time: 5.33697s, trainL2: 0.00013, testL2: 0.00014
+epoch: 64, loss: 0.00015, time: 5.33625s, trainL2: 0.00013, testL2: 0.00014
+epoch: 65, loss: 0.00015, time: 5.33933s, trainL2: 0.00013, testL2: 0.00014
+epoch: 66, loss: 0.00015, time: 5.34342s, trainL2: 0.00013, testL2: 0.00014
+epoch: 67, loss: 0.00015, time: 5.42606s, trainL2: 0.00013, testL2: 0.00013
+epoch: 68, loss: 0.00015, time: 5.33838s, trainL2: 0.00012, testL2: 0.00013
+epoch: 69, loss: 0.00014, time: 5.34309s, trainL2: 0.00012, testL2: 0.00013
+epoch: 70, loss: 0.00014, time: 5.34224s, trainL2: 0.00012, testL2: 0.00013
+epoch: 71, loss: 0.00014, time: 5.34352s, trainL2: 0.00012, testL2: 0.00013
+epoch: 72, loss: 0.00014, time: 5.34177s, trainL2: 0.00012, testL2: 0.00013
+epoch: 73, loss: 0.00014, time: 5.34218s, trainL2: 0.00012, testL2: 0.00013
+epoch: 74, loss: 0.00014, time: 5.33922s, trainL2: 0.00012, testL2: 0.00012
+epoch: 75, loss: 0.00013, time: 5.34227s, trainL2: 0.00011, testL2: 0.00012
+epoch: 76, loss: 0.00013, time: 5.45451s, trainL2: 0.00011, testL2: 0.00012
+epoch: 77, loss: 0.00013, time: 5.34354s, trainL2: 0.00011, testL2: 0.00012
+epoch: 78, loss: 0.00013, time: 5.33985s, trainL2: 0.00011, testL2: 0.00012
+epoch: 79, loss: 0.00013, time: 5.34334s, trainL2: 0.00011, testL2: 0.00012
+epoch: 80, loss: 0.00013, time: 5.34014s, trainL2: 0.00011, testL2: 0.00012
+epoch: 81, loss: 0.00013, time: 5.34059s, trainL2: 0.00011, testL2: 0.00011
+epoch: 82, loss: 0.00012, time: 5.34398s, trainL2: 0.00011, testL2: 0.00011
+epoch: 83, loss: 0.00012, time: 5.34046s, trainL2: 0.00011, testL2: 0.00011
+epoch: 84, loss: 0.00012, time: 5.45596s, trainL2: 0.00010, testL2: 0.00011
+epoch: 85, loss: 0.00012, time: 5.33699s, trainL2: 0.00010, testL2: 0.00011
+epoch: 86, loss: 0.00012, time: 5.34374s, trainL2: 0.00010, testL2: 0.00011
+epoch: 87, loss: 0.00012, time: 5.34088s, trainL2: 0.00010, testL2: 0.00011
+epoch: 88, loss: 0.00012, time: 5.34181s, trainL2: 0.00010, testL2: 0.00011
+epoch: 89, loss: 0.00012, time: 5.33519s, trainL2: 0.00010, testL2: 0.00011
+epoch: 90, loss: 0.00011, time: 5.43666s, trainL2: 0.00010, testL2: 0.00010
+epoch: 91, loss: 0.00011, time: 5.33848s, trainL2: 0.00010, testL2: 0.00010
+epoch: 92, loss: 0.00011, time: 5.46057s, trainL2: 0.00010, testL2: 0.00010
+epoch: 93, loss: 0.00011, time: 5.33724s, trainL2: 0.00010, testL2: 0.00010
+epoch: 94, loss: 0.00011, time: 5.33938s, trainL2: 0.00009, testL2: 0.00010
+epoch: 95, loss: 0.00011, time: 5.34344s, trainL2: 0.00009, testL2: 0.00010
+epoch: 96, loss: 0.00011, time: 5.34122s, trainL2: 0.00009, testL2: 0.00010
+epoch: 97, loss: 0.00011, time: 5.44810s, trainL2: 0.00009, testL2: 0.00010
+epoch: 98, loss: 0.00011, time: 5.34098s, trainL2: 0.00009, testL2: 0.00010
+epoch: 99, loss: 0.00011, time: 5.34047s, trainL2: 0.00009, testL2: 0.00010
+epoch: 100, loss: 0.00011, time: 5.33996s, trainL2: 0.00009, testL2: 0.00010
+epoch: 100, loss: 0.00011, time: 5.33996s, trainL2: 0.00009, testL2: 0.00010
+TEST VALUE FROM LAST EPOCH: 0.000086
+TEST VALUE BEST LAST EPOCH: 0.000086
+
+SEED: 2
+
+Filename: Heat, Seed: 2
+
+
+SEED: 2
+Gathering data...
+
+NUMBER OF SAMPLES: 36000
+
+SEED: 2
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+
+SEED: 2
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+Total parameters = 2394369
+epoch: 0, loss: 0.01663, time: 5.29619s, trainL2: 0.64783, testL2: 0.01425
+epoch: 1, loss: 0.01122, time: 5.31428s, trainL2: 0.01518, testL2: 0.01035
+epoch: 2, loss: 0.00623, time: 5.32142s, trainL2: 0.00694, testL2: 0.00594
+epoch: 3, loss: 0.00258, time: 5.45689s, trainL2: 0.00433, testL2: 0.00238
+epoch: 4, loss: 0.00258, time: 5.30362s, trainL2: 0.00314, testL2: 0.00242
+epoch: 5, loss: 0.00179, time: 5.33304s, trainL2: 0.00250, testL2: 0.00167
+epoch: 6, loss: 0.00144, time: 5.33110s, trainL2: 0.00228, testL2: 0.00132
+epoch: 7, loss: 0.00178, time: 5.30810s, trainL2: 0.00228, testL2: 0.00167
+epoch: 8, loss: 0.00197, time: 5.31456s, trainL2: 0.00182, testL2: 0.00187
+epoch: 9, loss: 0.00191, time: 5.40654s, trainL2: 0.00155, testL2: 0.00182
+epoch: 10, loss: 0.00105, time: 5.34848s, trainL2: 0.00172, testL2: 0.00097
+epoch: 11, loss: 0.00092, time: 5.46033s, trainL2: 0.00140, testL2: 0.00085
+epoch: 12, loss: 0.00437, time: 5.31289s, trainL2: 0.00180, testL2: 0.00426
+epoch: 13, loss: 0.00073, time: 5.34140s, trainL2: 0.00091, testL2: 0.00066
+epoch: 14, loss: 0.00097, time: 5.31393s, trainL2: 0.00138, testL2: 0.00091
+epoch: 15, loss: 0.00151, time: 5.31590s, trainL2: 0.00117, testL2: 0.00144
+epoch: 16, loss: 0.00063, time: 5.34896s, trainL2: 0.00101, testL2: 0.00058
+epoch: 17, loss: 0.00059, time: 5.42937s, trainL2: 0.00108, testL2: 0.00054
+epoch: 18, loss: 0.00402, time: 5.31992s, trainL2: 0.00117, testL2: 0.00396
+epoch: 19, loss: 0.00050, time: 5.34935s, trainL2: 0.00086, testL2: 0.00045
+epoch: 20, loss: 0.00053, time: 5.32343s, trainL2: 0.00097, testL2: 0.00048
+epoch: 21, loss: 0.00194, time: 5.31829s, trainL2: 0.00060, testL2: 0.00188
+epoch: 22, loss: 0.00042, time: 5.35023s, trainL2: 0.00123, testL2: 0.00038
+epoch: 23, loss: 0.00214, time: 5.32395s, trainL2: 0.00078, testL2: 0.00208
+epoch: 24, loss: 0.00066, time: 5.31941s, trainL2: 0.00091, testL2: 0.00062
+epoch: 25, loss: 0.00068, time: 5.32526s, trainL2: 0.00057, testL2: 0.00064
+epoch: 26, loss: 0.00085, time: 5.45614s, trainL2: 0.00084, testL2: 0.00081
+epoch: 27, loss: 0.00039, time: 5.35499s, trainL2: 0.00045, testL2: 0.00035
+epoch: 28, loss: 0.00603, time: 5.32532s, trainL2: 0.00083, testL2: 0.00594
+epoch: 29, loss: 0.00033, time: 5.35513s, trainL2: 0.00096, testL2: 0.00030
+epoch: 30, loss: 0.00030, time: 5.35709s, trainL2: 0.00030, testL2: 0.00027
+epoch: 31, loss: 0.00126, time: 5.32618s, trainL2: 0.00100, testL2: 0.00122
+epoch: 32, loss: 0.00033, time: 5.32801s, trainL2: 0.00047, testL2: 0.00030
+epoch: 33, loss: 0.00032, time: 5.46537s, trainL2: 0.00027, testL2: 0.00029
+epoch: 34, loss: 0.00039, time: 5.32462s, trainL2: 0.00108, testL2: 0.00037
+epoch: 35, loss: 0.00027, time: 5.35406s, trainL2: 0.00027, testL2: 0.00024
+epoch: 36, loss: 0.00130, time: 5.32734s, trainL2: 0.00053, testL2: 0.00126
+epoch: 37, loss: 0.00027, time: 5.35446s, trainL2: 0.00058, testL2: 0.00024
+epoch: 38, loss: 0.00034, time: 5.32434s, trainL2: 0.00026, testL2: 0.00031
+epoch: 39, loss: 0.00032, time: 5.42161s, trainL2: 0.00097, testL2: 0.00029
+epoch: 40, loss: 0.00024, time: 5.35827s, trainL2: 0.00023, testL2: 0.00022
+epoch: 41, loss: 0.00023, time: 5.47272s, trainL2: 0.00023, testL2: 0.00021
+epoch: 42, loss: 0.00026, time: 5.32783s, trainL2: 0.00107, testL2: 0.00024
+epoch: 43, loss: 0.00028, time: 5.32882s, trainL2: 0.00022, testL2: 0.00026
+epoch: 44, loss: 0.00025, time: 5.32870s, trainL2: 0.00023, testL2: 0.00023
+epoch: 45, loss: 0.00054, time: 5.32732s, trainL2: 0.00072, testL2: 0.00052
+epoch: 46, loss: 0.00020, time: 5.35991s, trainL2: 0.00025, testL2: 0.00018
+epoch: 47, loss: 0.00121, time: 5.42049s, trainL2: 0.00035, testL2: 0.00118
+epoch: 48, loss: 0.00020, time: 5.35626s, trainL2: 0.00070, testL2: 0.00018
+epoch: 49, loss: 0.00021, time: 5.32830s, trainL2: 0.00026, testL2: 0.00019
+epoch: 50, loss: 0.00019, time: 5.35596s, trainL2: 0.00017, testL2: 0.00017
+epoch: 51, loss: 0.00018, time: 5.35714s, trainL2: 0.00017, testL2: 0.00016
+epoch: 52, loss: 0.00018, time: 5.35790s, trainL2: 0.00017, testL2: 0.00016
+epoch: 53, loss: 0.00018, time: 5.35517s, trainL2: 0.00017, testL2: 0.00016
+epoch: 54, loss: 0.00017, time: 5.35604s, trainL2: 0.00016, testL2: 0.00016
+epoch: 55, loss: 0.00017, time: 5.49209s, trainL2: 0.00016, testL2: 0.00015
+epoch: 56, loss: 0.00017, time: 5.35548s, trainL2: 0.00016, testL2: 0.00015
+epoch: 57, loss: 0.00017, time: 5.36000s, trainL2: 0.00016, testL2: 0.00015
+epoch: 58, loss: 0.00016, time: 5.36079s, trainL2: 0.00015, testL2: 0.00015
+epoch: 59, loss: 0.00016, time: 5.35647s, trainL2: 0.00015, testL2: 0.00014
+epoch: 60, loss: 0.00016, time: 5.35759s, trainL2: 0.00015, testL2: 0.00014
+epoch: 61, loss: 0.00016, time: 5.35580s, trainL2: 0.00015, testL2: 0.00014
+epoch: 62, loss: 0.00016, time: 5.35611s, trainL2: 0.00015, testL2: 0.00014
+epoch: 63, loss: 0.00015, time: 5.48986s, trainL2: 0.00014, testL2: 0.00014
+epoch: 64, loss: 0.00015, time: 5.35718s, trainL2: 0.00014, testL2: 0.00014
+epoch: 65, loss: 0.00015, time: 5.35869s, trainL2: 0.00014, testL2: 0.00013
+epoch: 66, loss: 0.00015, time: 5.36255s, trainL2: 0.00014, testL2: 0.00013
+epoch: 67, loss: 0.00015, time: 5.35824s, trainL2: 0.00014, testL2: 0.00013
+epoch: 68, loss: 0.00014, time: 5.35711s, trainL2: 0.00013, testL2: 0.00013
+epoch: 69, loss: 0.00014, time: 5.44568s, trainL2: 0.00013, testL2: 0.00013
+epoch: 70, loss: 0.00014, time: 5.35596s, trainL2: 0.00013, testL2: 0.00013
+epoch: 71, loss: 0.00014, time: 5.47317s, trainL2: 0.00013, testL2: 0.00012
+epoch: 72, loss: 0.00014, time: 5.35587s, trainL2: 0.00013, testL2: 0.00012
+epoch: 73, loss: 0.00014, time: 5.35771s, trainL2: 0.00013, testL2: 0.00012
+epoch: 74, loss: 0.00014, time: 5.35679s, trainL2: 0.00013, testL2: 0.00012
+epoch: 75, loss: 0.00013, time: 5.35338s, trainL2: 0.00012, testL2: 0.00012
+epoch: 76, loss: 0.00013, time: 5.35457s, trainL2: 0.00012, testL2: 0.00012
+epoch: 77, loss: 0.00013, time: 5.44885s, trainL2: 0.00012, testL2: 0.00012
+epoch: 78, loss: 0.00013, time: 5.35805s, trainL2: 0.00012, testL2: 0.00012
+epoch: 79, loss: 0.00013, time: 5.35936s, trainL2: 0.00012, testL2: 0.00011
+epoch: 80, loss: 0.00013, time: 5.35933s, trainL2: 0.00012, testL2: 0.00011
+epoch: 81, loss: 0.00013, time: 5.35694s, trainL2: 0.00012, testL2: 0.00011
+epoch: 82, loss: 0.00012, time: 5.35823s, trainL2: 0.00012, testL2: 0.00011
+epoch: 83, loss: 0.00012, time: 5.36105s, trainL2: 0.00011, testL2: 0.00011
+epoch: 84, loss: 0.00012, time: 5.35590s, trainL2: 0.00011, testL2: 0.00011
+epoch: 85, loss: 0.00012, time: 5.49411s, trainL2: 0.00011, testL2: 0.00011
+epoch: 86, loss: 0.00012, time: 5.35465s, trainL2: 0.00011, testL2: 0.00011
+epoch: 87, loss: 0.00012, time: 5.35822s, trainL2: 0.00011, testL2: 0.00010
+epoch: 88, loss: 0.00012, time: 5.35759s, trainL2: 0.00011, testL2: 0.00010
+epoch: 89, loss: 0.00012, time: 5.35732s, trainL2: 0.00011, testL2: 0.00010
+epoch: 90, loss: 0.00012, time: 5.35510s, trainL2: 0.00011, testL2: 0.00010
+epoch: 91, loss: 0.00011, time: 5.35391s, trainL2: 0.00011, testL2: 0.00010
+epoch: 92, loss: 0.00011, time: 5.35196s, trainL2: 0.00010, testL2: 0.00010
+epoch: 93, loss: 0.00011, time: 5.49838s, trainL2: 0.00010, testL2: 0.00010
+epoch: 94, loss: 0.00011, time: 5.35798s, trainL2: 0.00010, testL2: 0.00010
+epoch: 95, loss: 0.00011, time: 5.36099s, trainL2: 0.00010, testL2: 0.00010
+epoch: 96, loss: 0.00011, time: 5.35859s, trainL2: 0.00010, testL2: 0.00010
+epoch: 97, loss: 0.00011, time: 5.35750s, trainL2: 0.00010, testL2: 0.00010
+epoch: 98, loss: 0.00011, time: 5.35795s, trainL2: 0.00010, testL2: 0.00009
+epoch: 99, loss: 0.00011, time: 5.45456s, trainL2: 0.00010, testL2: 0.00009
+epoch: 100, loss: 0.00011, time: 5.35751s, trainL2: 0.00010, testL2: 0.00009
+epoch: 100, loss: 0.00011, time: 5.35751s, trainL2: 0.00010, testL2: 0.00009
+TEST VALUE FROM LAST EPOCH: 0.000096
+TEST VALUE BEST LAST EPOCH: 0.000096
+
+SEED: 3
+
+Filename: Heat, Seed: 3
+
+
+SEED: 3
+Gathering data...
+
+NUMBER OF SAMPLES: 36000
+
+SEED: 3
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+
+SEED: 3
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+Total parameters = 2394369
+epoch: 0, loss: 0.01682, time: 5.28775s, trainL2: 0.69169, testL2: 0.01761
+epoch: 1, loss: 0.00623, time: 5.30099s, trainL2: 0.00875, testL2: 0.00616
+epoch: 2, loss: 0.00543, time: 5.30244s, trainL2: 0.00549, testL2: 0.00534
+epoch: 3, loss: 0.00401, time: 5.31187s, trainL2: 0.00244, testL2: 0.00389
+epoch: 4, loss: 0.00122, time: 5.31443s, trainL2: 0.00238, testL2: 0.00115
+epoch: 5, loss: 0.00107, time: 5.43538s, trainL2: 0.00234, testL2: 0.00100
+epoch: 6, loss: 0.00098, time: 5.32451s, trainL2: 0.00094, testL2: 0.00093
+epoch: 7, loss: 0.00082, time: 5.32282s, trainL2: 0.00198, testL2: 0.00078
+epoch: 8, loss: 0.00089, time: 5.29987s, trainL2: 0.00079, testL2: 0.00085
+epoch: 9, loss: 0.00090, time: 5.30428s, trainL2: 0.00137, testL2: 0.00087
+epoch: 10, loss: 0.00106, time: 5.30124s, trainL2: 0.00106, testL2: 0.00102
+epoch: 11, loss: 0.00107, time: 5.30375s, trainL2: 0.00092, testL2: 0.00105
+epoch: 12, loss: 0.00071, time: 5.32847s, trainL2: 0.00102, testL2: 0.00068
+epoch: 13, loss: 0.00097, time: 5.42953s, trainL2: 0.00089, testL2: 0.00095
+epoch: 14, loss: 0.00044, time: 5.33765s, trainL2: 0.00057, testL2: 0.00042
+epoch: 15, loss: 0.00056, time: 5.30765s, trainL2: 0.00116, testL2: 0.00054
+epoch: 16, loss: 0.00059, time: 5.30860s, trainL2: 0.00053, testL2: 0.00058
+epoch: 17, loss: 0.00043, time: 5.33634s, trainL2: 0.00064, testL2: 0.00042
+epoch: 18, loss: 0.00078, time: 5.30403s, trainL2: 0.00079, testL2: 0.00077
+epoch: 19, loss: 0.00066, time: 5.39743s, trainL2: 0.00057, testL2: 0.00064
+epoch: 20, loss: 0.00069, time: 5.30770s, trainL2: 0.00060, testL2: 0.00068
+epoch: 21, loss: 0.00035, time: 5.45378s, trainL2: 0.00056, testL2: 0.00034
+epoch: 22, loss: 0.00120, time: 5.30869s, trainL2: 0.00059, testL2: 0.00120
+epoch: 23, loss: 0.00029, time: 5.33680s, trainL2: 0.00062, testL2: 0.00027
+epoch: 24, loss: 0.00029, time: 5.30914s, trainL2: 0.00036, testL2: 0.00028
+epoch: 25, loss: 0.00097, time: 5.31083s, trainL2: 0.00035, testL2: 0.00095
+epoch: 26, loss: 0.00024, time: 5.33997s, trainL2: 0.00067, testL2: 0.00023
+epoch: 27, loss: 0.00022, time: 5.43256s, trainL2: 0.00023, testL2: 0.00021
+epoch: 28, loss: 0.00085, time: 5.31320s, trainL2: 0.00081, testL2: 0.00084
+epoch: 29, loss: 0.00021, time: 5.34319s, trainL2: 0.00035, testL2: 0.00020
+epoch: 30, loss: 0.00024, time: 5.31428s, trainL2: 0.00021, testL2: 0.00023
+epoch: 31, loss: 0.00058, time: 5.31168s, trainL2: 0.00034, testL2: 0.00057
+epoch: 32, loss: 0.00033, time: 5.31202s, trainL2: 0.00063, testL2: 0.00033
+epoch: 33, loss: 0.00027, time: 5.31061s, trainL2: 0.00029, testL2: 0.00025
+epoch: 34, loss: 0.00020, time: 5.34163s, trainL2: 0.00025, testL2: 0.00019
+epoch: 35, loss: 0.00073, time: 5.44555s, trainL2: 0.00038, testL2: 0.00072
+epoch: 36, loss: 0.00017, time: 5.34083s, trainL2: 0.00035, testL2: 0.00016
+epoch: 37, loss: 0.00026, time: 5.31535s, trainL2: 0.00018, testL2: 0.00026
+epoch: 38, loss: 0.00055, time: 5.31563s, trainL2: 0.00045, testL2: 0.00054
+epoch: 39, loss: 0.00015, time: 5.34202s, trainL2: 0.00024, testL2: 0.00015
+epoch: 40, loss: 0.00047, time: 5.31466s, trainL2: 0.00018, testL2: 0.00047
+epoch: 41, loss: 0.00020, time: 5.30889s, trainL2: 0.00068, testL2: 0.00019
+epoch: 42, loss: 0.00016, time: 5.31607s, trainL2: 0.00018, testL2: 0.00015
+epoch: 43, loss: 0.00017, time: 5.43011s, trainL2: 0.00015, testL2: 0.00017
+epoch: 44, loss: 0.00061, time: 5.31628s, trainL2: 0.00034, testL2: 0.00060
+epoch: 45, loss: 0.00014, time: 5.34237s, trainL2: 0.00025, testL2: 0.00013
+epoch: 46, loss: 0.00045, time: 5.31571s, trainL2: 0.00027, testL2: 0.00045
+epoch: 47, loss: 0.00020, time: 5.31648s, trainL2: 0.00034, testL2: 0.00019
+epoch: 48, loss: 0.00014, time: 5.31764s, trainL2: 0.00015, testL2: 0.00013
+epoch: 49, loss: 0.00015, time: 5.39720s, trainL2: 0.00014, testL2: 0.00014
+epoch: 50, loss: 0.00012, time: 5.34634s, trainL2: 0.00012, testL2: 0.00011
+epoch: 51, loss: 0.00012, time: 5.46532s, trainL2: 0.00011, testL2: 0.00011
+epoch: 52, loss: 0.00012, time: 5.34283s, trainL2: 0.00011, testL2: 0.00011
+epoch: 53, loss: 0.00012, time: 5.34871s, trainL2: 0.00011, testL2: 0.00011
+epoch: 54, loss: 0.00012, time: 5.34174s, trainL2: 0.00011, testL2: 0.00011
+epoch: 55, loss: 0.00011, time: 5.34506s, trainL2: 0.00011, testL2: 0.00011
+epoch: 56, loss: 0.00011, time: 5.34334s, trainL2: 0.00011, testL2: 0.00011
+epoch: 57, loss: 0.00011, time: 5.43997s, trainL2: 0.00011, testL2: 0.00010
+epoch: 58, loss: 0.00011, time: 5.34415s, trainL2: 0.00010, testL2: 0.00010
+epoch: 59, loss: 0.00011, time: 5.34475s, trainL2: 0.00010, testL2: 0.00010
+epoch: 60, loss: 0.00011, time: 5.34463s, trainL2: 0.00010, testL2: 0.00010
+epoch: 61, loss: 0.00011, time: 5.34275s, trainL2: 0.00010, testL2: 0.00010
+epoch: 62, loss: 0.00010, time: 5.34828s, trainL2: 0.00010, testL2: 0.00010
+epoch: 63, loss: 0.00010, time: 5.34455s, trainL2: 0.00010, testL2: 0.00010
+epoch: 64, loss: 0.00010, time: 5.34702s, trainL2: 0.00010, testL2: 0.00010
+epoch: 65, loss: 0.00010, time: 5.48319s, trainL2: 0.00010, testL2: 0.00010
+epoch: 66, loss: 0.00010, time: 5.34299s, trainL2: 0.00010, testL2: 0.00010
+epoch: 67, loss: 0.00010, time: 5.34397s, trainL2: 0.00009, testL2: 0.00009
+epoch: 68, loss: 0.00010, time: 5.34636s, trainL2: 0.00009, testL2: 0.00009
+epoch: 69, loss: 0.00010, time: 5.34843s, trainL2: 0.00009, testL2: 0.00009
+epoch: 70, loss: 0.00010, time: 5.34366s, trainL2: 0.00009, testL2: 0.00009
+epoch: 71, loss: 0.00009, time: 5.34154s, trainL2: 0.00009, testL2: 0.00009
+epoch: 72, loss: 0.00009, time: 5.34454s, trainL2: 0.00009, testL2: 0.00009
+epoch: 73, loss: 0.00009, time: 5.48264s, trainL2: 0.00009, testL2: 0.00009
+epoch: 74, loss: 0.00009, time: 5.34096s, trainL2: 0.00009, testL2: 0.00009
+epoch: 75, loss: 0.00009, time: 5.33985s, trainL2: 0.00009, testL2: 0.00009
+epoch: 76, loss: 0.00009, time: 5.34590s, trainL2: 0.00009, testL2: 0.00009
+epoch: 77, loss: 0.00009, time: 5.34510s, trainL2: 0.00009, testL2: 0.00008
+epoch: 78, loss: 0.00009, time: 5.34633s, trainL2: 0.00008, testL2: 0.00008
+epoch: 79, loss: 0.00009, time: 5.42520s, trainL2: 0.00008, testL2: 0.00008
+epoch: 80, loss: 0.00009, time: 5.34399s, trainL2: 0.00008, testL2: 0.00008
+epoch: 81, loss: 0.00009, time: 5.45648s, trainL2: 0.00008, testL2: 0.00008
+epoch: 82, loss: 0.00008, time: 5.34254s, trainL2: 0.00008, testL2: 0.00008
+epoch: 83, loss: 0.00008, time: 5.34752s, trainL2: 0.00008, testL2: 0.00008
+epoch: 84, loss: 0.00008, time: 5.34999s, trainL2: 0.00008, testL2: 0.00008
+epoch: 85, loss: 0.00008, time: 5.34494s, trainL2: 0.00008, testL2: 0.00008
+epoch: 86, loss: 0.00008, time: 5.34248s, trainL2: 0.00008, testL2: 0.00008
+epoch: 87, loss: 0.00008, time: 5.43094s, trainL2: 0.00008, testL2: 0.00008
+epoch: 88, loss: 0.00008, time: 5.34325s, trainL2: 0.00008, testL2: 0.00008
+epoch: 89, loss: 0.00008, time: 5.34812s, trainL2: 0.00008, testL2: 0.00008
+epoch: 90, loss: 0.00008, time: 5.34292s, trainL2: 0.00008, testL2: 0.00008
+epoch: 91, loss: 0.00008, time: 5.34335s, trainL2: 0.00008, testL2: 0.00008
+epoch: 92, loss: 0.00008, time: 5.34338s, trainL2: 0.00007, testL2: 0.00007
+epoch: 93, loss: 0.00008, time: 5.34525s, trainL2: 0.00007, testL2: 0.00007
+epoch: 94, loss: 0.00008, time: 5.34415s, trainL2: 0.00007, testL2: 0.00007
+epoch: 95, loss: 0.00007, time: 5.48091s, trainL2: 0.00007, testL2: 0.00007
+epoch: 96, loss: 0.00007, time: 5.34596s, trainL2: 0.00007, testL2: 0.00007
+epoch: 97, loss: 0.00007, time: 5.35033s, trainL2: 0.00007, testL2: 0.00007
+epoch: 98, loss: 0.00007, time: 5.34487s, trainL2: 0.00007, testL2: 0.00007
+epoch: 99, loss: 0.00007, time: 5.34476s, trainL2: 0.00007, testL2: 0.00007
+epoch: 100, loss: 0.00007, time: 5.34763s, trainL2: 0.00007, testL2: 0.00007
+epoch: 100, loss: 0.00007, time: 5.34763s, trainL2: 0.00007, testL2: 0.00007
+TEST VALUE FROM LAST EPOCH: 0.000064
+TEST VALUE BEST LAST EPOCH: 0.000064
+
+SEED: 4
+
+Filename: Heat, Seed: 4
+
+
+SEED: 4
+Gathering data...
+
+NUMBER OF SAMPLES: 36000
+
+SEED: 4
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+
+SEED: 4
+Gathering data...
+
+NUMBER OF SAMPLES: 12000
+Total parameters = 2394369
+epoch: 0, loss: 0.00947, time: 5.29405s, trainL2: 0.50269, testL2: 0.00944
+epoch: 1, loss: 0.00998, time: 5.41158s, trainL2: 0.00909, testL2: 0.01023
+epoch: 2, loss: 0.00342, time: 5.30893s, trainL2: 0.00613, testL2: 0.00348
+epoch: 3, loss: 0.00164, time: 5.31808s, trainL2: 0.00329, testL2: 0.00179
+epoch: 4, loss: 0.00147, time: 5.32351s, trainL2: 0.00276, testL2: 0.00156
+epoch: 5, loss: 0.00122, time: 5.32687s, trainL2: 0.00252, testL2: 0.00135
+epoch: 6, loss: 0.00467, time: 5.30037s, trainL2: 0.00175, testL2: 0.00472
+epoch: 7, loss: 0.00078, time: 5.42572s, trainL2: 0.00169, testL2: 0.00089
+epoch: 8, loss: 0.00082, time: 5.30438s, trainL2: 0.00251, testL2: 0.00093
+epoch: 9, loss: 0.00133, time: 5.30995s, trainL2: 0.00079, testL2: 0.00145
+epoch: 10, loss: 0.00107, time: 5.30449s, trainL2: 0.00169, testL2: 0.00114
+epoch: 11, loss: 0.00134, time: 5.30437s, trainL2: 0.00176, testL2: 0.00145
+epoch: 12, loss: 0.00073, time: 5.33682s, trainL2: 0.00069, testL2: 0.00082
+epoch: 13, loss: 0.00058, time: 5.34139s, trainL2: 0.00154, testL2: 0.00065
+epoch: 14, loss: 0.00262, time: 5.30515s, trainL2: 0.00106, testL2: 0.00274
+epoch: 15, loss: 0.00059, time: 5.31038s, trainL2: 0.00113, testL2: 0.00065
+epoch: 16, loss: 0.00057, time: 5.44042s, trainL2: 0.00121, testL2: 0.00065
+epoch: 17, loss: 0.00035, time: 5.33901s, trainL2: 0.00046, testL2: 0.00041
+epoch: 18, loss: 0.00053, time: 5.31408s, trainL2: 0.00172, testL2: 0.00060
+epoch: 19, loss: 0.00039, time: 5.31410s, trainL2: 0.00044, testL2: 0.00045
+epoch: 20, loss: 0.00178, time: 5.31358s, trainL2: 0.00110, testL2: 0.00181
+epoch: 21, loss: 0.00049, time: 5.32270s, trainL2: 0.00059, testL2: 0.00056
+epoch: 22, loss: 0.00105, time: 5.31776s, trainL2: 0.00100, testL2: 0.00109
+epoch: 23, loss: 0.00085, time: 5.31854s, trainL2: 0.00066, testL2: 0.00092
+epoch: 24, loss: 0.00068, time: 5.43970s, trainL2: 0.00070, testL2: 0.00071
+epoch: 25, loss: 0.00110, time: 5.31973s, trainL2: 0.00072, testL2: 0.00116
+epoch: 26, loss: 0.00045, time: 5.31349s, trainL2: 0.00081, testL2: 0.00049
+epoch: 27, loss: 0.00052, time: 5.31987s, trainL2: 0.00055, testL2: 0.00057
+epoch: 28, loss: 0.00051, time: 5.32321s, trainL2: 0.00047, testL2: 0.00054
+epoch: 29, loss: 0.00055, time: 5.42891s, trainL2: 0.00087, testL2: 0.00060
+epoch: 30, loss: 0.00049, time: 5.32044s, trainL2: 0.00050, testL2: 0.00052
+epoch: 31, loss: 0.00060, time: 5.31548s, trainL2: 0.00065, testL2: 0.00065
+epoch: 32, loss: 0.00026, time: 5.46918s, trainL2: 0.00036, testL2: 0.00029
+epoch: 33, loss: 0.00072, time: 5.31888s, trainL2: 0.00082, testL2: 0.00077
+epoch: 34, loss: 0.00035, time: 5.32043s, trainL2: 0.00045, testL2: 0.00038
+epoch: 35, loss: 0.00032, time: 5.32288s, trainL2: 0.00050, testL2: 0.00036
+epoch: 36, loss: 0.00079, time: 5.32178s, trainL2: 0.00052, testL2: 0.00081
+epoch: 37, loss: 0.00083, time: 5.42000s, trainL2: 0.00061, testL2: 0.00089
+epoch: 38, loss: 0.00032, time: 5.32412s, trainL2: 0.00043, testL2: 0.00034
+epoch: 39, loss: 0.00055, time: 5.32083s, trainL2: 0.00030, testL2: 0.00060
+epoch: 40, loss: 0.00038, time: 5.31949s, trainL2: 0.00060, testL2: 0.00040
+epoch: 41, loss: 0.00029, time: 5.32256s, trainL2: 0.00044, testL2: 0.00033
+epoch: 42, loss: 0.00026, time: 5.35024s, trainL2: 0.00039, testL2: 0.00029
+epoch: 43, loss: 0.00057, time: 5.31739s, trainL2: 0.00048, testL2: 0.00061
+epoch: 44, loss: 0.00038, time: 5.32349s, trainL2: 0.00038, testL2: 0.00041
+epoch: 45, loss: 0.00052, time: 5.31977s, trainL2: 0.00045, testL2: 0.00056
+epoch: 46, loss: 0.00019, time: 5.46846s, trainL2: 0.00045, testL2: 0.00022
+epoch: 47, loss: 0.00056, time: 5.31750s, trainL2: 0.00042, testL2: 0.00058
+epoch: 48, loss: 0.00019, time: 5.31996s, trainL2: 0.00043, testL2: 0.00023
+epoch: 49, loss: 0.00060, time: 5.32420s, trainL2: 0.00031, testL2: 0.00062
+epoch: 50, loss: 0.00013, time: 5.35404s, trainL2: 0.00016, testL2: 0.00015
+epoch: 51, loss: 0.00012, time: 5.34719s, trainL2: 0.00015, testL2: 0.00015
+epoch: 52, loss: 0.00012, time: 5.35224s, trainL2: 0.00015, testL2: 0.00015
+epoch: 53, loss: 0.00012, time: 5.35016s, trainL2: 0.00015, testL2: 0.00014
+epoch: 54, loss: 0.00012, time: 5.34729s, trainL2: 0.00015, testL2: 0.00014
+epoch: 55, loss: 0.00012, time: 5.46966s, trainL2: 0.00014, testL2: 0.00014
+epoch: 56, loss: 0.00012, time: 5.34970s, trainL2: 0.00014, testL2: 0.00014
+epoch: 57, loss: 0.00011, time: 5.34860s, trainL2: 0.00014, testL2: 0.00014
+epoch: 58, loss: 0.00011, time: 5.35480s, trainL2: 0.00014, testL2: 0.00013
+epoch: 59, loss: 0.00011, time: 5.35067s, trainL2: 0.00014, testL2: 0.00013
+epoch: 60, loss: 0.00011, time: 5.35223s, trainL2: 0.00013, testL2: 0.00013
+epoch: 61, loss: 0.00011, time: 5.35461s, trainL2: 0.00013, testL2: 0.00013
+epoch: 62, loss: 0.00011, time: 5.35691s, trainL2: 0.00013, testL2: 0.00013
+epoch: 63, loss: 0.00011, time: 5.35215s, trainL2: 0.00013, testL2: 0.00013
+epoch: 64, loss: 0.00010, time: 5.47529s, trainL2: 0.00013, testL2: 0.00012
+epoch: 65, loss: 0.00010, time: 5.35274s, trainL2: 0.00013, testL2: 0.00012
+epoch: 66, loss: 0.00010, time: 5.35192s, trainL2: 0.00012, testL2: 0.00012
+epoch: 67, loss: 0.00010, time: 5.35206s, trainL2: 0.00012, testL2: 0.00012
+epoch: 68, loss: 0.00010, time: 5.35135s, trainL2: 0.00012, testL2: 0.00012
+epoch: 69, loss: 0.00010, time: 5.44189s, trainL2: 0.00012, testL2: 0.00012
+epoch: 70, loss: 0.00010, time: 5.34835s, trainL2: 0.00012, testL2: 0.00012
+epoch: 71, loss: 0.00010, time: 5.34901s, trainL2: 0.00012, testL2: 0.00011
+epoch: 72, loss: 0.00009, time: 5.46796s, trainL2: 0.00011, testL2: 0.00011
+epoch: 73, loss: 0.00009, time: 5.35289s, trainL2: 0.00011, testL2: 0.00011
+epoch: 74, loss: 0.00009, time: 5.35397s, trainL2: 0.00011, testL2: 0.00011
+epoch: 75, loss: 0.00009, time: 5.35069s, trainL2: 0.00011, testL2: 0.00011
+epoch: 76, loss: 0.00009, time: 5.35148s, trainL2: 0.00011, testL2: 0.00011
+epoch: 77, loss: 0.00009, time: 5.44927s, trainL2: 0.00011, testL2: 0.00011
+epoch: 78, loss: 0.00009, time: 5.56210s, trainL2: 0.00011, testL2: 0.00011
+epoch: 79, loss: 0.00009, time: 5.35791s, trainL2: 0.00011, testL2: 0.00010
+epoch: 80, loss: 0.00009, time: 5.35281s, trainL2: 0.00011, testL2: 0.00010
+epoch: 81, loss: 0.00009, time: 5.34754s, trainL2: 0.00010, testL2: 0.00010
+epoch: 82, loss: 0.00008, time: 5.35267s, trainL2: 0.00010, testL2: 0.00010
+epoch: 83, loss: 0.00008, time: 5.35328s, trainL2: 0.00010, testL2: 0.00010
+epoch: 84, loss: 0.00008, time: 5.35460s, trainL2: 0.00010, testL2: 0.00010
+epoch: 85, loss: 0.00008, time: 5.35156s, trainL2: 0.00010, testL2: 0.00010
+epoch: 86, loss: 0.00008, time: 5.45823s, trainL2: 0.00010, testL2: 0.00010
+epoch: 87, loss: 0.00008, time: 5.35471s, trainL2: 0.00010, testL2: 0.00010
+epoch: 88, loss: 0.00008, time: 5.34957s, trainL2: 0.00010, testL2: 0.00010
+epoch: 89, loss: 0.00008, time: 5.56205s, trainL2: 0.00010, testL2: 0.00009
+epoch: 90, loss: 0.00008, time: 5.34843s, trainL2: 0.00010, testL2: 0.00009
+epoch: 91, loss: 0.00008, time: 5.34914s, trainL2: 0.00009, testL2: 0.00009
+epoch: 92, loss: 0.00008, time: 5.34828s, trainL2: 0.00009, testL2: 0.00009
+epoch: 93, loss: 0.00008, time: 5.35090s, trainL2: 0.00009, testL2: 0.00009
+epoch: 94, loss: 0.00008, time: 5.32049s, trainL2: 0.00009, testL2: 0.00009
+epoch: 95, loss: 0.00008, time: 5.47024s, trainL2: 0.00009, testL2: 0.00009
+epoch: 96, loss: 0.00008, time: 5.34972s, trainL2: 0.00009, testL2: 0.00009
+epoch: 97, loss: 0.00007, time: 5.34962s, trainL2: 0.00009, testL2: 0.00009
+epoch: 98, loss: 0.00007, time: 5.35263s, trainL2: 0.00009, testL2: 0.00009
+epoch: 99, loss: 0.00007, time: 5.35328s, trainL2: 0.00009, testL2: 0.00009
+epoch: 100, loss: 0.00007, time: 5.56246s, trainL2: 0.00009, testL2: 0.00009
+epoch: 100, loss: 0.00007, time: 5.56246s, trainL2: 0.00009, testL2: 0.00009
+TEST VALUE FROM LAST EPOCH: 0.000082
+TEST VALUE BEST LAST EPOCH: 0.000082
+Done.
