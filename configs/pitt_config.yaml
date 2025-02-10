@@ -47,7 +47,7 @@ args:
     num_t: 100
     sim_time: 1
     num_samples:
-    interval: 36
+    interval: 48
 
     # Transformer
     hidden: 64

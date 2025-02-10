@@ -29,8 +29,9 @@ from tqdm import tqdm
 import h5py
 from matplotlib import pyplot as plt
 
-best_loss = []
-mean_val_loss = []
+seed_last_loss = []
+seed_val_loss = []
+seed_best_loss = []
 
 def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_train, x0_val, path="progress_plots", seed=None):
     ncols = 8
@@ -364,8 +365,10 @@ def run_training(model, config, prefix):
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("./{}/test_vals_{}.npy".format(path, seed), test_vals)
-    best_loss.append(test_value)
-    mean_val_loss.append(sum(val_l2s[-50:])/len(val_l2s[-50:]))
+
+    seed_last_loss.append(test_vals[0])
+    seed_val_loss.append(val_l2s[-1])
+    seed_best_loss.append(test_vals[1])
     model.train()
             
 if __name__ == "__main__":
@@ -412,6 +415,7 @@ if __name__ == "__main__":
 
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(best_loss)
-        writer.writerow(mean_val_loss)
+        writer.writerow(seed_last_loss)
+        writer.writerow(seed_val_loss)
+        writer.writerow(seed_best_loss)
         

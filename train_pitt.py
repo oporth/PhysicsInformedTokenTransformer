@@ -25,9 +25,10 @@ import sys
 
 device = 'cuda' if(torch.cuda.is_available()) else 'cpu'
 
-best_loss = []
-mean_val_loss = []
+seed_test_loss = []
+seed_val_loss = []
 lin_loss = []
+seed_best_loss = []
 
 def custom_collate(batch):
     x0 = torch.empty((len(batch), batch[0][0].shape[0]))
@@ -107,16 +108,20 @@ def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
 
             im_num += 1
 
-def lin_interpolation(x0):
-    mid_frame = torch.mean(x0, dim=1)
-    return mid_frame
+def lin_interpolation(test_loader, loss_fn):
+    lin_loss = 0
+    for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
+        y = y[...,0].to(device=device)
+        y_lin = torch.mean(x0, dim=1)
+
+        lin_loss += loss_fn(y_lin, y).item()
+    return lin_loss/(bn+1)
 
 def evaluate(test_loader, transformer, loss_fn, path, plot=False):
     #src_mask = generate_square_subsequent_mask(640).cuda()
     with torch.no_grad():
         transformer.eval()
         test_loss = 0
-        lin_loss = 0
         for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
         #for bn, (x, y, grid, tokens, x0) in enumerate(test_loader):
             # Forward pass: compute predictions by passing the input sequence
@@ -129,13 +134,10 @@ def evaluate(test_loader, transformer, loss_fn, path, plot=False):
 
             # Compute the loss.
             test_loss += loss_fn(y_pred, y).item()
-
-            y_lin = lin_interpolation(x0)
-            lin_loss += loss_fn(y_lin, y).item()
-        
+    
     if plot==True:
         progress_plot_test(y, y_pred, x0, path, seed=seed)
-    return test_loss/(bn+1), lin_loss/(bn+1)
+    return test_loss/(bn+1)
 
 
 def generate_square_subsequent_mask(sz: int):
@@ -355,6 +357,7 @@ def run_training(config, prefix):
 
             if  val_loss < loss_val_min:
                 loss_val_min = val_loss
+                torch.save({'model_param': transformer.state_dict()}, path + "/model_param_{}.pt".format(seed))
                 torch.save({
                     'epoch': epoch,
                     'model_state_dict': transformer.state_dict(),
@@ -365,7 +368,7 @@ def run_training(config, prefix):
         val_loss /= (bn + 1)
         val_losses.append(val_loss)
 
-        test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path)
+        test_value = evaluate(test_loader, transformer, loss_fn, path)
         test_losses.append(test_value)
 
         # Print the loss at the end of each epoch.
@@ -427,20 +430,24 @@ def run_training(config, prefix):
         pass
 
     test_vals = []
-    test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path)
+    test_value = evaluate(test_loader, transformer, loss_fn, path)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
-#   model_path = path + "/" + "Heat_pitt_4.pt"
     transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
-    test_value, lin_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
+    test_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
-    print("test value for linear interpolation: {0:5f}".format(lin_value))
-    best_loss.append(test_value)
-    lin_loss.append(lin_value)
-    mean_val_loss.append(sum(val_losses[-50:])/len(val_losses[-50:]))
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['transformer'],
                                                  config['neural_operator'],  prefix, seed), test_vals)
+    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
+
+
+
+    lin_value = lin_interpolation(test_loader, loss_fn)
+    seed_test_loss.append(test_vals[0])
+    seed_val_loss.append(val_loss)
+    lin_loss.append(lin_value)
+    seed_best_loss.append(test_vals[1])
 
 
 
@@ -477,11 +484,12 @@ if __name__ == '__main__':
         run_training(train_args, prefix)
 
         
-    csv_file_path = "{}{}_{}_{}/test_vals_step{}_int{}.csv".format(train_args['results_dir'], train_args['transformer'], train_args['neural_operator'], prefix, train_args['initial_step'], train_args['interval'])
+    csv_file_path = "{}{}_{}_{}/test_vals_step{}_int{}_test.csv".format(train_args['results_dir'], train_args['transformer'], train_args['neural_operator'], prefix, train_args['initial_step'], train_args['interval'])
 
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(best_loss)
-        writer.writerow(mean_val_loss)
+        writer.writerow(seed_test_loss)
+        writer.writerow(seed_val_loss)
         writer.writerow(lin_loss)
+        writer.writerow(seed_best_loss)
     
