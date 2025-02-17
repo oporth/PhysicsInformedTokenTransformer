@@ -51,13 +51,17 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_tr
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
-        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu(), label='ground thruth')
+        ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu(), label='prediction')
+        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
         
         ax[1][i].plot(y_val_true[i].reshape(100,).detach().cpu())
         ax[1][i].plot(y_val_pred[i].reshape(100,).detach().cpu())
         ax[1][i].plot(x0_val[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+
+    handles, labels = ax[0][0].get_legend_handles_labels()
+    plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15))
+    plt.tight_layout()
 
     fname = str(ep)
     while(len(fname) < 8):
@@ -73,13 +77,17 @@ def progress_plot_test(y_test_true, y_test_pred, x0_test, path="progress_plots",
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
-        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu(), label='ground thruth')
+        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu(), label='prediction')
+        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
    
         ax[1][i].plot(y_test_true[i+ncols].reshape(100,).detach().cpu())
         ax[1][i].plot(y_test_pred[i+ncols].reshape(100,).detach().cpu())
         ax[1][i].plot(x0_test[i+ncols].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+
+    handles, labels = ax[0][0].get_legend_handles_labels()
+    plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15))
+    plt.tight_layout()
 
     fname='test'
     while(len(fname) < 8):
