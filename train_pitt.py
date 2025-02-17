@@ -51,13 +51,17 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_tr
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
-        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
-        
+        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu(), label='ground thruth')
+        ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu(), label='prediction')
+        ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
+       
         ax[1][i].plot(y_val_true[i].reshape(100,).detach().cpu())
         ax[1][i].plot(y_val_pred[i].reshape(100,).detach().cpu())
         ax[1][i].plot(x0_val[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+    
+    handles, labels = ax[0][0].get_legend_handles_labels()
+    plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15))
+    plt.tight_layout()
 
     fname = str(ep)
     while(len(fname) < 8):
@@ -73,14 +77,18 @@ def progress_plot_test(y_test_true, y_test_pred, x0_test, path="progress_plots",
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
-        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu())
-        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu(), label='ground thruth')
+        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu(), label='prediction')
+        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
    
         ax[1][i].plot(y_test_true[i+ncols].reshape(100,).detach().cpu())
         ax[1][i].plot(y_test_pred[i+ncols].reshape(100,).detach().cpu())
         ax[1][i].plot(x0_test[i+ncols].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
 
+    handles, labels = ax[0][0].get_legend_handles_labels()
+    plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15)) 
+    plt.tight_layout()
+    
     fname='test'
     while(len(fname) < 8):
         fname = '0' + fname
@@ -433,16 +441,19 @@ def run_training(config, prefix):
     test_value = evaluate(test_loader, transformer, loss_fn, path)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
+    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
+
     transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
     test_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['transformer'],
                                                  config['neural_operator'],  prefix, seed), test_vals)
-    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
 
-
-
+    transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
+    test_value = evaluate(test_loader, transformer, loss_fn, path, plot=False)
+    print("TEST VALUE REPEATED BEST LAST EPOCH: {0:5f}".format(test_value))
+   
     lin_value = lin_interpolation(test_loader, loss_fn)
     seed_test_loss.append(test_vals[0])
     seed_val_loss.append(val_loss)
@@ -484,7 +495,7 @@ if __name__ == '__main__':
         run_training(train_args, prefix)
 
         
-    csv_file_path = "{}{}_{}_{}/test_vals_step{}_int{}_test.csv".format(train_args['results_dir'], train_args['transformer'], train_args['neural_operator'], prefix, train_args['initial_step'], train_args['interval'])
+    csv_file_path = "{}{}_{}_{}/test_vals_step{}_int{}.csv".format(train_args['results_dir'], train_args['transformer'], train_args['neural_operator'], prefix, train_args['initial_step'], train_args['interval'])
 
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
