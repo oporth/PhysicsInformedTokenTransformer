@@ -441,14 +441,14 @@ def run_training(config, prefix):
     test_value = evaluate(test_loader, transformer, loss_fn, path)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
+    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
+
     transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
     test_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
     test_vals.append(test_value)
     print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['transformer'],
                                                  config['neural_operator'],  prefix, seed), test_vals)
-    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
-
 
 
     lin_value = lin_interpolation(test_loader, loss_fn)
