@@ -6,9 +6,14 @@ test_l2s = []
 for i in range(5):
     try:
         ax.set_yscale('log')
-        ax.plot(np.load("./train_l2s_{}.npy".format(i)),label='Training Set')
-        ax.plot(np.load("./val_l2s_{}.npy".format(i)),label='Validation Set')
-        ax.plot(np.load("./test_l2s_{}.npy".format(i)),'--',label='Test Set')
+        if i == 0:
+            ax.plot(np.load("./train_l2s_{}.npy".format(i)),'C0',label='Training Set')
+            ax.plot(np.load("./val_l2s_{}.npy".format(i)),'orange',label='Validation Set')
+            ax.plot(np.load("./test_l2s_{}.npy".format(i)),'k--',label='Test Set')
+        else:
+            ax.plot(np.load("./train_l2s_{}.npy".format(i)),'C0')
+            ax.plot(np.load("./val_l2s_{}.npy".format(i)),'orange')
+            ax.plot(np.load("./test_l2s_{}.npy".format(i)),'k--')
         train_vals = np.load("./train_l2s_{}.npy".format(i))
         val_vals = np.load("./val_l2s_{}.npy".format(i))
         test_per_epoch = np.load("./test_l2s_{}.npy".format(i))

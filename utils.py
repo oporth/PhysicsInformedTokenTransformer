@@ -205,7 +205,7 @@ class TransformerOperatorDataset(Dataset):
         self.train_style = train_style
         self.ssl = ssl
         self.forcing = forcing
-        
+                
         # Extract list of seeds
         print("\nSEED: {}".format(seed))
         np.random.seed(seed)

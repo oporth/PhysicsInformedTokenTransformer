@@ -23,113 +23,63 @@ NUMBER OF SAMPLES: 12000
 Processing data...
 
 USING NOVEL EMBEDDING
-Total parameters = 227570
+Total parameters = 227442
 
 WEIGHT DECAY: 1e-05
 
-Epoch 1: loss = 0.29473	 val loss = 0.04371	 test loss = 0.04323
-Epoch 2: loss = 0.04525	 val loss = 0.02886	 test loss = 0.02830
-Epoch 3: loss = 0.03391	 val loss = 0.02605	 test loss = 0.02644
-Epoch 4: loss = 0.03110	 val loss = 0.02547	 test loss = 0.02544
-Epoch 5: loss = 0.02955	 val loss = 0.02516	 test loss = 0.02557
-Epoch 6: loss = 0.02893	 val loss = 0.02548	 test loss = 0.02542
-Epoch 7: loss = 0.02895	 val loss = 0.02470	 test loss = 0.02515
-Epoch 8: loss = 0.02784	 val loss = 0.02627	 test loss = 0.02623
-Epoch 9: loss = 0.02467	 val loss = 0.00322	 test loss = 0.00327
-Epoch 10: loss = 0.00642	 val loss = 0.00197	 test loss = 0.00197
-Epoch 11: loss = 0.00513	 val loss = 0.00185	 test loss = 0.00188
-Epoch 12: loss = 0.00472	 val loss = 0.00161	 test loss = 0.00161
-Epoch 13: loss = 0.00442	 val loss = 0.00153	 test loss = 0.00154
-Epoch 14: loss = 0.00424	 val loss = 0.00153	 test loss = 0.00154
-Epoch 15: loss = 0.00425	 val loss = 0.00205	 test loss = 0.00204
-Epoch 16: loss = 0.00412	 val loss = 0.00163	 test loss = 0.00166
-Epoch 17: loss = 0.00409	 val loss = 0.00145	 test loss = 0.00146
-Epoch 18: loss = 0.00404	 val loss = 0.00172	 test loss = 0.00173
-Epoch 19: loss = 0.00400	 val loss = 0.00129	 test loss = 0.00130
-Epoch 20: loss = 0.00392	 val loss = 0.00190	 test loss = 0.00190
-Epoch 21: loss = 0.00402	 val loss = 0.00180	 test loss = 0.00182
-Epoch 22: loss = 0.00393	 val loss = 0.00182	 test loss = 0.00182
-Epoch 23: loss = 0.00394	 val loss = 0.00157	 test loss = 0.00161
-Epoch 24: loss = 0.00391	 val loss = 0.00243	 test loss = 0.00234
-Epoch 25: loss = 0.00406	 val loss = 0.00186	 test loss = 0.00188
-Epoch 26: loss = 0.00389	 val loss = 0.00332	 test loss = 0.00337
-Epoch 27: loss = 0.00385	 val loss = 0.00219	 test loss = 0.00219
-Epoch 28: loss = 0.00379	 val loss = 0.00281	 test loss = 0.00280
-Epoch 29: loss = 0.00382	 val loss = 0.00200	 test loss = 0.00198
-Epoch 30: loss = 0.00380	 val loss = 0.00157	 test loss = 0.00161
-Epoch 31: loss = 0.00374	 val loss = 0.00157	 test loss = 0.00156
-Epoch 32: loss = 0.00373	 val loss = 0.00186	 test loss = 0.00186
-Epoch 33: loss = 0.00372	 val loss = 0.00197	 test loss = 0.00199
-Epoch 34: loss = 0.00375	 val loss = 0.00267	 test loss = 0.00265
-Epoch 35: loss = 0.00366	 val loss = 0.00163	 test loss = 0.00167
-Epoch 36: loss = 0.00371	 val loss = 0.00162	 test loss = 0.00165
-Epoch 37: loss = 0.00363	 val loss = 0.00312	 test loss = 0.00314
-Epoch 38: loss = 0.00367	 val loss = 0.00208	 test loss = 0.00210
-Epoch 39: loss = 0.00362	 val loss = 0.00133	 test loss = 0.00137
-Epoch 40: loss = 0.00357	 val loss = 0.00257	 test loss = 0.00261
-Epoch 41: loss = 0.00362	 val loss = 0.00184	 test loss = 0.00185
-Epoch 42: loss = 0.00362	 val loss = 0.00142	 test loss = 0.00142
-Epoch 43: loss = 0.00355	 val loss = 0.00139	 test loss = 0.00140
-Epoch 44: loss = 0.00356	 val loss = 0.00137	 test loss = 0.00136
-Epoch 45: loss = 0.00356	 val loss = 0.00147	 test loss = 0.00148
-Epoch 46: loss = 0.00354	 val loss = 0.00134	 test loss = 0.00135
-Epoch 47: loss = 0.00350	 val loss = 0.00131	 test loss = 0.00134
-Epoch 48: loss = 0.00349	 val loss = 0.00141	 test loss = 0.00144
-Epoch 49: loss = 0.00351	 val loss = 0.00142	 test loss = 0.00141
-Epoch 50: loss = 0.00346	 val loss = 0.00165	 test loss = 0.00160
-Epoch 51: loss = 0.00345	 val loss = 0.00139	 test loss = 0.00140
-Epoch 52: loss = 0.00345	 val loss = 0.00144	 test loss = 0.00144
-Epoch 53: loss = 0.00343	 val loss = 0.00243	 test loss = 0.00245
-Epoch 54: loss = 0.00340	 val loss = 0.00162	 test loss = 0.00160
-Epoch 55: loss = 0.00343	 val loss = 0.00153	 test loss = 0.00153
-Epoch 56: loss = 0.00343	 val loss = 0.00138	 test loss = 0.00137
-Epoch 57: loss = 0.00342	 val loss = 0.00154	 test loss = 0.00154
-Epoch 58: loss = 0.00338	 val loss = 0.00148	 test loss = 0.00147
-Epoch 59: loss = 0.00337	 val loss = 0.00129	 test loss = 0.00131
-Epoch 60: loss = 0.00336	 val loss = 0.00132	 test loss = 0.00133
-Epoch 61: loss = 0.00336	 val loss = 0.00157	 test loss = 0.00159
-Epoch 62: loss = 0.00337	 val loss = 0.00125	 test loss = 0.00126
-Epoch 63: loss = 0.00334	 val loss = 0.00152	 test loss = 0.00151
-Epoch 64: loss = 0.00333	 val loss = 0.00167	 test loss = 0.00167
-Epoch 65: loss = 0.00330	 val loss = 0.00121	 test loss = 0.00123
-Epoch 66: loss = 0.00329	 val loss = 0.00127	 test loss = 0.00127
-Epoch 67: loss = 0.00328	 val loss = 0.00155	 test loss = 0.00154
-Epoch 68: loss = 0.00329	 val loss = 0.00140	 test loss = 0.00143
-Epoch 69: loss = 0.00331	 val loss = 0.00124	 test loss = 0.00126
-Epoch 70: loss = 0.00324	 val loss = 0.00125	 test loss = 0.00125
-Epoch 71: loss = 0.00327	 val loss = 0.00122	 test loss = 0.00122
-Epoch 72: loss = 0.00327	 val loss = 0.00132	 test loss = 0.00132
-Epoch 73: loss = 0.00324	 val loss = 0.00127	 test loss = 0.00124
-Epoch 74: loss = 0.00325	 val loss = 0.00117	 test loss = 0.00117
-Epoch 75: loss = 0.00322	 val loss = 0.00118	 test loss = 0.00117
-Epoch 76: loss = 0.00320	 val loss = 0.00125	 test loss = 0.00125
-Epoch 77: loss = 0.00321	 val loss = 0.00146	 test loss = 0.00147
-Epoch 78: loss = 0.00322	 val loss = 0.00118	 test loss = 0.00118
-Epoch 79: loss = 0.00320	 val loss = 0.00128	 test loss = 0.00127
-Epoch 80: loss = 0.00321	 val loss = 0.00121	 test loss = 0.00124
-Epoch 81: loss = 0.00321	 val loss = 0.00119	 test loss = 0.00119
-Epoch 82: loss = 0.00319	 val loss = 0.00120	 test loss = 0.00119
-Epoch 83: loss = 0.00316	 val loss = 0.00117	 test loss = 0.00118
-Epoch 84: loss = 0.00317	 val loss = 0.00118	 test loss = 0.00119
-Epoch 85: loss = 0.00318	 val loss = 0.00114	 test loss = 0.00116
-Epoch 86: loss = 0.00317	 val loss = 0.00119	 test loss = 0.00120
-Epoch 87: loss = 0.00314	 val loss = 0.00118	 test loss = 0.00116
-Epoch 88: loss = 0.00315	 val loss = 0.00114	 test loss = 0.00118
-Epoch 89: loss = 0.00316	 val loss = 0.00118	 test loss = 0.00119
-Epoch 90: loss = 0.00315	 val loss = 0.00118	 test loss = 0.00115
-Epoch 91: loss = 0.00315	 val loss = 0.00117	 test loss = 0.00116
-Epoch 92: loss = 0.00314	 val loss = 0.00114	 test loss = 0.00114
-Epoch 93: loss = 0.00314	 val loss = 0.00113	 test loss = 0.00115
-Epoch 94: loss = 0.00311	 val loss = 0.00117	 test loss = 0.00116
-Epoch 95: loss = 0.00312	 val loss = 0.00116	 test loss = 0.00115
-Epoch 96: loss = 0.00311	 val loss = 0.00113	 test loss = 0.00116
-Epoch 97: loss = 0.00312	 val loss = 0.00114	 test loss = 0.00114
-Epoch 98: loss = 0.00312	 val loss = 0.00113	 test loss = 0.00114
-Epoch 99: loss = 0.00310	 val loss = 0.00114	 test loss = 0.00114
-Epoch 100: loss = 0.00311	 val loss = 0.00114	 test loss = 0.00114
-TEST VALUE FROM LAST EPOCH: 0.001152
-TEST VALUE BEST LAST EPOCH: 0.001149
-TEST VALUE REPEATED BEST LAST EPOCH: 0.001157
+Epoch 1: loss = 0.17128	 val loss = 0.02975	 test loss = 0.02994
+Epoch 2: loss = 0.03301	 val loss = 0.02802	 test loss = 0.02826
+Epoch 3: loss = 0.03042	 val loss = 0.02722	 test loss = 0.02750
+Epoch 4: loss = 0.02923	 val loss = 0.02718	 test loss = 0.02748
+Epoch 5: loss = 0.02904	 val loss = 0.02783	 test loss = 0.02810
+Epoch 6: loss = 0.02888	 val loss = 0.02605	 test loss = 0.02629
+Epoch 7: loss = 0.00948	 val loss = 0.00121	 test loss = 0.00124
+Epoch 8: loss = 0.00328	 val loss = 0.00087	 test loss = 0.00089
+Epoch 9: loss = 0.00283	 val loss = 0.00080	 test loss = 0.00082
+Epoch 10: loss = 0.00265	 val loss = 0.00074	 test loss = 0.00076
+Epoch 11: loss = 0.00249	 val loss = 0.00072	 test loss = 0.00074
+Epoch 12: loss = 0.00242	 val loss = 0.00073	 test loss = 0.00074
+Epoch 13: loss = 0.00234	 val loss = 0.00070	 test loss = 0.00071
+Epoch 14: loss = 0.00227	 val loss = 0.00068	 test loss = 0.00070
+Epoch 15: loss = 0.00218	 val loss = 0.00077	 test loss = 0.00078
+Epoch 16: loss = 0.00211	 val loss = 0.00141	 test loss = 0.00142
+Epoch 17: loss = 0.00205	 val loss = 0.00075	 test loss = 0.00077
+Epoch 18: loss = 0.00201	 val loss = 0.00064	 test loss = 0.00066
+Epoch 19: loss = 0.00202	 val loss = 0.00056	 test loss = 0.00057
+Epoch 20: loss = 0.00200	 val loss = 0.00054	 test loss = 0.00056
+Epoch 21: loss = 0.00195	 val loss = 0.00103	 test loss = 0.00105
+Epoch 22: loss = 0.00192	 val loss = 0.00061	 test loss = 0.00063
+Epoch 23: loss = 0.00191	 val loss = 0.00056	 test loss = 0.00058
+Epoch 24: loss = 0.00186	 val loss = 0.00056	 test loss = 0.00057
+Epoch 25: loss = 0.00184	 val loss = 0.00072	 test loss = 0.00074
+Epoch 26: loss = 0.00187	 val loss = 0.00056	 test loss = 0.00057
+Epoch 27: loss = 0.00180	 val loss = 0.00047	 test loss = 0.00048
+Epoch 28: loss = 0.00181	 val loss = 0.00046	 test loss = 0.00047
+Epoch 29: loss = 0.00178	 val loss = 0.00052	 test loss = 0.00054
+Epoch 30: loss = 0.00175	 val loss = 0.00060	 test loss = 0.00062
+Epoch 31: loss = 0.00174	 val loss = 0.00039	 test loss = 0.00041
+Epoch 32: loss = 0.00173	 val loss = 0.00038	 test loss = 0.00040
+Epoch 33: loss = 0.00171	 val loss = 0.00042	 test loss = 0.00044
+Epoch 34: loss = 0.00170	 val loss = 0.00046	 test loss = 0.00047
+Epoch 35: loss = 0.00170	 val loss = 0.00043	 test loss = 0.00044
+Epoch 36: loss = 0.00168	 val loss = 0.00038	 test loss = 0.00039
+Epoch 37: loss = 0.00169	 val loss = 0.00039	 test loss = 0.00041
+Epoch 38: loss = 0.00165	 val loss = 0.00038	 test loss = 0.00039
+Epoch 39: loss = 0.00166	 val loss = 0.00036	 test loss = 0.00037
+Epoch 40: loss = 0.00164	 val loss = 0.00037	 test loss = 0.00038
+Epoch 41: loss = 0.00162	 val loss = 0.00041	 test loss = 0.00042
+Epoch 42: loss = 0.00163	 val loss = 0.00040	 test loss = 0.00041
+Epoch 43: loss = 0.00162	 val loss = 0.00035	 test loss = 0.00036
+Epoch 44: loss = 0.00161	 val loss = 0.00036	 test loss = 0.00038
+Epoch 45: loss = 0.00161	 val loss = 0.00035	 test loss = 0.00036
+Epoch 46: loss = 0.00160	 val loss = 0.00034	 test loss = 0.00035
+Epoch 47: loss = 0.00160	 val loss = 0.00035	 test loss = 0.00036
+Epoch 48: loss = 0.00160	 val loss = 0.00034	 test loss = 0.00036
+Epoch 49: loss = 0.00160	 val loss = 0.00034	 test loss = 0.00035
+Epoch 50: loss = 0.00159	 val loss = 0.00034	 test loss = 0.00035
+TEST VALUE FROM LAST EPOCH: 0.000352
+TEST VALUE REPEATED FROM LAST EPOCH: 0.000352
+TEST VALUE BEST LAST EPOCH: 0.000351
 
 SEED: 1
 
@@ -155,113 +105,63 @@ NUMBER OF SAMPLES: 12000
 Processing data...
 
 USING NOVEL EMBEDDING
-Total parameters = 227570
+Total parameters = 227442
 
 WEIGHT DECAY: 1e-05
 
-Epoch 1: loss = 0.33327	 val loss = 0.03969	 test loss = 0.03978
-Epoch 2: loss = 0.04690	 val loss = 0.03136	 test loss = 0.03173
-Epoch 3: loss = 0.03682	 val loss = 0.02728	 test loss = 0.02715
-Epoch 4: loss = 0.03212	 val loss = 0.02570	 test loss = 0.02628
-Epoch 5: loss = 0.03020	 val loss = 0.02432	 test loss = 0.02508
-Epoch 6: loss = 0.02882	 val loss = 0.02364	 test loss = 0.02376
-Epoch 7: loss = 0.01439	 val loss = 0.00240	 test loss = 0.00239
-Epoch 8: loss = 0.00650	 val loss = 0.00194	 test loss = 0.00196
-Epoch 9: loss = 0.00558	 val loss = 0.00172	 test loss = 0.00172
-Epoch 10: loss = 0.00504	 val loss = 0.00163	 test loss = 0.00164
-Epoch 11: loss = 0.00471	 val loss = 0.00150	 test loss = 0.00152
-Epoch 12: loss = 0.00442	 val loss = 0.00168	 test loss = 0.00166
-Epoch 13: loss = 0.00430	 val loss = 0.00139	 test loss = 0.00141
-Epoch 14: loss = 0.00416	 val loss = 0.00185	 test loss = 0.00187
-Epoch 15: loss = 0.00405	 val loss = 0.00170	 test loss = 0.00171
-Epoch 16: loss = 0.00402	 val loss = 0.00155	 test loss = 0.00154
-Epoch 17: loss = 0.00391	 val loss = 0.00148	 test loss = 0.00150
-Epoch 18: loss = 0.00389	 val loss = 0.00168	 test loss = 0.00167
-Epoch 19: loss = 0.00396	 val loss = 0.00197	 test loss = 0.00200
-Epoch 20: loss = 0.00393	 val loss = 0.00187	 test loss = 0.00185
-Epoch 21: loss = 0.00393	 val loss = 0.00150	 test loss = 0.00147
-Epoch 22: loss = 0.00387	 val loss = 0.00174	 test loss = 0.00177
-Epoch 23: loss = 0.00387	 val loss = 0.00211	 test loss = 0.00208
-Epoch 24: loss = 0.00398	 val loss = 0.00154	 test loss = 0.00148
-Epoch 25: loss = 0.00385	 val loss = 0.00137	 test loss = 0.00136
-Epoch 26: loss = 0.00390	 val loss = 0.00167	 test loss = 0.00169
-Epoch 27: loss = 0.00373	 val loss = 0.00151	 test loss = 0.00152
-Epoch 28: loss = 0.00382	 val loss = 0.00239	 test loss = 0.00238
-Epoch 29: loss = 0.00377	 val loss = 0.00171	 test loss = 0.00172
-Epoch 30: loss = 0.00380	 val loss = 0.00153	 test loss = 0.00155
-Epoch 31: loss = 0.00370	 val loss = 0.00239	 test loss = 0.00238
-Epoch 32: loss = 0.00362	 val loss = 0.00310	 test loss = 0.00310
-Epoch 33: loss = 0.00370	 val loss = 0.00162	 test loss = 0.00162
-Epoch 34: loss = 0.00369	 val loss = 0.00125	 test loss = 0.00125
-Epoch 35: loss = 0.00362	 val loss = 0.00214	 test loss = 0.00212
-Epoch 36: loss = 0.00366	 val loss = 0.00182	 test loss = 0.00182
-Epoch 37: loss = 0.00362	 val loss = 0.00209	 test loss = 0.00211
-Epoch 38: loss = 0.00365	 val loss = 0.00144	 test loss = 0.00144
-Epoch 39: loss = 0.00364	 val loss = 0.00249	 test loss = 0.00253
-Epoch 40: loss = 0.00368	 val loss = 0.00216	 test loss = 0.00217
-Epoch 41: loss = 0.00354	 val loss = 0.00139	 test loss = 0.00136
-Epoch 42: loss = 0.00354	 val loss = 0.00142	 test loss = 0.00140
-Epoch 43: loss = 0.00355	 val loss = 0.00134	 test loss = 0.00136
-Epoch 44: loss = 0.00352	 val loss = 0.00168	 test loss = 0.00170
-Epoch 45: loss = 0.00353	 val loss = 0.00231	 test loss = 0.00238
-Epoch 46: loss = 0.00352	 val loss = 0.00188	 test loss = 0.00187
-Epoch 47: loss = 0.00352	 val loss = 0.00153	 test loss = 0.00154
-Epoch 48: loss = 0.00352	 val loss = 0.00130	 test loss = 0.00132
-Epoch 49: loss = 0.00345	 val loss = 0.00133	 test loss = 0.00136
-Epoch 50: loss = 0.00343	 val loss = 0.00146	 test loss = 0.00145
-Epoch 51: loss = 0.00347	 val loss = 0.00131	 test loss = 0.00131
-Epoch 52: loss = 0.00348	 val loss = 0.00142	 test loss = 0.00143
-Epoch 53: loss = 0.00341	 val loss = 0.00172	 test loss = 0.00176
-Epoch 54: loss = 0.00342	 val loss = 0.00176	 test loss = 0.00175
-Epoch 55: loss = 0.00337	 val loss = 0.00167	 test loss = 0.00166
-Epoch 56: loss = 0.00346	 val loss = 0.00125	 test loss = 0.00129
-Epoch 57: loss = 0.00341	 val loss = 0.00139	 test loss = 0.00139
-Epoch 58: loss = 0.00336	 val loss = 0.00132	 test loss = 0.00136
-Epoch 59: loss = 0.00338	 val loss = 0.00188	 test loss = 0.00191
-Epoch 60: loss = 0.00339	 val loss = 0.00163	 test loss = 0.00166
-Epoch 61: loss = 0.00334	 val loss = 0.00128	 test loss = 0.00129
-Epoch 62: loss = 0.00335	 val loss = 0.00123	 test loss = 0.00122
-Epoch 63: loss = 0.00330	 val loss = 0.00125	 test loss = 0.00124
-Epoch 64: loss = 0.00333	 val loss = 0.00120	 test loss = 0.00123
-Epoch 65: loss = 0.00333	 val loss = 0.00122	 test loss = 0.00122
-Epoch 66: loss = 0.00332	 val loss = 0.00135	 test loss = 0.00134
-Epoch 67: loss = 0.00332	 val loss = 0.00127	 test loss = 0.00126
-Epoch 68: loss = 0.00328	 val loss = 0.00125	 test loss = 0.00125
-Epoch 69: loss = 0.00328	 val loss = 0.00129	 test loss = 0.00131
-Epoch 70: loss = 0.00325	 val loss = 0.00139	 test loss = 0.00140
-Epoch 71: loss = 0.00326	 val loss = 0.00171	 test loss = 0.00172
-Epoch 72: loss = 0.00325	 val loss = 0.00119	 test loss = 0.00121
-Epoch 73: loss = 0.00325	 val loss = 0.00123	 test loss = 0.00123
-Epoch 74: loss = 0.00324	 val loss = 0.00117	 test loss = 0.00119
-Epoch 75: loss = 0.00321	 val loss = 0.00132	 test loss = 0.00131
-Epoch 76: loss = 0.00320	 val loss = 0.00132	 test loss = 0.00134
-Epoch 77: loss = 0.00320	 val loss = 0.00128	 test loss = 0.00127
-Epoch 78: loss = 0.00319	 val loss = 0.00127	 test loss = 0.00126
-Epoch 79: loss = 0.00321	 val loss = 0.00128	 test loss = 0.00133
-Epoch 80: loss = 0.00317	 val loss = 0.00117	 test loss = 0.00117
-Epoch 81: loss = 0.00315	 val loss = 0.00121	 test loss = 0.00121
-Epoch 82: loss = 0.00317	 val loss = 0.00133	 test loss = 0.00134
-Epoch 83: loss = 0.00316	 val loss = 0.00121	 test loss = 0.00122
-Epoch 84: loss = 0.00316	 val loss = 0.00125	 test loss = 0.00128
-Epoch 85: loss = 0.00316	 val loss = 0.00119	 test loss = 0.00122
-Epoch 86: loss = 0.00313	 val loss = 0.00120	 test loss = 0.00122
-Epoch 87: loss = 0.00315	 val loss = 0.00122	 test loss = 0.00123
-Epoch 88: loss = 0.00313	 val loss = 0.00125	 test loss = 0.00125
-Epoch 89: loss = 0.00313	 val loss = 0.00118	 test loss = 0.00121
-Epoch 90: loss = 0.00313	 val loss = 0.00122	 test loss = 0.00121
-Epoch 91: loss = 0.00311	 val loss = 0.00118	 test loss = 0.00118
-Epoch 92: loss = 0.00310	 val loss = 0.00123	 test loss = 0.00123
-Epoch 93: loss = 0.00313	 val loss = 0.00119	 test loss = 0.00122
-Epoch 94: loss = 0.00312	 val loss = 0.00120	 test loss = 0.00119
-Epoch 95: loss = 0.00310	 val loss = 0.00120	 test loss = 0.00120
-Epoch 96: loss = 0.00310	 val loss = 0.00118	 test loss = 0.00117
-Epoch 97: loss = 0.00309	 val loss = 0.00119	 test loss = 0.00119
-Epoch 98: loss = 0.00309	 val loss = 0.00116	 test loss = 0.00121
-Epoch 99: loss = 0.00311	 val loss = 0.00119	 test loss = 0.00118
-Epoch 100: loss = 0.00311	 val loss = 0.00118	 test loss = 0.00120
-TEST VALUE FROM LAST EPOCH: 0.001182
-TEST VALUE BEST LAST EPOCH: 0.001184
-TEST VALUE REPEATED BEST LAST EPOCH: 0.001198
+Epoch 1: loss = 0.18255	 val loss = 0.03025	 test loss = 0.03076
+Epoch 2: loss = 0.03419	 val loss = 0.02828	 test loss = 0.02858
+Epoch 3: loss = 0.03076	 val loss = 0.02781	 test loss = 0.02815
+Epoch 4: loss = 0.02918	 val loss = 0.02704	 test loss = 0.02722
+Epoch 5: loss = 0.02503	 val loss = 0.00212	 test loss = 0.00209
+Epoch 6: loss = 0.00468	 val loss = 0.00115	 test loss = 0.00114
+Epoch 7: loss = 0.00341	 val loss = 0.00093	 test loss = 0.00092
+Epoch 8: loss = 0.00292	 val loss = 0.00076	 test loss = 0.00075
+Epoch 9: loss = 0.00268	 val loss = 0.00080	 test loss = 0.00080
+Epoch 10: loss = 0.00253	 val loss = 0.00106	 test loss = 0.00105
+Epoch 11: loss = 0.00241	 val loss = 0.00071	 test loss = 0.00071
+Epoch 12: loss = 0.00233	 val loss = 0.00101	 test loss = 0.00101
+Epoch 13: loss = 0.00226	 val loss = 0.00100	 test loss = 0.00099
+Epoch 14: loss = 0.00219	 val loss = 0.00053	 test loss = 0.00053
+Epoch 15: loss = 0.00214	 val loss = 0.00062	 test loss = 0.00063
+Epoch 16: loss = 0.00207	 val loss = 0.00115	 test loss = 0.00115
+Epoch 17: loss = 0.00206	 val loss = 0.00068	 test loss = 0.00067
+Epoch 18: loss = 0.00207	 val loss = 0.00096	 test loss = 0.00095
+Epoch 19: loss = 0.00197	 val loss = 0.00087	 test loss = 0.00087
+Epoch 20: loss = 0.00199	 val loss = 0.00067	 test loss = 0.00067
+Epoch 21: loss = 0.00198	 val loss = 0.00055	 test loss = 0.00056
+Epoch 22: loss = 0.00195	 val loss = 0.00060	 test loss = 0.00060
+Epoch 23: loss = 0.00190	 val loss = 0.00127	 test loss = 0.00126
+Epoch 24: loss = 0.00191	 val loss = 0.00056	 test loss = 0.00056
+Epoch 25: loss = 0.00190	 val loss = 0.00072	 test loss = 0.00073
+Epoch 26: loss = 0.00184	 val loss = 0.00052	 test loss = 0.00053
+Epoch 27: loss = 0.00186	 val loss = 0.00049	 test loss = 0.00049
+Epoch 28: loss = 0.00181	 val loss = 0.00047	 test loss = 0.00047
+Epoch 29: loss = 0.00180	 val loss = 0.00048	 test loss = 0.00049
+Epoch 30: loss = 0.00178	 val loss = 0.00057	 test loss = 0.00057
+Epoch 31: loss = 0.00175	 val loss = 0.00048	 test loss = 0.00048
+Epoch 32: loss = 0.00173	 val loss = 0.00051	 test loss = 0.00051
+Epoch 33: loss = 0.00173	 val loss = 0.00049	 test loss = 0.00049
+Epoch 34: loss = 0.00172	 val loss = 0.00049	 test loss = 0.00050
+Epoch 35: loss = 0.00171	 val loss = 0.00043	 test loss = 0.00044
+Epoch 36: loss = 0.00171	 val loss = 0.00042	 test loss = 0.00043
+Epoch 37: loss = 0.00169	 val loss = 0.00041	 test loss = 0.00041
+Epoch 38: loss = 0.00168	 val loss = 0.00046	 test loss = 0.00047
+Epoch 39: loss = 0.00167	 val loss = 0.00039	 test loss = 0.00039
+Epoch 40: loss = 0.00167	 val loss = 0.00046	 test loss = 0.00046
+Epoch 41: loss = 0.00167	 val loss = 0.00038	 test loss = 0.00039
+Epoch 42: loss = 0.00165	 val loss = 0.00038	 test loss = 0.00039
+Epoch 43: loss = 0.00165	 val loss = 0.00036	 test loss = 0.00037
+Epoch 44: loss = 0.00165	 val loss = 0.00036	 test loss = 0.00037
+Epoch 45: loss = 0.00163	 val loss = 0.00038	 test loss = 0.00038
+Epoch 46: loss = 0.00163	 val loss = 0.00036	 test loss = 0.00036
+Epoch 47: loss = 0.00163	 val loss = 0.00036	 test loss = 0.00036
+Epoch 48: loss = 0.00162	 val loss = 0.00035	 test loss = 0.00036
+Epoch 49: loss = 0.00161	 val loss = 0.00035	 test loss = 0.00036
+Epoch 50: loss = 0.00161	 val loss = 0.00035	 test loss = 0.00036
+TEST VALUE FROM LAST EPOCH: 0.000356
+TEST VALUE REPEATED FROM LAST EPOCH: 0.000356
+TEST VALUE BEST LAST EPOCH: 0.000356
 
 SEED: 2
 
@@ -287,113 +187,63 @@ NUMBER OF SAMPLES: 12000
 Processing data...
 
 USING NOVEL EMBEDDING
-Total parameters = 227570
+Total parameters = 227442
 
 WEIGHT DECAY: 1e-05
 
-Epoch 1: loss = 0.31817	 val loss = 0.04410	 test loss = 0.04439
-Epoch 2: loss = 0.04650	 val loss = 0.02967	 test loss = 0.02951
-Epoch 3: loss = 0.03517	 val loss = 0.02641	 test loss = 0.02642
-Epoch 4: loss = 0.03138	 val loss = 0.02520	 test loss = 0.02542
-Epoch 5: loss = 0.03016	 val loss = 0.02553	 test loss = 0.02521
-Epoch 6: loss = 0.02927	 val loss = 0.02724	 test loss = 0.02719
-Epoch 7: loss = 0.02886	 val loss = 0.02551	 test loss = 0.02594
-Epoch 8: loss = 0.02840	 val loss = 0.02678	 test loss = 0.02759
-Epoch 9: loss = 0.02699	 val loss = 0.01335	 test loss = 0.01341
-Epoch 10: loss = 0.00734	 val loss = 0.00202	 test loss = 0.00200
-Epoch 11: loss = 0.00516	 val loss = 0.00168	 test loss = 0.00165
-Epoch 12: loss = 0.00470	 val loss = 0.00159	 test loss = 0.00161
-Epoch 13: loss = 0.00448	 val loss = 0.00169	 test loss = 0.00168
-Epoch 14: loss = 0.00431	 val loss = 0.00170	 test loss = 0.00164
-Epoch 15: loss = 0.00418	 val loss = 0.00146	 test loss = 0.00147
-Epoch 16: loss = 0.00412	 val loss = 0.00160	 test loss = 0.00162
-Epoch 17: loss = 0.00412	 val loss = 0.00153	 test loss = 0.00157
-Epoch 18: loss = 0.00398	 val loss = 0.00150	 test loss = 0.00152
-Epoch 19: loss = 0.00405	 val loss = 0.00137	 test loss = 0.00141
-Epoch 20: loss = 0.00391	 val loss = 0.00191	 test loss = 0.00190
-Epoch 21: loss = 0.00398	 val loss = 0.00145	 test loss = 0.00146
-Epoch 22: loss = 0.00391	 val loss = 0.00191	 test loss = 0.00190
-Epoch 23: loss = 0.00400	 val loss = 0.00137	 test loss = 0.00137
-Epoch 24: loss = 0.00388	 val loss = 0.00243	 test loss = 0.00240
-Epoch 25: loss = 0.00379	 val loss = 0.00170	 test loss = 0.00172
-Epoch 26: loss = 0.00390	 val loss = 0.00221	 test loss = 0.00219
-Epoch 27: loss = 0.00385	 val loss = 0.00154	 test loss = 0.00154
-Epoch 28: loss = 0.00394	 val loss = 0.00209	 test loss = 0.00206
-Epoch 29: loss = 0.00381	 val loss = 0.00181	 test loss = 0.00181
-Epoch 30: loss = 0.00377	 val loss = 0.00153	 test loss = 0.00155
-Epoch 31: loss = 0.00381	 val loss = 0.00140	 test loss = 0.00137
-Epoch 32: loss = 0.00375	 val loss = 0.00169	 test loss = 0.00171
-Epoch 33: loss = 0.00370	 val loss = 0.00180	 test loss = 0.00176
-Epoch 34: loss = 0.00371	 val loss = 0.00295	 test loss = 0.00296
-Epoch 35: loss = 0.00375	 val loss = 0.00272	 test loss = 0.00278
-Epoch 36: loss = 0.00371	 val loss = 0.00165	 test loss = 0.00164
-Epoch 37: loss = 0.00365	 val loss = 0.00172	 test loss = 0.00173
-Epoch 38: loss = 0.00359	 val loss = 0.00167	 test loss = 0.00168
-Epoch 39: loss = 0.00364	 val loss = 0.00228	 test loss = 0.00233
-Epoch 40: loss = 0.00366	 val loss = 0.00238	 test loss = 0.00241
-Epoch 41: loss = 0.00359	 val loss = 0.00160	 test loss = 0.00162
-Epoch 42: loss = 0.00359	 val loss = 0.00151	 test loss = 0.00154
-Epoch 43: loss = 0.00354	 val loss = 0.00178	 test loss = 0.00183
-Epoch 44: loss = 0.00362	 val loss = 0.00154	 test loss = 0.00152
-Epoch 45: loss = 0.00347	 val loss = 0.00149	 test loss = 0.00147
-Epoch 46: loss = 0.00351	 val loss = 0.00159	 test loss = 0.00162
-Epoch 47: loss = 0.00348	 val loss = 0.00171	 test loss = 0.00172
-Epoch 48: loss = 0.00347	 val loss = 0.00199	 test loss = 0.00202
-Epoch 49: loss = 0.00353	 val loss = 0.00173	 test loss = 0.00176
-Epoch 50: loss = 0.00348	 val loss = 0.00140	 test loss = 0.00141
-Epoch 51: loss = 0.00344	 val loss = 0.00135	 test loss = 0.00138
-Epoch 52: loss = 0.00345	 val loss = 0.00136	 test loss = 0.00136
-Epoch 53: loss = 0.00346	 val loss = 0.00131	 test loss = 0.00131
-Epoch 54: loss = 0.00341	 val loss = 0.00156	 test loss = 0.00159
-Epoch 55: loss = 0.00342	 val loss = 0.00176	 test loss = 0.00177
-Epoch 56: loss = 0.00343	 val loss = 0.00129	 test loss = 0.00127
-Epoch 57: loss = 0.00341	 val loss = 0.00169	 test loss = 0.00170
-Epoch 58: loss = 0.00339	 val loss = 0.00183	 test loss = 0.00185
-Epoch 59: loss = 0.00334	 val loss = 0.00145	 test loss = 0.00143
-Epoch 60: loss = 0.00336	 val loss = 0.00126	 test loss = 0.00127
-Epoch 61: loss = 0.00333	 val loss = 0.00143	 test loss = 0.00143
-Epoch 62: loss = 0.00335	 val loss = 0.00136	 test loss = 0.00139
-Epoch 63: loss = 0.00333	 val loss = 0.00184	 test loss = 0.00180
-Epoch 64: loss = 0.00334	 val loss = 0.00129	 test loss = 0.00129
-Epoch 65: loss = 0.00329	 val loss = 0.00163	 test loss = 0.00164
-Epoch 66: loss = 0.00333	 val loss = 0.00132	 test loss = 0.00131
-Epoch 67: loss = 0.00331	 val loss = 0.00129	 test loss = 0.00129
-Epoch 68: loss = 0.00328	 val loss = 0.00144	 test loss = 0.00145
-Epoch 69: loss = 0.00324	 val loss = 0.00144	 test loss = 0.00144
-Epoch 70: loss = 0.00324	 val loss = 0.00150	 test loss = 0.00148
-Epoch 71: loss = 0.00326	 val loss = 0.00127	 test loss = 0.00126
-Epoch 72: loss = 0.00327	 val loss = 0.00139	 test loss = 0.00141
-Epoch 73: loss = 0.00326	 val loss = 0.00150	 test loss = 0.00148
-Epoch 74: loss = 0.00319	 val loss = 0.00134	 test loss = 0.00136
-Epoch 75: loss = 0.00321	 val loss = 0.00144	 test loss = 0.00142
-Epoch 76: loss = 0.00320	 val loss = 0.00133	 test loss = 0.00136
-Epoch 77: loss = 0.00320	 val loss = 0.00145	 test loss = 0.00143
-Epoch 78: loss = 0.00319	 val loss = 0.00127	 test loss = 0.00126
-Epoch 79: loss = 0.00319	 val loss = 0.00136	 test loss = 0.00135
-Epoch 80: loss = 0.00316	 val loss = 0.00134	 test loss = 0.00131
-Epoch 81: loss = 0.00314	 val loss = 0.00132	 test loss = 0.00132
-Epoch 82: loss = 0.00314	 val loss = 0.00129	 test loss = 0.00131
-Epoch 83: loss = 0.00312	 val loss = 0.00131	 test loss = 0.00132
-Epoch 84: loss = 0.00314	 val loss = 0.00135	 test loss = 0.00134
-Epoch 85: loss = 0.00314	 val loss = 0.00131	 test loss = 0.00132
-Epoch 86: loss = 0.00314	 val loss = 0.00127	 test loss = 0.00131
-Epoch 87: loss = 0.00314	 val loss = 0.00127	 test loss = 0.00128
-Epoch 88: loss = 0.00312	 val loss = 0.00127	 test loss = 0.00128
-Epoch 89: loss = 0.00311	 val loss = 0.00134	 test loss = 0.00134
-Epoch 90: loss = 0.00312	 val loss = 0.00131	 test loss = 0.00128
-Epoch 91: loss = 0.00312	 val loss = 0.00129	 test loss = 0.00132
-Epoch 92: loss = 0.00309	 val loss = 0.00129	 test loss = 0.00128
-Epoch 93: loss = 0.00309	 val loss = 0.00131	 test loss = 0.00129
-Epoch 94: loss = 0.00310	 val loss = 0.00129	 test loss = 0.00132
-Epoch 95: loss = 0.00308	 val loss = 0.00132	 test loss = 0.00131
-Epoch 96: loss = 0.00308	 val loss = 0.00131	 test loss = 0.00130
-Epoch 97: loss = 0.00308	 val loss = 0.00132	 test loss = 0.00130
-Epoch 98: loss = 0.00309	 val loss = 0.00131	 test loss = 0.00127
-Epoch 99: loss = 0.00309	 val loss = 0.00129	 test loss = 0.00131
-Epoch 100: loss = 0.00308	 val loss = 0.00129	 test loss = 0.00131
-TEST VALUE FROM LAST EPOCH: 0.001271
-TEST VALUE BEST LAST EPOCH: 0.001274
-TEST VALUE REPEATED BEST LAST EPOCH: 0.001261
+Epoch 1: loss = 0.18694	 val loss = 0.03061	 test loss = 0.02963
+Epoch 2: loss = 0.03428	 val loss = 0.02892	 test loss = 0.02829
+Epoch 3: loss = 0.03119	 val loss = 0.02862	 test loss = 0.02761
+Epoch 4: loss = 0.02991	 val loss = 0.02743	 test loss = 0.02669
+Epoch 5: loss = 0.02915	 val loss = 0.02717	 test loss = 0.02647
+Epoch 6: loss = 0.02218	 val loss = 0.00198	 test loss = 0.00199
+Epoch 7: loss = 0.00413	 val loss = 0.00104	 test loss = 0.00106
+Epoch 8: loss = 0.00319	 val loss = 0.00105	 test loss = 0.00107
+Epoch 9: loss = 0.00280	 val loss = 0.00094	 test loss = 0.00095
+Epoch 10: loss = 0.00262	 val loss = 0.00064	 test loss = 0.00065
+Epoch 11: loss = 0.00250	 val loss = 0.00082	 test loss = 0.00085
+Epoch 12: loss = 0.00247	 val loss = 0.00089	 test loss = 0.00090
+Epoch 13: loss = 0.00231	 val loss = 0.00058	 test loss = 0.00059
+Epoch 14: loss = 0.00227	 val loss = 0.00061	 test loss = 0.00062
+Epoch 15: loss = 0.00221	 val loss = 0.00078	 test loss = 0.00079
+Epoch 16: loss = 0.00216	 val loss = 0.00061	 test loss = 0.00061
+Epoch 17: loss = 0.00214	 val loss = 0.00062	 test loss = 0.00063
+Epoch 18: loss = 0.00207	 val loss = 0.00136	 test loss = 0.00134
+Epoch 19: loss = 0.00206	 val loss = 0.00071	 test loss = 0.00071
+Epoch 20: loss = 0.00206	 val loss = 0.00069	 test loss = 0.00070
+Epoch 21: loss = 0.00201	 val loss = 0.00051	 test loss = 0.00051
+Epoch 22: loss = 0.00198	 val loss = 0.00065	 test loss = 0.00064
+Epoch 23: loss = 0.00197	 val loss = 0.00090	 test loss = 0.00092
+Epoch 24: loss = 0.00194	 val loss = 0.00057	 test loss = 0.00058
+Epoch 25: loss = 0.00192	 val loss = 0.00052	 test loss = 0.00053
+Epoch 26: loss = 0.00191	 val loss = 0.00064	 test loss = 0.00065
+Epoch 27: loss = 0.00185	 val loss = 0.00063	 test loss = 0.00065
+Epoch 28: loss = 0.00184	 val loss = 0.00060	 test loss = 0.00060
+Epoch 29: loss = 0.00182	 val loss = 0.00043	 test loss = 0.00044
+Epoch 30: loss = 0.00182	 val loss = 0.00054	 test loss = 0.00055
+Epoch 31: loss = 0.00179	 val loss = 0.00066	 test loss = 0.00066
+Epoch 32: loss = 0.00177	 val loss = 0.00062	 test loss = 0.00062
+Epoch 33: loss = 0.00178	 val loss = 0.00056	 test loss = 0.00056
+Epoch 34: loss = 0.00177	 val loss = 0.00053	 test loss = 0.00054
+Epoch 35: loss = 0.00173	 val loss = 0.00042	 test loss = 0.00043
+Epoch 36: loss = 0.00173	 val loss = 0.00041	 test loss = 0.00042
+Epoch 37: loss = 0.00172	 val loss = 0.00038	 test loss = 0.00038
+Epoch 38: loss = 0.00170	 val loss = 0.00039	 test loss = 0.00039
+Epoch 39: loss = 0.00170	 val loss = 0.00039	 test loss = 0.00039
+Epoch 40: loss = 0.00169	 val loss = 0.00042	 test loss = 0.00042
+Epoch 41: loss = 0.00170	 val loss = 0.00041	 test loss = 0.00041
+Epoch 42: loss = 0.00166	 val loss = 0.00036	 test loss = 0.00036
+Epoch 43: loss = 0.00167	 val loss = 0.00036	 test loss = 0.00036
+Epoch 44: loss = 0.00165	 val loss = 0.00037	 test loss = 0.00037
+Epoch 45: loss = 0.00164	 val loss = 0.00036	 test loss = 0.00037
+Epoch 46: loss = 0.00164	 val loss = 0.00035	 test loss = 0.00035
+Epoch 47: loss = 0.00164	 val loss = 0.00035	 test loss = 0.00035
+Epoch 48: loss = 0.00163	 val loss = 0.00035	 test loss = 0.00035
+Epoch 49: loss = 0.00164	 val loss = 0.00034	 test loss = 0.00035
+Epoch 50: loss = 0.00163	 val loss = 0.00035	 test loss = 0.00035
+TEST VALUE FROM LAST EPOCH: 0.000350
+TEST VALUE REPEATED FROM LAST EPOCH: 0.000350
+TEST VALUE BEST LAST EPOCH: 0.000348
 
 SEED: 3
 
@@ -419,113 +269,63 @@ NUMBER OF SAMPLES: 12000
 Processing data...
 
 USING NOVEL EMBEDDING
-Total parameters = 227570
+Total parameters = 227442
 
 WEIGHT DECAY: 1e-05
 
-Epoch 1: loss = 0.30753	 val loss = 0.04079	 test loss = 0.04056
-Epoch 2: loss = 0.04729	 val loss = 0.03178	 test loss = 0.03108
-Epoch 3: loss = 0.03651	 val loss = 0.02689	 test loss = 0.02649
-Epoch 4: loss = 0.03237	 val loss = 0.02516	 test loss = 0.02575
-Epoch 5: loss = 0.03018	 val loss = 0.02576	 test loss = 0.02513
-Epoch 6: loss = 0.02910	 val loss = 0.02333	 test loss = 0.02307
-Epoch 7: loss = 0.01842	 val loss = 0.00293	 test loss = 0.00286
-Epoch 8: loss = 0.00723	 val loss = 0.00215	 test loss = 0.00214
-Epoch 9: loss = 0.00600	 val loss = 0.00201	 test loss = 0.00197
-Epoch 10: loss = 0.00532	 val loss = 0.00177	 test loss = 0.00175
-Epoch 11: loss = 0.00493	 val loss = 0.00153	 test loss = 0.00155
-Epoch 12: loss = 0.00465	 val loss = 0.00147	 test loss = 0.00147
-Epoch 13: loss = 0.00438	 val loss = 0.00149	 test loss = 0.00149
-Epoch 14: loss = 0.00430	 val loss = 0.00135	 test loss = 0.00135
-Epoch 15: loss = 0.00419	 val loss = 0.00167	 test loss = 0.00167
-Epoch 16: loss = 0.00403	 val loss = 0.00175	 test loss = 0.00176
-Epoch 17: loss = 0.00404	 val loss = 0.00163	 test loss = 0.00161
-Epoch 18: loss = 0.00404	 val loss = 0.00135	 test loss = 0.00136
-Epoch 19: loss = 0.00392	 val loss = 0.00160	 test loss = 0.00162
-Epoch 20: loss = 0.00391	 val loss = 0.00275	 test loss = 0.00272
-Epoch 21: loss = 0.00394	 val loss = 0.00281	 test loss = 0.00281
-Epoch 22: loss = 0.00395	 val loss = 0.00172	 test loss = 0.00170
-Epoch 23: loss = 0.00404	 val loss = 0.00176	 test loss = 0.00174
-Epoch 24: loss = 0.00402	 val loss = 0.00152	 test loss = 0.00149
-Epoch 25: loss = 0.00386	 val loss = 0.00209	 test loss = 0.00207
-Epoch 26: loss = 0.00400	 val loss = 0.00351	 test loss = 0.00350
-Epoch 27: loss = 0.00384	 val loss = 0.00328	 test loss = 0.00325
-Epoch 28: loss = 0.00380	 val loss = 0.00333	 test loss = 0.00333
-Epoch 29: loss = 0.00398	 val loss = 0.00155	 test loss = 0.00157
-Epoch 30: loss = 0.00379	 val loss = 0.00202	 test loss = 0.00204
-Epoch 31: loss = 0.00377	 val loss = 0.00172	 test loss = 0.00171
-Epoch 32: loss = 0.00381	 val loss = 0.00198	 test loss = 0.00199
-Epoch 33: loss = 0.00383	 val loss = 0.00180	 test loss = 0.00177
-Epoch 34: loss = 0.00374	 val loss = 0.00157	 test loss = 0.00157
-Epoch 35: loss = 0.00372	 val loss = 0.00260	 test loss = 0.00259
-Epoch 36: loss = 0.00373	 val loss = 0.00170	 test loss = 0.00171
-Epoch 37: loss = 0.00364	 val loss = 0.00164	 test loss = 0.00162
-Epoch 38: loss = 0.00371	 val loss = 0.00136	 test loss = 0.00134
-Epoch 39: loss = 0.00366	 val loss = 0.00162	 test loss = 0.00160
-Epoch 40: loss = 0.00367	 val loss = 0.00225	 test loss = 0.00228
-Epoch 41: loss = 0.00359	 val loss = 0.00184	 test loss = 0.00184
-Epoch 42: loss = 0.00366	 val loss = 0.00176	 test loss = 0.00175
-Epoch 43: loss = 0.00358	 val loss = 0.00147	 test loss = 0.00144
-Epoch 44: loss = 0.00362	 val loss = 0.00173	 test loss = 0.00171
-Epoch 45: loss = 0.00358	 val loss = 0.00164	 test loss = 0.00160
-Epoch 46: loss = 0.00356	 val loss = 0.00176	 test loss = 0.00176
-Epoch 47: loss = 0.00353	 val loss = 0.00243	 test loss = 0.00241
-Epoch 48: loss = 0.00352	 val loss = 0.00131	 test loss = 0.00131
-Epoch 49: loss = 0.00347	 val loss = 0.00172	 test loss = 0.00173
-Epoch 50: loss = 0.00353	 val loss = 0.00149	 test loss = 0.00151
-Epoch 51: loss = 0.00347	 val loss = 0.00177	 test loss = 0.00176
-Epoch 52: loss = 0.00346	 val loss = 0.00142	 test loss = 0.00142
-Epoch 53: loss = 0.00348	 val loss = 0.00131	 test loss = 0.00130
-Epoch 54: loss = 0.00345	 val loss = 0.00141	 test loss = 0.00141
-Epoch 55: loss = 0.00349	 val loss = 0.00133	 test loss = 0.00129
-Epoch 56: loss = 0.00341	 val loss = 0.00132	 test loss = 0.00134
-Epoch 57: loss = 0.00340	 val loss = 0.00125	 test loss = 0.00122
-Epoch 58: loss = 0.00342	 val loss = 0.00140	 test loss = 0.00140
-Epoch 59: loss = 0.00336	 val loss = 0.00172	 test loss = 0.00170
-Epoch 60: loss = 0.00340	 val loss = 0.00139	 test loss = 0.00140
-Epoch 61: loss = 0.00336	 val loss = 0.00128	 test loss = 0.00129
-Epoch 62: loss = 0.00333	 val loss = 0.00167	 test loss = 0.00169
-Epoch 63: loss = 0.00336	 val loss = 0.00138	 test loss = 0.00139
-Epoch 64: loss = 0.00334	 val loss = 0.00137	 test loss = 0.00136
-Epoch 65: loss = 0.00332	 val loss = 0.00144	 test loss = 0.00142
-Epoch 66: loss = 0.00332	 val loss = 0.00161	 test loss = 0.00161
-Epoch 67: loss = 0.00330	 val loss = 0.00130	 test loss = 0.00129
-Epoch 68: loss = 0.00329	 val loss = 0.00136	 test loss = 0.00137
-Epoch 69: loss = 0.00328	 val loss = 0.00154	 test loss = 0.00153
-Epoch 70: loss = 0.00328	 val loss = 0.00123	 test loss = 0.00122
-Epoch 71: loss = 0.00326	 val loss = 0.00124	 test loss = 0.00123
-Epoch 72: loss = 0.00324	 val loss = 0.00121	 test loss = 0.00121
-Epoch 73: loss = 0.00327	 val loss = 0.00128	 test loss = 0.00127
-Epoch 74: loss = 0.00324	 val loss = 0.00123	 test loss = 0.00122
-Epoch 75: loss = 0.00326	 val loss = 0.00118	 test loss = 0.00116
-Epoch 76: loss = 0.00323	 val loss = 0.00127	 test loss = 0.00127
-Epoch 77: loss = 0.00324	 val loss = 0.00122	 test loss = 0.00123
-Epoch 78: loss = 0.00322	 val loss = 0.00117	 test loss = 0.00118
-Epoch 79: loss = 0.00322	 val loss = 0.00125	 test loss = 0.00123
-Epoch 80: loss = 0.00322	 val loss = 0.00126	 test loss = 0.00124
-Epoch 81: loss = 0.00320	 val loss = 0.00119	 test loss = 0.00116
-Epoch 82: loss = 0.00318	 val loss = 0.00119	 test loss = 0.00117
-Epoch 83: loss = 0.00317	 val loss = 0.00114	 test loss = 0.00117
-Epoch 84: loss = 0.00317	 val loss = 0.00120	 test loss = 0.00121
-Epoch 85: loss = 0.00316	 val loss = 0.00115	 test loss = 0.00114
-Epoch 86: loss = 0.00316	 val loss = 0.00118	 test loss = 0.00117
-Epoch 87: loss = 0.00317	 val loss = 0.00118	 test loss = 0.00118
-Epoch 88: loss = 0.00316	 val loss = 0.00120	 test loss = 0.00121
-Epoch 89: loss = 0.00315	 val loss = 0.00117	 test loss = 0.00118
-Epoch 90: loss = 0.00315	 val loss = 0.00114	 test loss = 0.00116
-Epoch 91: loss = 0.00315	 val loss = 0.00115	 test loss = 0.00115
-Epoch 92: loss = 0.00315	 val loss = 0.00114	 test loss = 0.00112
-Epoch 93: loss = 0.00312	 val loss = 0.00116	 test loss = 0.00115
-Epoch 94: loss = 0.00314	 val loss = 0.00114	 test loss = 0.00114
-Epoch 95: loss = 0.00314	 val loss = 0.00112	 test loss = 0.00113
-Epoch 96: loss = 0.00313	 val loss = 0.00113	 test loss = 0.00115
-Epoch 97: loss = 0.00312	 val loss = 0.00114	 test loss = 0.00112
-Epoch 98: loss = 0.00313	 val loss = 0.00113	 test loss = 0.00112
-Epoch 99: loss = 0.00312	 val loss = 0.00113	 test loss = 0.00114
-Epoch 100: loss = 0.00314	 val loss = 0.00115	 test loss = 0.00113
-TEST VALUE FROM LAST EPOCH: 0.001152
-TEST VALUE BEST LAST EPOCH: 0.001128
-TEST VALUE REPEATED BEST LAST EPOCH: 0.001129
+Epoch 1: loss = 0.18375	 val loss = 0.02940	 test loss = 0.02864
+Epoch 2: loss = 0.03375	 val loss = 0.02824	 test loss = 0.02754
+Epoch 3: loss = 0.03073	 val loss = 0.02742	 test loss = 0.02699
+Epoch 4: loss = 0.02920	 val loss = 0.02690	 test loss = 0.02622
+Epoch 5: loss = 0.01622	 val loss = 0.00176	 test loss = 0.00179
+Epoch 6: loss = 0.00450	 val loss = 0.00107	 test loss = 0.00109
+Epoch 7: loss = 0.00351	 val loss = 0.00085	 test loss = 0.00086
+Epoch 8: loss = 0.00304	 val loss = 0.00062	 test loss = 0.00063
+Epoch 9: loss = 0.00271	 val loss = 0.00110	 test loss = 0.00110
+Epoch 10: loss = 0.00256	 val loss = 0.00072	 test loss = 0.00073
+Epoch 11: loss = 0.00242	 val loss = 0.00072	 test loss = 0.00073
+Epoch 12: loss = 0.00234	 val loss = 0.00082	 test loss = 0.00082
+Epoch 13: loss = 0.00228	 val loss = 0.00154	 test loss = 0.00154
+Epoch 14: loss = 0.00225	 val loss = 0.00083	 test loss = 0.00083
+Epoch 15: loss = 0.00219	 val loss = 0.00060	 test loss = 0.00061
+Epoch 16: loss = 0.00214	 val loss = 0.00072	 test loss = 0.00072
+Epoch 17: loss = 0.00210	 val loss = 0.00072	 test loss = 0.00072
+Epoch 18: loss = 0.00206	 val loss = 0.00070	 test loss = 0.00070
+Epoch 19: loss = 0.00201	 val loss = 0.00061	 test loss = 0.00060
+Epoch 20: loss = 0.00199	 val loss = 0.00098	 test loss = 0.00100
+Epoch 21: loss = 0.00196	 val loss = 0.00073	 test loss = 0.00074
+Epoch 22: loss = 0.00192	 val loss = 0.00063	 test loss = 0.00064
+Epoch 23: loss = 0.00194	 val loss = 0.00085	 test loss = 0.00086
+Epoch 24: loss = 0.00194	 val loss = 0.00047	 test loss = 0.00048
+Epoch 25: loss = 0.00191	 val loss = 0.00052	 test loss = 0.00052
+Epoch 26: loss = 0.00185	 val loss = 0.00058	 test loss = 0.00059
+Epoch 27: loss = 0.00184	 val loss = 0.00040	 test loss = 0.00040
+Epoch 28: loss = 0.00180	 val loss = 0.00047	 test loss = 0.00047
+Epoch 29: loss = 0.00179	 val loss = 0.00047	 test loss = 0.00047
+Epoch 30: loss = 0.00176	 val loss = 0.00044	 test loss = 0.00045
+Epoch 31: loss = 0.00178	 val loss = 0.00038	 test loss = 0.00038
+Epoch 32: loss = 0.00176	 val loss = 0.00039	 test loss = 0.00040
+Epoch 33: loss = 0.00172	 val loss = 0.00045	 test loss = 0.00046
+Epoch 34: loss = 0.00173	 val loss = 0.00038	 test loss = 0.00039
+Epoch 35: loss = 0.00171	 val loss = 0.00041	 test loss = 0.00042
+Epoch 36: loss = 0.00170	 val loss = 0.00041	 test loss = 0.00041
+Epoch 37: loss = 0.00169	 val loss = 0.00040	 test loss = 0.00041
+Epoch 38: loss = 0.00166	 val loss = 0.00045	 test loss = 0.00045
+Epoch 39: loss = 0.00166	 val loss = 0.00038	 test loss = 0.00039
+Epoch 40: loss = 0.00167	 val loss = 0.00038	 test loss = 0.00039
+Epoch 41: loss = 0.00165	 val loss = 0.00037	 test loss = 0.00037
+Epoch 42: loss = 0.00164	 val loss = 0.00041	 test loss = 0.00042
+Epoch 43: loss = 0.00163	 val loss = 0.00035	 test loss = 0.00036
+Epoch 44: loss = 0.00163	 val loss = 0.00035	 test loss = 0.00035
+Epoch 45: loss = 0.00163	 val loss = 0.00036	 test loss = 0.00037
+Epoch 46: loss = 0.00162	 val loss = 0.00035	 test loss = 0.00036
+Epoch 47: loss = 0.00162	 val loss = 0.00035	 test loss = 0.00036
+Epoch 48: loss = 0.00161	 val loss = 0.00034	 test loss = 0.00035
+Epoch 49: loss = 0.00161	 val loss = 0.00034	 test loss = 0.00035
+Epoch 50: loss = 0.00160	 val loss = 0.00034	 test loss = 0.00035
+TEST VALUE FROM LAST EPOCH: 0.000346
+TEST VALUE REPEATED FROM LAST EPOCH: 0.000346
+TEST VALUE BEST LAST EPOCH: 0.000346
 
 SEED: 4
 
@@ -551,110 +351,60 @@ NUMBER OF SAMPLES: 12000
 Processing data...
 
 USING NOVEL EMBEDDING
-Total parameters = 227570
+Total parameters = 227442
 
 WEIGHT DECAY: 1e-05
 
-Epoch 1: loss = 0.32159	 val loss = 0.04143	 test loss = 0.04051
-Epoch 2: loss = 0.04790	 val loss = 0.03187	 test loss = 0.03178
-Epoch 3: loss = 0.03662	 val loss = 0.02716	 test loss = 0.02668
-Epoch 4: loss = 0.03223	 val loss = 0.02545	 test loss = 0.02511
-Epoch 5: loss = 0.03053	 val loss = 0.02564	 test loss = 0.02542
-Epoch 6: loss = 0.02937	 val loss = 0.02518	 test loss = 0.02483
-Epoch 7: loss = 0.02890	 val loss = 0.02712	 test loss = 0.02706
-Epoch 8: loss = 0.02840	 val loss = 0.02502	 test loss = 0.02489
-Epoch 9: loss = 0.02769	 val loss = 0.02434	 test loss = 0.02463
-Epoch 10: loss = 0.02766	 val loss = 0.02390	 test loss = 0.02479
-Epoch 11: loss = 0.02759	 val loss = 0.02474	 test loss = 0.02460
-Epoch 12: loss = 0.02748	 val loss = 0.02566	 test loss = 0.02557
-Epoch 13: loss = 0.02757	 val loss = 0.02471	 test loss = 0.02398
-Epoch 14: loss = 0.02755	 val loss = 0.02573	 test loss = 0.02545
-Epoch 15: loss = 0.02730	 val loss = 0.02479	 test loss = 0.02516
-Epoch 16: loss = 0.02758	 val loss = 0.02551	 test loss = 0.02576
-Epoch 17: loss = 0.02718	 val loss = 0.02588	 test loss = 0.02572
-Epoch 18: loss = 0.02789	 val loss = 0.02489	 test loss = 0.02428
-Epoch 19: loss = 0.02795	 val loss = 0.02505	 test loss = 0.02479
-Epoch 20: loss = 0.02788	 val loss = 0.02539	 test loss = 0.02574
-Epoch 21: loss = 0.02715	 val loss = 0.02513	 test loss = 0.02474
-Epoch 22: loss = 0.02776	 val loss = 0.02492	 test loss = 0.02471
-Epoch 23: loss = 0.02791	 val loss = 0.03220	 test loss = 0.03191
-Epoch 24: loss = 0.02788	 val loss = 0.02455	 test loss = 0.02475
-Epoch 25: loss = 0.02731	 val loss = 0.02647	 test loss = 0.02597
-Epoch 26: loss = 0.02785	 val loss = 0.02545	 test loss = 0.02545
-Epoch 27: loss = 0.02750	 val loss = 0.02532	 test loss = 0.02519
-Epoch 28: loss = 0.02765	 val loss = 0.02498	 test loss = 0.02480
-Epoch 29: loss = 0.02750	 val loss = 0.03124	 test loss = 0.03146
-Epoch 30: loss = 0.02802	 val loss = 0.02826	 test loss = 0.02763
-Epoch 31: loss = 0.02748	 val loss = 0.02684	 test loss = 0.02710
-Epoch 32: loss = 0.02743	 val loss = 0.02464	 test loss = 0.02471
-Epoch 33: loss = 0.02771	 val loss = 0.02503	 test loss = 0.02522
-Epoch 34: loss = 0.02759	 val loss = 0.02674	 test loss = 0.02626
-Epoch 35: loss = 0.02779	 val loss = 0.02452	 test loss = 0.02442
-Epoch 36: loss = 0.02706	 val loss = 0.02731	 test loss = 0.02715
-Epoch 37: loss = 0.02736	 val loss = 0.02657	 test loss = 0.02666
-Epoch 38: loss = 0.02742	 val loss = 0.02548	 test loss = 0.02502
-Epoch 39: loss = 0.02742	 val loss = 0.02453	 test loss = 0.02400
-Epoch 40: loss = 0.02731	 val loss = 0.02446	 test loss = 0.02433
-Epoch 41: loss = 0.02708	 val loss = 0.02429	 test loss = 0.02419
-Epoch 42: loss = 0.02673	 val loss = 0.02818	 test loss = 0.02879
-Epoch 43: loss = 0.02697	 val loss = 0.02582	 test loss = 0.02546
-Epoch 44: loss = 0.02679	 val loss = 0.02533	 test loss = 0.02539
-Epoch 45: loss = 0.02711	 val loss = 0.02532	 test loss = 0.02500
-Epoch 46: loss = 0.02721	 val loss = 0.02456	 test loss = 0.02464
-Epoch 47: loss = 0.02682	 val loss = 0.02566	 test loss = 0.02553
-Epoch 48: loss = 0.02635	 val loss = 0.02451	 test loss = 0.02454
-Epoch 49: loss = 0.02701	 val loss = 0.02728	 test loss = 0.02765
-Epoch 50: loss = 0.02672	 val loss = 0.02495	 test loss = 0.02440
-Epoch 51: loss = 0.02646	 val loss = 0.02607	 test loss = 0.02523
-Epoch 52: loss = 0.02680	 val loss = 0.02458	 test loss = 0.02447
-Epoch 53: loss = 0.02668	 val loss = 0.02524	 test loss = 0.02455
-Epoch 54: loss = 0.02685	 val loss = 0.02526	 test loss = 0.02502
-Epoch 55: loss = 0.02644	 val loss = 0.02517	 test loss = 0.02448
-Epoch 56: loss = 0.02663	 val loss = 0.02519	 test loss = 0.02513
-Epoch 57: loss = 0.02665	 val loss = 0.02468	 test loss = 0.02388
-Epoch 58: loss = 0.02672	 val loss = 0.02506	 test loss = 0.02473
-Epoch 59: loss = 0.02642	 val loss = 0.02468	 test loss = 0.02446
-Epoch 60: loss = 0.02632	 val loss = 0.02479	 test loss = 0.02514
-Epoch 61: loss = 0.02641	 val loss = 0.02450	 test loss = 0.02438
-Epoch 62: loss = 0.02612	 val loss = 0.02467	 test loss = 0.02436
-Epoch 63: loss = 0.02653	 val loss = 0.02525	 test loss = 0.02471
-Epoch 64: loss = 0.02629	 val loss = 0.02547	 test loss = 0.02511
-Epoch 65: loss = 0.02614	 val loss = 0.02437	 test loss = 0.02408
-Epoch 66: loss = 0.02646	 val loss = 0.02464	 test loss = 0.02449
-Epoch 67: loss = 0.02632	 val loss = 0.02546	 test loss = 0.02577
-Epoch 68: loss = 0.02612	 val loss = 0.02379	 test loss = 0.02425
-Epoch 69: loss = 0.02602	 val loss = 0.02404	 test loss = 0.02438
-Epoch 70: loss = 0.02642	 val loss = 0.02412	 test loss = 0.02385
-Epoch 71: loss = 0.02609	 val loss = 0.02429	 test loss = 0.02380
-Epoch 72: loss = 0.02620	 val loss = 0.02440	 test loss = 0.02416
-Epoch 73: loss = 0.02628	 val loss = 0.02403	 test loss = 0.02390
-Epoch 74: loss = 0.02606	 val loss = 0.02445	 test loss = 0.02416
-Epoch 75: loss = 0.02622	 val loss = 0.02436	 test loss = 0.02395
-Epoch 76: loss = 0.02629	 val loss = 0.02416	 test loss = 0.02426
-Epoch 77: loss = 0.02587	 val loss = 0.02629	 test loss = 0.02642
-Epoch 78: loss = 0.02594	 val loss = 0.02444	 test loss = 0.02358
-Epoch 79: loss = 0.02622	 val loss = 0.02429	 test loss = 0.02425
-Epoch 80: loss = 0.02593	 val loss = 0.02419	 test loss = 0.02452
-Epoch 81: loss = 0.02585	 val loss = 0.02356	 test loss = 0.02394
-Epoch 82: loss = 0.02601	 val loss = 0.02510	 test loss = 0.02400
-Epoch 83: loss = 0.02584	 val loss = 0.02443	 test loss = 0.02383
-Epoch 84: loss = 0.02579	 val loss = 0.02378	 test loss = 0.02401
-Epoch 85: loss = 0.02587	 val loss = 0.02445	 test loss = 0.02440
-Epoch 86: loss = 0.02580	 val loss = 0.02454	 test loss = 0.02444
-Epoch 87: loss = 0.02584	 val loss = 0.02421	 test loss = 0.02434
-Epoch 88: loss = 0.02582	 val loss = 0.02434	 test loss = 0.02415
-Epoch 89: loss = 0.02590	 val loss = 0.02413	 test loss = 0.02409
-Epoch 90: loss = 0.02577	 val loss = 0.02365	 test loss = 0.02409
-Epoch 91: loss = 0.02583	 val loss = 0.02440	 test loss = 0.02403
-Epoch 92: loss = 0.02575	 val loss = 0.02460	 test loss = 0.02391
-Epoch 93: loss = 0.02557	 val loss = 0.02396	 test loss = 0.02423
-Epoch 94: loss = 0.02575	 val loss = 0.02314	 test loss = 0.02404
-Epoch 95: loss = 0.02586	 val loss = 0.02415	 test loss = 0.02362
-Epoch 96: loss = 0.02573	 val loss = 0.02432	 test loss = 0.02436
-Epoch 97: loss = 0.02557	 val loss = 0.02448	 test loss = 0.02393
-Epoch 98: loss = 0.02563	 val loss = 0.02421	 test loss = 0.02385
-Epoch 99: loss = 0.02589	 val loss = 0.02421	 test loss = 0.02387
-Epoch 100: loss = 0.02590	 val loss = 0.02416	 test loss = 0.02402
-TEST VALUE FROM LAST EPOCH: 0.024321
-TEST VALUE BEST LAST EPOCH: 0.023958
-TEST VALUE REPEATED BEST LAST EPOCH: 0.024202
+Epoch 1: loss = 0.20344	 val loss = 0.03038	 test loss = 0.02977
+Epoch 2: loss = 0.03448	 val loss = 0.02891	 test loss = 0.02848
+Epoch 3: loss = 0.03101	 val loss = 0.02757	 test loss = 0.02720
+Epoch 4: loss = 0.02995	 val loss = 0.02743	 test loss = 0.02697
+Epoch 5: loss = 0.02939	 val loss = 0.02670	 test loss = 0.02629
+Epoch 6: loss = 0.02416	 val loss = 0.00220	 test loss = 0.00220
+Epoch 7: loss = 0.00454	 val loss = 0.00126	 test loss = 0.00127
+Epoch 8: loss = 0.00328	 val loss = 0.00081	 test loss = 0.00081
+Epoch 9: loss = 0.00290	 val loss = 0.00104	 test loss = 0.00103
+Epoch 10: loss = 0.00271	 val loss = 0.00085	 test loss = 0.00085
+Epoch 11: loss = 0.00247	 val loss = 0.00097	 test loss = 0.00098
+Epoch 12: loss = 0.00237	 val loss = 0.00059	 test loss = 0.00059
+Epoch 13: loss = 0.00231	 val loss = 0.00061	 test loss = 0.00062
+Epoch 14: loss = 0.00222	 val loss = 0.00065	 test loss = 0.00065
+Epoch 15: loss = 0.00219	 val loss = 0.00066	 test loss = 0.00066
+Epoch 16: loss = 0.00210	 val loss = 0.00070	 test loss = 0.00070
+Epoch 17: loss = 0.00209	 val loss = 0.00083	 test loss = 0.00084
+Epoch 18: loss = 0.00202	 val loss = 0.00091	 test loss = 0.00093
+Epoch 19: loss = 0.00205	 val loss = 0.00085	 test loss = 0.00085
+Epoch 20: loss = 0.00197	 val loss = 0.00071	 test loss = 0.00071
+Epoch 21: loss = 0.00197	 val loss = 0.00056	 test loss = 0.00055
+Epoch 22: loss = 0.00193	 val loss = 0.00068	 test loss = 0.00068
+Epoch 23: loss = 0.00191	 val loss = 0.00047	 test loss = 0.00047
+Epoch 24: loss = 0.00187	 val loss = 0.00051	 test loss = 0.00051
+Epoch 25: loss = 0.00189	 val loss = 0.00059	 test loss = 0.00059
+Epoch 26: loss = 0.00185	 val loss = 0.00053	 test loss = 0.00053
+Epoch 27: loss = 0.00183	 val loss = 0.00055	 test loss = 0.00055
+Epoch 28: loss = 0.00180	 val loss = 0.00048	 test loss = 0.00048
+Epoch 29: loss = 0.00176	 val loss = 0.00045	 test loss = 0.00044
+Epoch 30: loss = 0.00177	 val loss = 0.00047	 test loss = 0.00047
+Epoch 31: loss = 0.00174	 val loss = 0.00044	 test loss = 0.00044
+Epoch 32: loss = 0.00174	 val loss = 0.00047	 test loss = 0.00046
+Epoch 33: loss = 0.00172	 val loss = 0.00050	 test loss = 0.00049
+Epoch 34: loss = 0.00171	 val loss = 0.00053	 test loss = 0.00053
+Epoch 35: loss = 0.00168	 val loss = 0.00049	 test loss = 0.00049
+Epoch 36: loss = 0.00169	 val loss = 0.00046	 test loss = 0.00045
+Epoch 37: loss = 0.00167	 val loss = 0.00053	 test loss = 0.00054
+Epoch 38: loss = 0.00166	 val loss = 0.00039	 test loss = 0.00039
+Epoch 39: loss = 0.00165	 val loss = 0.00043	 test loss = 0.00043
+Epoch 40: loss = 0.00165	 val loss = 0.00039	 test loss = 0.00039
+Epoch 41: loss = 0.00164	 val loss = 0.00037	 test loss = 0.00037
+Epoch 42: loss = 0.00163	 val loss = 0.00039	 test loss = 0.00039
+Epoch 43: loss = 0.00162	 val loss = 0.00037	 test loss = 0.00037
+Epoch 44: loss = 0.00162	 val loss = 0.00038	 test loss = 0.00038
+Epoch 45: loss = 0.00161	 val loss = 0.00036	 test loss = 0.00036
+Epoch 46: loss = 0.00159	 val loss = 0.00036	 test loss = 0.00036
+Epoch 47: loss = 0.00159	 val loss = 0.00036	 test loss = 0.00036
+Epoch 48: loss = 0.00160	 val loss = 0.00036	 test loss = 0.00035
+Epoch 49: loss = 0.00159	 val loss = 0.00035	 test loss = 0.00035
+Epoch 50: loss = 0.00160	 val loss = 0.00035	 test loss = 0.00035
+TEST VALUE FROM LAST EPOCH: 0.000346
+TEST VALUE REPEATED FROM LAST EPOCH: 0.000346
+TEST VALUE BEST LAST EPOCH: 0.000346

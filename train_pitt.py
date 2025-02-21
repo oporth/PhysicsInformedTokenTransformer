@@ -116,13 +116,29 @@ def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
 
             im_num += 1
 
-def lin_interpolation(test_loader, loss_fn):
-    lin_loss = 0
-    for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
-        y = y[...,0].to(device=device)
-        y_lin = torch.mean(x0, dim=1)
+def lin_interpolation(test_loader, transformer, loss_fn):
+    with torch.no_grad():
+        transformer.eval()
+        lin_loss = 0
+        for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
+            y = y[...,0].to(device=device)
 
-        lin_loss += loss_fn(y_lin, y).item()
+            _, T, _ = x0.shape  # Get the size of the second dimension (T should be even)
+    
+            mid1, mid2 = T // 2 - 1, T // 2  # Compute the two middle indices
+
+            # Extract the two middle frames
+            middle_frames = x0[:, [mid1, mid2], :].to(device)  # Shape: [batch, 2, features]
+
+            t_inv = 1-t
+
+            t = t.view(-1, 1).to(device)
+            t_inv = t_inv.view(-1, 1).to(device) 
+
+            # Compute the weighted sum
+            y_lin = t_inv * middle_frames[:, 0, :] + t * middle_frames[:, 1, :]
+        
+            lin_loss += loss_fn(y_lin, y).item()
     return lin_loss/(bn+1)
 
 def evaluate(test_loader, transformer, loss_fn, path, plot=False):
@@ -243,13 +259,15 @@ def get_data(f, config):
     test_data.data = test_data.data.to(device)
     test_data.grid = test_data.grid.to(device)
 
+    val_data_list = list(val_data)
+    test_data_list = list(test_data)
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=config['batch_size'],
                                                num_workers=config['num_workers'], shuffle=True,
                                                generator=torch.Generator(device=device))
-    val_loader = torch.utils.data.DataLoader(val_data, batch_size=config['batch_size'],
+    val_loader = torch.utils.data.DataLoader(val_data_list, batch_size=config['batch_size'],
                                              num_workers=config['num_workers'], shuffle=False,
                                              generator=torch.Generator(device=device))
-    test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
+    test_loader = torch.utils.data.DataLoader(test_data_list, batch_size=config['batch_size'],
                                              num_workers=config['num_workers'], shuffle=False,
                                              generator=torch.Generator(device=device))
 
@@ -441,8 +459,13 @@ def run_training(config, prefix):
     test_value = evaluate(test_loader, transformer, loss_fn, path)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
-    torch.save({'model_param': transformer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
-
+    torch.save({'model_param': transformer.state_dict(), 'optimizer_state': optimizer.state_dict()}, path + "/model_param_end_{}.pt".format(seed))
+    
+    
+    transformer.load_state_dict(torch.load(path + "/model_param_end_{}.pt".format(seed))['model_param'])
+    test_value = evaluate(test_loader, transformer, loss_fn, path, plot=False)
+    print("TEST VALUE REPEATED FROM LAST EPOCH: {0:5f}".format(test_value))
+    
     transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
     test_value = evaluate(test_loader, transformer, loss_fn, path, plot=True)
     test_vals.append(test_value)
@@ -450,11 +473,12 @@ def run_training(config, prefix):
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['transformer'],
                                                  config['neural_operator'],  prefix, seed), test_vals)
 
-    transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
-    test_value = evaluate(test_loader, transformer, loss_fn, path, plot=False)
-    print("TEST VALUE REPEATED BEST LAST EPOCH: {0:5f}".format(test_value))
+#    transformer.load_state_dict(torch.load(path + "/model_param_end_{}.pt".format(seed))['model_param'])
+#    optimizer.load_state_dict(torch.load(path + "/model_param_end_{}.pt".format(seed))['optimizer_state'])
+#    test_value = evaluate(test_loader, transformer, loss_fn, path, plot=False)
+#    print("TEST VALUE RELOADED FROM DISK LAST EPOCH: {0:5f}".format(test_value))
    
-    lin_value = lin_interpolation(test_loader, loss_fn)
+    lin_value = lin_interpolation(test_loader, transformer, loss_fn)
     seed_test_loss.append(test_vals[0])
     seed_val_loss.append(val_loss)
     lin_loss.append(lin_value)
@@ -490,7 +514,10 @@ if __name__ == '__main__':
         #seed = 2
         print("\nSEED: {}\n".format(seed))
         torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
         np.random.seed(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
         train_args['seed'] = seed
         run_training(train_args, prefix)
 
