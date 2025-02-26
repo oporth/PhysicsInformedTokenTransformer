@@ -1,26 +1,26 @@
 args:
     if_training: True
     neural_operator: False
-    #results_dir: './2D_ns_next_step/'
-    results_dir: './2D_FF_IC_20/'
+    results_dir: './2D_ns_next_step/'
+    #results_dir: './2D_FF_IC_20/'
     #results_dir: './2D_FF_IC_30/'
     #results_dir: './2D_ELECTRIC/'
 
     model: 'pitt' 
-    neural_operator: 'oformer' # fno, oformer, deeponet
+    neural_operator: 'fno' # fno, oformer, deeponet
 
     embedding: 'standard'
     #embedding: 'novel'
 
-    split_style: 'equation'
-    #split_style: 'initial_condition'
+    #split_style: 'equation'
+    split_style: 'initial_condition'
 
-    #train_style: 'next_step'
-    train_style: 'fixed_future'
+    train_style: 'next_step'
+    #train_style: 'fixed_future'
     
     attention_type: 'galerkin'
 
-    base_path: './2D_NS_DATA/' # Set to path of saved data
+    base_path: './pde_data/'
     continue_training: False
     augment: False
     forcing: False
@@ -34,8 +34,8 @@ args:
 
     # Data file
     #data_name: '2d_ns_1s_256_4eq.h5'
-    #data_name: '2d_ns_30s_256_370eq.h5'
-    data_name: '2d_electric_100_60.h5'
+    data_name: '2d_ns_30s_256_370eq.h5'
+    #data_name: '2d_electric_100_60.h5'
     
     fno: False
     return_text: True
@@ -43,7 +43,7 @@ args:
     reduced_resolution_t: 1
     reduced_batch: 1
 
-    epochs: 11
+    epochs: 101
     num_seeds: 2
     dropout: 0.
 
@@ -55,21 +55,21 @@ args:
     training_type: single
 
     #
-    num_x: 60
-    num_y: 100
-    #num_x: 64
-    #num_y: 64
+    #num_x: 60
+    #num_y: 100
+    num_x: 64
+    num_y: 64
     num_t: 100
 
     # Fixed Future
-    sim_time: 80
+    #sim_time: 80
     #sim_time: 120
     
     # Next-step
-    #sim_time: 1000
+    sim_time: 1000
 
-    #num_samples: 4
-    num_samples: 100
+    num_samples: 
+    #num_samples: 100
     #num_samples: 370
     #num_samples: 5000
     

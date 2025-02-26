@@ -350,7 +350,7 @@ def run_training(config, prefix):
     # Train the transformer for the specified number of epochs.
     train_losses = []
     val_losses = []
-    loss_val_min = np.infty
+    loss_val_min = np.inf
     #src_mask = generate_square_subsequent_mask(640).cuda()
     lrs = []
     shift = 0

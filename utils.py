@@ -539,7 +539,7 @@ class TransformerOperatorDataset(Dataset):
             else:
                 return self.data[idx][...,:self.initial_step,:], \
                        self.data[idx][self.sim_time], \
-                       self.grid[udx][self.sim_time]
+                       self.grid[idx][self.sim_time]
 
         # Need to slice according to available data
         elif(self.train_style == 'next_step'):
@@ -1018,7 +1018,7 @@ class TransformerOperatorDataset2D(Dataset):
             else:
                 return self.data[idx][...,:self.initial_step,:], \
                        self.data[idx][self.sim_time], \
-                       self.grid[udx][self.sim_time]
+                       self.grid[idx][self.sim_time]
 
         elif(self.train_style == 'fixed_future'):
             #print(self.time[0][:self.initial_step], self.time[0][self.sim_time])
