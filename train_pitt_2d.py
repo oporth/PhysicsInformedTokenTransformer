@@ -195,6 +195,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                interval=config['interval'],
                                 seed=config['seed']
         )
         print("\nVALIDATION DATA")
@@ -214,6 +215,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                interval=config['interval'],
                                 seed=config['seed']
         )
         print("\nTEST DATA")
@@ -233,6 +235,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                interval=config['interval'],
                                 seed=config['seed']
         )
 
@@ -397,57 +400,59 @@ def run_training(config, prefix):
 
             scheduler.step()
 
+            try:
+                if(bn%100 == 0 and len(train_loader) >= 1000):
+                    print("Batch: {0}\tloss = {1:.4f}".format(bn, train_loss/(bn+1)))
+                    fig, ax = plt.subplots(ncols=3, nrows=2, figsize=(22,15))
+                    im0 = ax[0][0].imshow(transformer.query_matrix.detach().cpu()[0], cmap='bwr')
+                    divider = make_axes_locatable(ax[0][0])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im0, cax=cax, orientation='vertical')
 
-            if(bn%100 == 0 and len(train_loader) >= 1000):
-                print("Batch: {0}\tloss = {1:.4f}".format(bn, train_loss/(bn+1)))
-                fig, ax = plt.subplots(ncols=3, nrows=2, figsize=(22,15))
-                im0 = ax[0][0].imshow(transformer.query_matrix.detach().cpu()[0], cmap='bwr')
-                divider = make_axes_locatable(ax[0][0])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im0, cax=cax, orientation='vertical')
+                    im1 = ax[0][1].imshow(transformer.key_matrix.detach().cpu()[0], cmap='bwr')
+                    divider = make_axes_locatable(ax[0][1])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im1, cax=cax, orientation='vertical')
 
-                im1 = ax[0][1].imshow(transformer.key_matrix.detach().cpu()[0], cmap='bwr')
-                divider = make_axes_locatable(ax[0][1])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im1, cax=cax, orientation='vertical')
+                    prod_mat = torch.mul(transformer.query_matrix.detach().cpu()[0], transformer.key_matrix.detach().cpu()[0])
+                    im2 = ax[0][2].imshow(prod_mat, vmin=prod_mat.mean()-prod_mat.std(), vmax=prod_mat.mean()+prod_mat.std(), cmap='bwr')
+                    divider = make_axes_locatable(ax[0][2])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im2, cax=cax, orientation='vertical')
 
-                prod_mat = torch.mul(transformer.query_matrix.detach().cpu()[0], transformer.key_matrix.detach().cpu()[0])
-                im2 = ax[0][2].imshow(prod_mat, vmin=prod_mat.mean()-prod_mat.std(), vmax=prod_mat.mean()+prod_mat.std(), cmap='bwr')
-                divider = make_axes_locatable(ax[0][2])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im2, cax=cax, orientation='vertical')
+                    im3 = ax[1][0].imshow(transformer.q2_matrix.detach().cpu()[0], cmap='bwr')
+                    divider = make_axes_locatable(ax[1][0])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im3, cax=cax, orientation='vertical')
 
-                im3 = ax[1][0].imshow(transformer.q2_matrix.detach().cpu()[0], cmap='bwr')
-                divider = make_axes_locatable(ax[1][0])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im3, cax=cax, orientation='vertical')
+                    im4 = ax[1][1].imshow(transformer.k2_matrix.detach().cpu()[0], cmap='bwr')
+                    divider = make_axes_locatable(ax[1][1])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im4, cax=cax, orientation='vertical')
 
-                im4 = ax[1][1].imshow(transformer.k2_matrix.detach().cpu()[0], cmap='bwr')
-                divider = make_axes_locatable(ax[1][1])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im4, cax=cax, orientation='vertical')
+                    prod_mat2 = torch.mul(transformer.q2_matrix.detach().cpu()[0], transformer.k2_matrix.detach().cpu()[0])
+                    im5 = ax[1][2].imshow(prod_mat2, vmin=prod_mat2.mean()-prod_mat2.std(), vmax=prod_mat2.mean()+prod_mat2.std(), cmap='bwr')
+                    divider = make_axes_locatable(ax[1][2])
+                    cax = divider.append_axes('right', size='5%', pad=0.05)
+                    fig.colorbar(im5, cax=cax, orientation='vertical')
+                    #raise
+                    ax[0][0].set_title("Query Matrix", fontsize=20)
+                    ax[0][1].set_title("Key Matrix", fontsize=20)
+                    ax[0][2].set_title("Matrix Product", fontsize=20)
 
-                prod_mat2 = torch.mul(transformer.q2_matrix.detach().cpu()[0], transformer.k2_matrix.detach().cpu()[0])
-                im5 = ax[1][2].imshow(prod_mat2, vmin=prod_mat2.mean()-prod_mat2.std(), vmax=prod_mat2.mean()+prod_mat2.std(), cmap='bwr')
-                divider = make_axes_locatable(ax[1][2])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im5, cax=cax, orientation='vertical')
-                #raise
-                ax[0][0].set_title("Query Matrix", fontsize=20)
-                ax[0][1].set_title("Key Matrix", fontsize=20)
-                ax[0][2].set_title("Matrix Product", fontsize=20)
-
-                ax[0][0].set_ylabel("First Order Operator Matrices", fontsize=20)
-                ax[1][0].set_ylabel("Second Order Operator Matrices", fontsize=20)
-                #ax[2].imshow(transformer.v_embedding_layer.weight.detach().cpu().T)
-                plt.tight_layout()
-                #plt.savefig("./{}/weight_matrices_{}_{}.png".format(path, seed, epoch))
-                fname = str(bn)
-                while(len(fname) < 8):
-                    fname = '0' + fname
-                plt.savefig("./{}/weight_matrices_{}_{}_{}.png".format(path, seed, epoch, fname))
-                plt.close()
-                #plt.show()
+                    ax[0][0].set_ylabel("First Order Operator Matrices", fontsize=20)
+                    ax[1][0].set_ylabel("Second Order Operator Matrices", fontsize=20)
+                    #ax[2].imshow(transformer.v_embedding_layer.weight.detach().cpu().T)
+                    plt.tight_layout()
+                    #plt.savefig("./{}/weight_matrices_{}_{}.png".format(path, seed, epoch))
+                    fname = str(bn)
+                    while(len(fname) < 8):
+                        fname = '0' + fname
+                    plt.savefig("./{}/weight_matrices_{}_{}_{}.png".format(path, seed, epoch, fname))
+                    plt.close()
+                    #plt.show()
+            except AttributeError:
+                pass
 
 
 

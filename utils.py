@@ -668,6 +668,7 @@ class TransformerOperatorDataset2D(Dataset):
                  return_text=False,
                  train_style='fixed_future',
                  rollout_length=10,
+                 interval=1,
                  split_style='equation',
                  samples_per_equation=111,
                  seed=0
@@ -688,6 +689,7 @@ class TransformerOperatorDataset2D(Dataset):
         self.return_text = return_text
         self.train_style = train_style
         self.rollout_length = rollout_length
+        self.interval = interval
         self.split_style = split_style
         self.samples_per_equation = samples_per_equation
         
@@ -826,7 +828,9 @@ class TransformerOperatorDataset2D(Dataset):
         self.available_idxs = []
         #print(len(self.data_list))
         #raise
-        if(self.train_style in ['next_step', 'arbitrary_step']):
+        nsets=1
+
+        if(self.train_style in ['next_step', 'arbitrary_step', 'interpolate']):
             for i in tqdm(range(len(self.data_list))):
                 if(self.train_style == 'next_step'):
                     idxs = np.arange(0, self.data.shape[2])[self.initial_step:]
@@ -835,12 +839,16 @@ class TransformerOperatorDataset2D(Dataset):
                             idxs = np.append(idxs, np.arange(0, self.data.shape[2])[self.initial_step:] + idxs[-1]+1)
                 elif(self.train_style == 'arbitrary_step'):
                     idxs = np.arange(0, self.data.shape[2])[self.initial_step:]
+                elif(self.train_style == 'interpolate'):
+                    idxs = np.arange(0, self.data.shape[2])[self.interval:self.data.shape[2]-self.interval]
                 
                 # Take into account that the first self.initial_step samples can't be used as target
                 if(len(self.available_idxs) != 0): #TODO Make this robust to initial step
                     idxs += self.available_idxs[-1] + 1 if(self.train_style == 'next_step') else \
                             self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
+                            self.available_idxs[-1] + nsets * self.data.shape[2] if(self.train_style == 'interpolate') else \
 	    					self.available_idxs[-1] + 1
+                    nsets += 1
                 self.available_idxs.extend(idxs)
 
         elif(self.train_style == 'fixed_future'): # Only need to keep track of total number of valid samples
@@ -933,6 +941,22 @@ class TransformerOperatorDataset2D(Dataset):
                         #        self.grid[sim_num],
                         #        self.tokens[sim_num][sim_time],
                         #        self.time[sim_num][sim_time] - self.time[sim_num][sim_time-1]))
+
+            elif(self.train_style == 'interpolate'):
+                for idx in self.idxs:
+                    for jdx in range(self.interval, self.data.shape[1]-self.interval):
+                        sim_idx = self.available_idxs[idx]
+                        sim_num = sim_idx // self.data.shape[1] # Get simulation number
+                        sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
+
+                        self.data_tuples.append((
+                            self.data[idx][np.r_[jdx-self.interval:jdx:self.interval, jdx+self.interval:jdx+self.interval+1:self.interval], :],
+                            self.data[idx][jdx][...,np.newaxis],
+                            self.grid[idx//self.samples_per_equation],
+                            self.tokens[idx//self.samples_per_equation][jdx],
+                            self.time[sim_num][sim_time]*0+0.5
+                        ))
+                        
             elif(self.train_style == 'fixed_future'):
                 #for idx in tqdm(range(self.data.shape[0])):
                 for idx in tqdm(self.idxs):
@@ -948,11 +972,13 @@ class TransformerOperatorDataset2D(Dataset):
                                 self.time[sim_num][self.sim_time-1]
                     ))
 
+
             del self.data
             del self.tokens
             del self.grid
             del self.time
             gc.collect()
+            print(len(self.data_tuples))
             print("TOTAL SAMPLES: {}".format(len(self.data_tuples)))
             print("Done.")
 
@@ -994,6 +1020,11 @@ class TransformerOperatorDataset2D(Dataset):
                 return len(self.data_tuples)
         elif(self.train_style == 'rollout'):
             return len(self.available_idxs)
+        elif(self.train_style == 'interpolate'):
+            if(self.split_style == 'equation'):
+                return len(self.available_idxs)
+            else:
+                return len(self.data_tuples)
 
     def __getitem__(self, idx):
         '''
@@ -1001,6 +1032,7 @@ class TransformerOperatorDataset2D(Dataset):
         Need to figure out a way to sample the snapshots within the file...
         '''
         if(self.split_style == 'initial_condition'):
+            print(idx)
             return self.data_tuples[idx]
             idx = self.idx_to_avail_map[self.idxs[idx]]
 
@@ -1020,6 +1052,18 @@ class TransformerOperatorDataset2D(Dataset):
                        self.data[idx][self.sim_time], \
                        self.grid[idx][self.sim_time]
 
+        elif(self.train_style == 'interpolate'):
+            if(self.return_text):
+                return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
+                        self.data[sim_num][sim_time][...,np.newaxis], \
+                        self.grid[sim_num//2], \
+                        self.tokens[sim_num//2][self.sim_time], \
+                        self.time[sim_num][sim_time]*0+0.5
+            else:
+                return self.data[idx][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
+                        self.data[idx][sim_time], \
+                        self.grid[idx][sim_time] # ????
+            
         elif(self.train_style == 'fixed_future'):
             #print(self.time[0][:self.initial_step], self.time[0][self.sim_time])
             #raise

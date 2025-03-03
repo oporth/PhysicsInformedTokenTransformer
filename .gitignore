@@ -1,9 +1,10 @@
 1D_results
 1D_results_fnodebug
-1D_results_2
+1D_results_test
 1D_results_fno_nodropout_fix_4s
 1D_results_time_cont
 2D_ns_next_step
+2D_ns_interpolate
 err
 out
 test.ipynb
