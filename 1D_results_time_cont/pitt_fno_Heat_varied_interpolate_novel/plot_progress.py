@@ -22,6 +22,9 @@ for i in range(5):
         #print(val_vals.shape)
         print("{0:.6f}\t{1:.6f}\t{2:.6f}".format(np.min(train_vals), np.min(val_vals), test_vals[1]))
         #raise
+        plt.legend()
+        ax.set_xlabel(r'Epoch')
+        ax.set_ylabel(r'Error')
     except FileNotFoundError:
         print("WORKING ON: {}".format(i))
         pass
@@ -30,8 +33,6 @@ try:
     print("TEST MSE: {0:.6f} \t {1:.6f}".format(np.mean(test_l2s, axis=0)[1], np.std(test_l2s, axis=0)[1]))
 except IndexError:
     print("No completed runs.")
-ax.set_xlabel('Epoch')
-ax.set_ylabel('Error')
 plt.legend()
 plt.show()
 fig.savefig('progress.png')

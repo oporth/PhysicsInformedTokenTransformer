@@ -205,7 +205,7 @@ class TransformerOperatorDataset(Dataset):
         self.train_style = train_style
         self.ssl = ssl
         self.forcing = forcing
-        
+                
         # Extract list of seeds
         print("\nSEED: {}".format(seed))
         np.random.seed(seed)
@@ -564,13 +564,14 @@ class TransformerOperatorDataset(Dataset):
             sim_idx = self.available_idxs[idx]      # Get valid prestored index
             sim_num = sim_idx // self.data.shape[1] # Get simulation number
             sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
+            time_shift = random.randrange(-(self.interval-1), (self.interval-1))
 
             if(self.return_text):
                 return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
-                        self.data[sim_num][sim_time][...,np.newaxis], \
+                        self.data[sim_num][sim_time+time_shift][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \
-                        self.time[sim_num][sim_time]*0+0.5
+                        self.time[sim_num][sim_time]*0+0.5+(time_shift/(2*self.interval))
             else:
                 return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time][np.newaxis], \
