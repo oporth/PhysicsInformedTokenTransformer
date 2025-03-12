@@ -663,7 +663,7 @@ class TransformerOperatorDataset2D(Dataset):
                  sim_time=-1,
                  split="train",
                  test_ratio=0.2,
-                 val_ratio=0.2,
+                 val_ratio=0.01,
                  num_samples=None,
                  return_text=False,
                  train_style='fixed_future',
@@ -954,7 +954,7 @@ class TransformerOperatorDataset2D(Dataset):
                             self.data[idx][jdx][...,np.newaxis],
                             self.grid[idx//self.samples_per_equation],
                             self.tokens[idx//self.samples_per_equation][jdx],
-                            self.time[sim_num][sim_time]*0+0.5
+                            self.time[idx//self.samples_per_equation][sim_time]*0+0.5
                         ))
                         
             elif(self.train_style == 'fixed_future'):
@@ -1056,8 +1056,8 @@ class TransformerOperatorDataset2D(Dataset):
             if(self.return_text):
                 return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
-                        self.grid[sim_num//2], \
-                        self.tokens[sim_num//2][self.sim_time], \
+                        self.grid[sim_num], \
+                        self.tokens[sim_num][self.sim_time], \
                         self.time[sim_num][sim_time]*0+0.5
             else:
                 return self.data[idx][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\

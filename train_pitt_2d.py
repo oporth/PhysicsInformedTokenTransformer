@@ -12,6 +12,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import os
 import shutil
+import csv
 
 from models.pitt import StandardPhysicsInformedTokenTransformer2D
 from models.pitt import PhysicsInformedTokenTransformer2D
@@ -24,6 +25,9 @@ import sys
 
 device = 'cuda' if(torch.cuda.is_available()) else 'cpu'
 
+seed_test_loss = []
+seed_val_loss = []
+lin_loss = []
 
 def custom_collate(batch):
     x0 = torch.empty((len(batch), batch[0][0].shape[0]))
@@ -67,6 +71,57 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
         plt.savefig("./{}/{}.png".format(path, fname))
     plt.close()
 
+def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress_plots", seed=None):
+    ncols = 3
+    fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
+    ax[0].imshow(x0[0, :, :, 0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[1].imshow(y_test_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[2].imshow(x0[0, :, :, 1].detach().cpu(), vmin=-0.75, vmax=0.75)
+
+    ax[0].set_title("t-15s")
+    ax[1].set_title("PITT output")
+    ax[2].set_title("t+15s")
+
+    fname = 'test'
+    plt.tight_layout()
+    while(len(fname) < 8):
+        fname = '0' + fname
+    if(seed is not None): 
+        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+    else:
+        plt.savefig("./{}/{}.png".format(path, fname))
+    plt.close()
+
+    ncols = 3
+    fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
+    ax[0][0].imshow(y_test_true[0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[0][1].imshow(y_test_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[0][2].imshow(np.absolute(y_test_pred[0].detach().cpu()-y_test_true[0].detach().cpu()), vmin=-0.75, vmax=0.75)
+
+    ax[1][0].imshow(y_test_true[0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[1][1].imshow(y_lin_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[1][2].imshow(np.absolute(y_lin_pred[0].detach().cpu()-y_test_true[0].detach().cpu()), vmin=-0.75, vmax=0.75)
+
+    ax[0][0].set_title("Target")
+    ax[0][1].set_title("PITT")
+    ax[0][2].set_title("Residual")
+
+    ax[1][0].set_title("Target")
+    ax[1][1].set_title("Linear")
+    ax[1][2].set_title("Residual")
+
+    fname = 'delta'
+    plt.tight_layout()
+    while(len(fname) < 8):
+        fname = '0' + fname
+    if(seed is not None): 
+        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+    else:
+        plt.savefig("./{}/{}.png".format(path, fname))
+    plt.close()
+
+
+
 
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
     im_num = 0
@@ -85,8 +140,20 @@ def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
 
             im_num += 1
 
+def lin_interpolation(test_loader, loss_fn):
+    lin_loss = 0
+    for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
+        x0 = x0.to(device).float()
+        y = y.to(device).float()
 
-def evaluate(test_loader, transformer, loss_fn, config=None):
+        y = y[...,0].to(device=device)
+        y_lin = torch.mean(x0, dim=1)
+
+        lin_loss += loss_fn(y_lin, y).item()
+    return lin_loss/(bn+1), y_lin
+
+
+def evaluate(test_loader, y_lin, transformer, loss_fn, config=None, path=None, seed=None):
     #src_mask = generate_square_subsequent_mask(640).cuda()
     with torch.no_grad():
         transformer.eval()
@@ -113,6 +180,8 @@ def evaluate(test_loader, transformer, loss_fn, config=None):
             # Compute the loss.
             test_loss += loss_fn(y_pred, y).item()
 
+
+    progress_plots_test(y, y_pred, y_lin, x0, path=path, seed=seed)
     return test_loss/(bn+1)
 
 
@@ -348,7 +417,7 @@ def run_training(config, prefix):
                                                     steps_per_epoch=len(train_loader), epochs=config['epochs'])
     
     # Use mean squared error as the loss function.
-    loss_fn = nn.L1Loss(reduction='mean')
+    loss_fn = nn.MSELoss(reduction='mean')
     
     # Train the transformer for the specified number of epochs.
     train_losses = []
@@ -454,8 +523,6 @@ def run_training(config, prefix):
             except AttributeError:
                 pass
 
-
-
         train_loss /= (bn + 1)
         train_losses.append(train_loss)
 
@@ -557,19 +624,27 @@ def run_training(config, prefix):
         #plt.show()
     except AttributeError:
         pass
-    #raise
-    #progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
-    #val_plots(epoch, val_loader, all_val_preds, seed=seed)
+    # raise
+    # progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
+    # val_plots(epoch, val_loader, all_val_preds, seed=seed)
+
+    lin_value, y_lin = lin_interpolation(test_loader, loss_fn)
 
     test_vals = []
-    test_value = evaluate(test_loader, transformer, loss_fn, config=config)
+    test_value = evaluate(test_loader, y_lin, transformer, loss_fn, config=config, path=path, seed=seed)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
-    transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
-    test_value = evaluate(test_loader, transformer, loss_fn, config=config)
-    test_vals.append(test_value)
-    print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
+
+
+    # transformer.load_state_dict(torch.load(model_path)['model_state_dict'])
+    # test_value = evaluate(test_loader, y_lin, transformer, loss_fn, config=config)
+    # test_vals.append(test_value)
+    # print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("{}{}_{}_{}/test_vals_{}.npy".format(config['results_dir'], config['model'], config['neural_operator'], prefix, seed), test_vals)
+
+    lin_loss.append(lin_value)
+    seed_test_loss.append(test_value)
+    seed_val_loss.append(val_loss)
 
 
 if __name__ == '__main__':
@@ -602,4 +677,12 @@ if __name__ == '__main__':
         np.random.seed(seed)
         train_args['seed'] = seed
         run_training(train_args, prefix)
+
+    csv_file_path = "{}{}_{}_{}/test_vals_int{}_test.csv".format(train_args['results_dir'], train_args['model'], train_args['neural_operator'], prefix, train_args['interval'])
+
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(seed_test_loss)
+        writer.writerow(seed_val_loss)
+        writer.writerow(lin_loss)
     
