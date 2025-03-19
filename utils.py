@@ -664,7 +664,7 @@ class TransformerOperatorDataset2D(Dataset):
                  sim_time=-1,
                  split="train",
                  test_ratio=0.2,
-                 val_ratio=0.01,
+                 val_ratio=0.2,
                  num_samples=None,
                  return_text=False,
                  train_style='fixed_future',
