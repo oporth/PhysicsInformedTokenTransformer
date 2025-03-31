@@ -829,7 +829,7 @@ class TransformerOperatorDataset2D(Dataset):
         self.available_idxs = []
         #print(len(self.data_list))
         #raise
-        nsets=1
+        # nsets=1
 
         if(self.train_style in ['next_step', 'arbitrary_step', 'interpolate']):
             for i in tqdm(range(len(self.data_list))):
@@ -842,14 +842,18 @@ class TransformerOperatorDataset2D(Dataset):
                     idxs = np.arange(0, self.data.shape[2])[self.initial_step:]
                 elif(self.train_style == 'interpolate'):
                     idxs = np.arange(0, self.data.shape[2])[self.interval:self.data.shape[2]-self.interval]
+                    if(self.split_style == 'equation'):
+                        for j in range(1, self.samples_per_equation):
+                            idxs = np.append(idxs, np.arange(0, self.data.shape[2])[self.interval:self.data.shape[2]-self.interval] + idxs[-1]+self.interval+1)
+
                 
                 # Take into account that the first self.initial_step samples can't be used as target
                 if(len(self.available_idxs) != 0): #TODO Make this robust to initial step
                     idxs += self.available_idxs[-1] + 1 if(self.train_style == 'next_step') else \
                             self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
-                            self.available_idxs[-1] + nsets * self.data.shape[2] if(self.train_style == 'interpolate') else \
+                            self.available_idxs[-1] + 1 + self.interval if(self.train_style == 'interpolate') else \
 	    					self.available_idxs[-1] + 1
-                    nsets += 1
+                    # nsets += 1
                 self.available_idxs.extend(idxs)
 
         elif(self.train_style == 'fixed_future'): # Only need to keep track of total number of valid samples
@@ -946,6 +950,8 @@ class TransformerOperatorDataset2D(Dataset):
             elif(self.train_style == 'interpolate'):
                 for idx in self.idxs:
                     for jdx in range(self.interval, self.data.shape[1]-self.interval):
+                        print("length of available indices", len(self.available_idxs))
+                        print("length of sampled indices", len(self.idxs))
                         sim_idx = self.available_idxs[idx]
                         sim_num = sim_idx // self.data.shape[1] # Get simulation number
                         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
@@ -1037,6 +1043,11 @@ class TransformerOperatorDataset2D(Dataset):
             return self.data_tuples[idx]
             idx = self.idx_to_avail_map[self.idxs[idx]]
 
+        print("available indices", self.available_idxs)
+        print("time difference", np.diff(self.available_idxs))
+        print("available indices length", len(self.available_idxs))
+        print("data length", self.data.shape[1])
+        print("number of simulations", self.data.shape[0])
         sim_idx = self.available_idxs[idx]
         sim_num = sim_idx // self.data.shape[1] # Get simulation number
         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
@@ -1057,9 +1068,9 @@ class TransformerOperatorDataset2D(Dataset):
             if(self.return_text):
                 return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time][...,np.newaxis], \
-                        self.grid[sim_num], \
-                        self.tokens[sim_num][self.sim_time], \
-                        self.time[sim_num][sim_time]*0+0.5
+                        self.grid[sim_num//self.samples_per_equation], \
+                        self.tokens[sim_num//self.samples_per_equation][sim_time], \
+                        self.time[sim_num//self.samples_per_equation][sim_time]*0+0.5
             else:
                 return self.data[idx][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
                         self.data[idx][sim_time], \
