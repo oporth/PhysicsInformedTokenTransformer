@@ -950,8 +950,6 @@ class TransformerOperatorDataset2D(Dataset):
             elif(self.train_style == 'interpolate'):
                 for idx in self.idxs:
                     for jdx in range(self.interval, self.data.shape[1]-self.interval):
-                        print("length of available indices", len(self.available_idxs))
-                        print("length of sampled indices", len(self.idxs))
                         sim_idx = self.available_idxs[idx]
                         sim_num = sim_idx // self.data.shape[1] # Get simulation number
                         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
@@ -1043,11 +1041,6 @@ class TransformerOperatorDataset2D(Dataset):
             return self.data_tuples[idx]
             idx = self.idx_to_avail_map[self.idxs[idx]]
 
-        print("available indices", self.available_idxs)
-        print("time difference", np.diff(self.available_idxs))
-        print("available indices length", len(self.available_idxs))
-        print("data length", self.data.shape[1])
-        print("number of simulations", self.data.shape[0])
         sim_idx = self.available_idxs[idx]
         sim_num = sim_idx // self.data.shape[1] # Get simulation number
         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
