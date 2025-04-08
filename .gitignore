@@ -6,6 +6,7 @@
 2D_ns_next_step
 2D_ns_interpolate
 2D_ns_interpolate_test
+2D_Euler_interpolate
 err
 out
 test.ipynb

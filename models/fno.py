@@ -229,6 +229,7 @@ class FNO2d(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, grid):
+        x = x.reshape(x.shape[0], x.shape[1], x.shape[2], x.shape[3]*x.shape[4])
         # x dim = [b, x1, x2, t*v]
         x = torch.cat((x, grid), dim=-1)
         x = self.fc0(x)

@@ -49,15 +49,15 @@ def custom_collate(batch):
 def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path="progress_plots", seed=None):
     ncols = 4
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-    ax[0][0].imshow(y_train_true[0].detach().cpu())
-    ax[0][1].imshow(y_train_true[1].detach().cpu())
-    ax[0][2].imshow(y_val_true[0].detach().cpu())
-    ax[0][3].imshow(y_val_true[1].detach().cpu())
+    ax[0][0].imshow(y_train_true[0,:,:,0].detach().cpu())
+    ax[0][1].imshow(y_train_true[1,:,:,0].detach().cpu())
+    ax[0][2].imshow(y_val_true[0,:,:,0].detach().cpu())
+    ax[0][3].imshow(y_val_true[1,:,:,0].detach().cpu())
 
-    ax[1][0].imshow(y_train_pred[0].detach().cpu())
-    ax[1][1].imshow(y_train_pred[1].detach().cpu())
-    ax[1][2].imshow(y_val_pred[0].detach().cpu())
-    ax[1][3].imshow(y_val_pred[1].detach().cpu())
+    ax[1][0].imshow(y_train_pred[0,:,:,0].detach().cpu())
+    ax[1][1].imshow(y_train_pred[1,:,:,0].detach().cpu())
+    ax[1][2].imshow(y_val_pred[0,:,:,0].detach().cpu())
+    ax[1][3].imshow(y_val_pred[1,:,:,0].detach().cpu())
 
     ax[0][0].set_ylabel("VALIDATION SET TRUE")
     ax[1][0].set_ylabel("VALIDATION SET PRED")
@@ -74,9 +74,9 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
 def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress_plots", seed=None):
     ncols = 3
     fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
-    ax[0].imshow(x0[0, :, :, 0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[1].imshow(y_test_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[2].imshow(x0[0, :, :, 1].detach().cpu(), vmin=-0.75, vmax=0.75)
+    ax[0].imshow(x0[0, :, :,0, 0].detach().cpu())
+    ax[1].imshow(y_test_pred[0,:,:,0].detach().cpu())
+    ax[2].imshow(x0[0, :, :,1, 0].detach().cpu())
 
     ax[0].set_title("t-15s")
     ax[1].set_title("PITT output")
@@ -94,13 +94,13 @@ def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress
 
     ncols = 3
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-    ax[0][0].imshow(y_test_true[0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[0][1].imshow(y_test_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[0][2].imshow(np.absolute(y_test_pred[0].detach().cpu()-y_test_true[0].detach().cpu()), vmin=-0.75, vmax=0.75)
+    ax[0][0].imshow(y_test_true[0,:,:,0].detach().cpu())
+    ax[0][1].imshow(y_test_pred[0,:,:,0].detach().cpu())
+    ax[0][2].imshow(np.absolute(y_test_pred[0,:,:,0].detach().cpu()-y_test_true[0,:,:,0].detach().cpu()))
 
-    ax[1][0].imshow(y_test_true[0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[1][1].imshow(y_lin_pred[0].detach().cpu(), vmin=-0.75, vmax=0.75)
-    ax[1][2].imshow(np.absolute(y_lin_pred[0].detach().cpu()-y_test_true[0].detach().cpu()), vmin=-0.75, vmax=0.75)
+    ax[1][0].imshow(y_test_true[0,:,:,0].detach().cpu())
+    ax[1][1].imshow(y_lin_pred[0,:,:,0].detach().cpu())
+    ax[1][2].imshow(np.absolute(y_lin_pred[0,:,:,0].detach().cpu()-y_test_true[0,:,:,0].detach().cpu()))
 
     ax[0][0].set_title("Target")
     ax[0][1].set_title("PITT")
@@ -363,7 +363,7 @@ def get_transformer(model_name, config):
         print("\n USING STANDARD EMBEDDING")
         neural_operator = get_neural_operator(config['neural_operator'], config)
         transformer = StandardPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], dropout=config['dropout'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], dropout=config['dropout'],
                                         neural_operator=neural_operator).to(device=device)
     elif(config['embedding'] == "novel"):
         print("\n USING NOVEL EMBEDDING")

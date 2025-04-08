@@ -700,7 +700,7 @@ class TransformerOperatorDataset2D(Dataset):
         # Time steps used as initial conditions
         self.initial_step = initial_step
 
-        self.WORDS = ['(', ')', '+', '-', '*', '/', '=', 'Derivative', 'sin', 'cos', 't', 'u', 'x', 'w', 'y',
+        self.WORDS = ['(', ')', '+', '-', '*', '/', '=', 'Derivative', 'sin', 'cos', 't', 'u', 'v', 'x', 'w', 'y', 'p', 'rho', 
                       'pi', 'Delta', 'nabla', 'dot', "None", '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10^',
                       'E', 'e', ',', '.', '&']
         self.word2id = {w: i for i, w in enumerate(self.WORDS)}
@@ -768,6 +768,9 @@ class TransformerOperatorDataset2D(Dataset):
             #print(len(self.data_list))
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,201)).float()
             #raise
+        elif('Euler' in self.h5_file.filename):
+            self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,101,4)).float()
+
         for i in tqdm(range(len(self.data_list))):
             seed_group = self.h5_file[self.data_list[i]]
             #data = seed_group['u'][:]
@@ -779,20 +782,20 @@ class TransformerOperatorDataset2D(Dataset):
             base_tokens = seed_group['tokens'][:]
             x = seed_group['X'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
             y = seed_group['Y'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
-            w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
+            # w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
 
             # Add initial condition
-            complete_data = np.concatenate((w0, data), axis=3)
+            # complete_data = np.concatenate((w0, data), axis=3)
             #self.data.append(torch.Tensor(complete_data).clone())
             #complete_data = complete_data[...,:101]
             #print(complete_data.shape)
             #raise
-            self.data[i] = torch.Tensor(complete_data[:self.samples_per_equation])
+            self.data[i] = torch.Tensor(data[:self.samples_per_equation])
             #print(complete_data.shape)
 
             # Add initial time
             time = list(seed_group['t'][:])
-            time.insert(0, 0.0)
+            # time.insert(0, 0.0)
             self.time.append(time)
 
             # Get grid
@@ -801,7 +804,7 @@ class TransformerOperatorDataset2D(Dataset):
             # Get tokens
             #print(base_tokens)
             # Correct for small issue.
-            base_tokens[38] = 12
+            # base_tokens[38] = 12
             #base_tokens = torch.cat((base_tokens[:33], torch.Tensor([16]), base_tokens[33:]))
             base_tokens = np.insert(base_tokens, 34, 16)
             #base_tokens[8] = 11
@@ -812,7 +815,7 @@ class TransformerOperatorDataset2D(Dataset):
             #raise
             self.temp_tokens.append(base_tokens)
             #print("\nGOT SAMPLE {}\n".format(i))
-            del complete_data
+            # del complete_data
 
         # Arrange data
         print("ARRANGING DATA")
@@ -829,7 +832,6 @@ class TransformerOperatorDataset2D(Dataset):
         self.available_idxs = []
         #print(len(self.data_list))
         #raise
-        # nsets=1
 
         if(self.train_style in ['next_step', 'arbitrary_step', 'interpolate']):
             for i in tqdm(range(len(self.data_list))):
@@ -853,7 +855,6 @@ class TransformerOperatorDataset2D(Dataset):
                             self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
                             self.available_idxs[-1] + 1 + self.interval if(self.train_style == 'interpolate') else \
 	    					self.available_idxs[-1] + 1
-                    # nsets += 1
                 self.available_idxs.extend(idxs)
 
         elif(self.train_style == 'fixed_future'): # Only need to keep track of total number of valid samples
@@ -869,10 +870,10 @@ class TransformerOperatorDataset2D(Dataset):
         # Add tokenized time to each equation for each simulation
         #print("Getting tokens...")
         self.tokens = []
-        self.tokens = torch.empty(len(self.time), self.data.shape[1], 100)
+        self.tokens = torch.empty(len(self.time), self.data.shape[1], 250)
         for idx, token in enumerate(self.temp_tokens):
+            token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
             for jdx, time in enumerate(self.time[idx]):
-
                 # Tokenize time
                 slice_tokens = self._encode_tokens("&" + str(time))
 
@@ -881,7 +882,7 @@ class TransformerOperatorDataset2D(Dataset):
                 full_tokens.extend(list(slice_tokens))
 
                 # Pad tokens to all have same length
-                full_tokens.extend([len(self.WORDS)]*(100 - len(full_tokens)))
+                full_tokens.extend([len(self.WORDS)]*(250 - len(full_tokens)))
 
                 # Hold on to tokens
                 self.tokens[idx][jdx] = torch.Tensor(full_tokens)
