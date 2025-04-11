@@ -672,6 +672,7 @@ class TransformerOperatorDataset2D(Dataset):
                  interval=1,
                  split_style='equation',
                  samples_per_equation=111,
+                 token_length=100,
                  seed=0
                  ):
         """
@@ -693,6 +694,7 @@ class TransformerOperatorDataset2D(Dataset):
         self.interval = interval
         self.split_style = split_style
         self.samples_per_equation = samples_per_equation
+        self.token_length = token_length
         
         # Extract list of seeds
         self.data_list = list(f.keys())
@@ -763,12 +765,12 @@ class TransformerOperatorDataset2D(Dataset):
         if('10s' in self.h5_file.filename):
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,201)).float()
         elif('30s' in self.h5_file.filename):
-            self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,121)).float()
+            self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,121,1)).float()
         elif('1s' in self.h5_file.filename):
             #print(len(self.data_list))
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,201)).float()
             #raise
-        elif('Euler' in self.h5_file.filename):
+        elif('euler' in self.h5_file.filename):
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,101,4)).float()
 
         for i in tqdm(range(len(self.data_list))):
@@ -782,20 +784,21 @@ class TransformerOperatorDataset2D(Dataset):
             base_tokens = seed_group['tokens'][:]
             x = seed_group['X'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
             y = seed_group['Y'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
-            # w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
-
-            # Add initial condition
-            # complete_data = np.concatenate((w0, data), axis=3)
-            #self.data.append(torch.Tensor(complete_data).clone())
-            #complete_data = complete_data[...,:101]
-            #print(complete_data.shape)
-            #raise
-            self.data[i] = torch.Tensor(data[:self.samples_per_equation])
-            #print(complete_data.shape)
-
-            # Add initial time
             time = list(seed_group['t'][:])
-            # time.insert(0, 0.0)
+
+            if('euler' in self.h5_file.filename):
+                self.data[i] = torch.Tensor(data[:self.samples_per_equation])
+            else:
+                w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
+                complete_data = np.concatenate((w0, data), axis=3)
+                print('data shape', complete_data.shape)
+
+                complete_data = np.expand_dims(complete_data, axis=-1)
+                print('complete shape', complete_data.shape)
+                self.data[i] = torch.Tensor(complete_data[:self.samples_per_equation])
+
+                time.insert(0, 0.0)
+
             self.time.append(time)
 
             # Get grid
@@ -806,7 +809,7 @@ class TransformerOperatorDataset2D(Dataset):
             # Correct for small issue.
             # base_tokens[38] = 12
             #base_tokens = torch.cat((base_tokens[:33], torch.Tensor([16]), base_tokens[33:]))
-            base_tokens = np.insert(base_tokens, 34, 16)
+            # base_tokens = np.insert(base_tokens, 34, 16)
             #base_tokens[8] = 11
             #base_tokens[17] = 11
             #base_tokens[35] = 11
@@ -870,7 +873,7 @@ class TransformerOperatorDataset2D(Dataset):
         # Add tokenized time to each equation for each simulation
         #print("Getting tokens...")
         self.tokens = []
-        self.tokens = torch.empty(len(self.time), self.data.shape[1], 250)
+        self.tokens = torch.empty(len(self.time), self.data.shape[1], self.token_length)
         for idx, token in enumerate(self.temp_tokens):
             token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
             for jdx, time in enumerate(self.time[idx]):
@@ -882,7 +885,7 @@ class TransformerOperatorDataset2D(Dataset):
                 full_tokens.extend(list(slice_tokens))
 
                 # Pad tokens to all have same length
-                full_tokens.extend([len(self.WORDS)]*(250 - len(full_tokens)))
+                full_tokens.extend([len(self.WORDS)]*(self.token_length - len(full_tokens)))
 
                 # Hold on to tokens
                 self.tokens[idx][jdx] = torch.Tensor(full_tokens)

@@ -257,8 +257,8 @@ class LinearAttention(nn.Module):
                 dots = torch.matmul(k.transpose(-1, -2), v)
                 out = torch.matmul(q, dots) * (1. / grid_size)
             else:
-                # print(k.shape)
-                # print(v.shape)
+                print(k.shape)
+                print(v.shape)
                 #print(queries.shape)
                 dots = torch.matmul(keys.transpose(-1, -2), values)
                 out = torch.matmul(queries, dots) * (1./queries.shape[2])
@@ -755,7 +755,7 @@ class PhysicsInformedTokenTransformer2D(nn.Module):
 
 
 class StandardPhysicsInformedTokenTransformer2D(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, neural_operator, dropout=0.1):
+    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, neural_operator, dropout=0.1):
         super().__init__()
 
         self.temp = nn.Linear(100, 100, bias=False)
@@ -764,8 +764,9 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.output_dim2 = output_dim2
         self.num_channels = num_channels
         self.hidden_dim = hidden_dim
+        self.token_len = token_len
 
-        self.embedding = torch.nn.Embedding(100, hidden_dim)
+        self.embedding = torch.nn.Embedding(token_len, hidden_dim)
         self.pos_encoding = PositionalEncoding(hidden_dim, dropout)
 
         # Get input processing
@@ -780,8 +781,8 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         # Query and value processing
         self.q_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
         self.v_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
-        self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2*num_channels, 250, bias=False)
-        self.vh_unembedding_layer = nn.Linear(250, output_dim1*output_dim2*num_channels, bias=False)
+        self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2*num_channels, token_len, bias=False)
+        self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2*num_channels, bias=False)
 
         self.output_layer = nn.Linear(hidden_dim, output_dim1)
 
@@ -826,13 +827,13 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
 
             # NN Update
             self.updates_h.append(nn.Sequential(
-                                       nn.Linear(250+1, 100),
+                                       nn.Linear(token_len+1, 100),
                                        nn.GELU(),
                                        nn.Dropout(dropout),
                                        nn.Linear(100, 100),
                                        nn.GELU(),
                                        nn.Dropout(dropout),
-                                       nn.Linear(100, 250)
+                                       nn.Linear(100, token_len)
             ))
 
         self.project_in = nn.Linear(100, 1)
@@ -867,7 +868,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         x = x.reshape(x.shape[0], self.output_dim1, self.output_dim2, self.num_channels)
 
         # Get difference between physics model output and input
-        # print("values", values.shape)
+        print("values", values.shape)
         dx = x - values[...,-1,:]
         dx = dx.unsqueeze(-1)
 

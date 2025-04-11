@@ -120,9 +120,6 @@ def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress
         plt.savefig("./{}/{}.png".format(path, fname))
     plt.close()
 
-
-
-
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
     im_num = 0
     for vals in val_loader:
@@ -264,6 +261,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                token_length=config['token_length'],
                                 interval=config['interval'],
                                 seed=config['seed']
         )
@@ -284,6 +282,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                token_length=config['token_length'],
                                 interval=config['interval'],
                                 seed=config['seed']
         )
@@ -304,6 +303,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                token_length=config['token_length'],
                                 interval=config['interval'],
                                 seed=config['seed']
         )
@@ -363,7 +363,7 @@ def get_transformer(model_name, config):
         print("\n USING STANDARD EMBEDDING")
         neural_operator = get_neural_operator(config['neural_operator'], config)
         transformer = StandardPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], dropout=config['dropout'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], dropout=config['dropout'],
                                         neural_operator=neural_operator).to(device=device)
     elif(config['embedding'] == "novel"):
         print("\n USING NOVEL EMBEDDING")
