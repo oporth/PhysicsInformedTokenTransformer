@@ -72,53 +72,54 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
     plt.close()
 
 def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress_plots", seed=None):
-    ncols = 3
-    fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
-    ax[0].imshow(x0[0, :, :,0, 0].detach().cpu())
-    ax[1].imshow(y_test_pred[0,:,:,0].detach().cpu())
-    ax[2].imshow(x0[0, :, :,1, 0].detach().cpu())
+    for i in range(y_test_pred.shape[3]):
+        ncols = 3
+        fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
+        ax[0].imshow(x0[0, :, :,0, i].detach().cpu())
+        ax[1].imshow(y_test_pred[0,:,:,i].detach().cpu())
+        ax[2].imshow(x0[0, :, :,1, i].detach().cpu())
 
-    ax[0].set_title("t-15s")
-    ax[1].set_title("PITT output")
-    ax[2].set_title("t+15s")
+        ax[0].set_title("start frame")
+        ax[1].set_title("PITT output")
+        ax[2].set_title("end frame")
 
-    fname = 'test'
-    plt.tight_layout()
-    while(len(fname) < 8):
-        fname = '0' + fname
-    if(seed is not None): 
-        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
-    else:
-        plt.savefig("./{}/{}.png".format(path, fname))
-    plt.close()
+        fname = 'test' + str(i)
+        plt.tight_layout()
+        while(len(fname) < 8):
+            fname = '0' + fname
+        if(seed is not None): 
+            plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+        else:
+            plt.savefig("./{}/{}.png".format(path, fname))
+        plt.close()
 
-    ncols = 3
-    fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-    ax[0][0].imshow(y_test_true[0,:,:,0].detach().cpu())
-    ax[0][1].imshow(y_test_pred[0,:,:,0].detach().cpu())
-    ax[0][2].imshow(np.absolute(y_test_pred[0,:,:,0].detach().cpu()-y_test_true[0,:,:,0].detach().cpu()))
+        ncols = 3
+        fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
+        ax[0][0].imshow(y_test_true[0,:,:,i].detach().cpu())
+        ax[0][1].imshow(y_test_pred[0,:,:,i].detach().cpu())
+        ax[0][2].imshow(np.absolute(y_test_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()))
 
-    ax[1][0].imshow(y_test_true[0,:,:,0].detach().cpu())
-    ax[1][1].imshow(y_lin_pred[0,:,:,0].detach().cpu())
-    ax[1][2].imshow(np.absolute(y_lin_pred[0,:,:,0].detach().cpu()-y_test_true[0,:,:,0].detach().cpu()))
+        ax[1][0].imshow(y_test_true[0,:,:,i].detach().cpu())
+        ax[1][1].imshow(y_lin_pred[0,:,:,i].detach().cpu())
+        ax[1][2].imshow(np.absolute(y_lin_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()))
 
-    ax[0][0].set_title("Target")
-    ax[0][1].set_title("PITT")
-    ax[0][2].set_title("Residual")
+        ax[0][0].set_title("Target")
+        ax[0][1].set_title("PITT")
+        ax[0][2].set_title("Residual")
 
-    ax[1][0].set_title("Target")
-    ax[1][1].set_title("Linear")
-    ax[1][2].set_title("Residual")
+        ax[1][0].set_title("Target")
+        ax[1][1].set_title("Linear")
+        ax[1][2].set_title("Residual")
 
-    fname = 'delta'
-    plt.tight_layout()
-    while(len(fname) < 8):
-        fname = '0' + fname
-    if(seed is not None): 
-        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
-    else:
-        plt.savefig("./{}/{}.png".format(path, fname))
-    plt.close()
+        fname = 'delta' + str(i)
+        plt.tight_layout()
+        while(len(fname) < 8):
+            fname = '0' + fname
+        if(seed is not None): 
+            plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+        else:
+            plt.savefig("./{}/{}.png".format(path, fname))
+        plt.close()
 
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
     im_num = 0
@@ -658,7 +659,7 @@ if __name__ == '__main__':
 
     # Get arguments and get rid of unnecessary ones
     train_args = config['args']
-    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding']
+    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval'])
     if('electric' in train_args['data_name']):
         prefix = "electric_" + prefix
     train_args['prefix'] = prefix

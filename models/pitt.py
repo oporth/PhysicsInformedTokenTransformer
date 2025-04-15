@@ -257,8 +257,8 @@ class LinearAttention(nn.Module):
                 dots = torch.matmul(k.transpose(-1, -2), v)
                 out = torch.matmul(q, dots) * (1. / grid_size)
             else:
-                print(k.shape)
-                print(v.shape)
+                # print(k.shape)
+                # print(v.shape)
                 #print(queries.shape)
                 dots = torch.matmul(keys.transpose(-1, -2), values)
                 out = torch.matmul(queries, dots) * (1./queries.shape[2])
@@ -868,7 +868,6 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         x = x.reshape(x.shape[0], self.output_dim1, self.output_dim2, self.num_channels)
 
         # Get difference between physics model output and input
-        print("values", values.shape)
         dx = x - values[...,-1,:]
         dx = dx.unsqueeze(-1)
 
@@ -898,9 +897,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             kh3 = ah.clone()
 
         # Embed Values
-        # print("dx", dx.shape)
         dx = dx.flatten(1,3)[...,0]
-        # print("dx", dx.shape)
         vh = self.vh_embedding_layer(dx).unsqueeze(-1)
         # print(vh.shape)
         vh = self.v_embedding_layer(vh)
