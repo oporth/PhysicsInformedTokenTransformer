@@ -73,11 +73,14 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
 
 def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress_plots", seed=None):
     for i in range(y_test_pred.shape[3]):
+        max = y_test_pred[0,:,:,i].max()
+        min = y_test_pred[0,:,:,i].min()
+
         ncols = 3
         fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
-        ax[0].imshow(x0[0, :, :,0, i].detach().cpu())
-        ax[1].imshow(y_test_pred[0,:,:,i].detach().cpu())
-        ax[2].imshow(x0[0, :, :,1, i].detach().cpu())
+        ax[0].imshow(x0[0,:,:,0,i].detach().cpu(), vmin=min, vmax=max)
+        ax[1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[2].imshow(x0[0,:,:,1,i].detach().cpu(), vmin=min, vmax=max)
 
         ax[0].set_title("start frame")
         ax[1].set_title("PITT output")
@@ -95,13 +98,13 @@ def progress_plots_test(y_test_true, y_test_pred, y_lin_pred, x0, path="progress
 
         ncols = 3
         fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-        ax[0][0].imshow(y_test_true[0,:,:,i].detach().cpu())
-        ax[0][1].imshow(y_test_pred[0,:,:,i].detach().cpu())
-        ax[0][2].imshow(np.absolute(y_test_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()))
+        ax[0][0].imshow(y_test_true[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[0][1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[0][2].imshow(np.absolute(y_test_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()), vmin=min, vmax=max)
 
-        ax[1][0].imshow(y_test_true[0,:,:,i].detach().cpu())
-        ax[1][1].imshow(y_lin_pred[0,:,:,i].detach().cpu())
-        ax[1][2].imshow(np.absolute(y_lin_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()))
+        ax[1][0].imshow(y_test_true[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[1][1].imshow(y_lin_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[1][2].imshow(np.absolute(y_lin_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()), vmin=min, vmax=max)
 
         ax[0][0].set_title("Target")
         ax[0][1].set_title("PITT")
@@ -138,25 +141,29 @@ def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
 
             im_num += 1
 
-def lin_interpolation(test_loader, loss_fn):
+def lin_interpolation(path, val_loader, loss_fn, config=None):
     lin_loss = 0
-    for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
+    for bn, (x0, y, grid, tokens, t) in enumerate(val_loader):
         x0 = x0.to(device).float()
         y = y.to(device).float()
 
+        if(config is not None and not('electric' in config['data_name'])):
+            x0 = torch.swapaxes(x0, 1, 3)
+            x0 = torch.swapaxes(x0, 1, 2)
+
         y = y[...,0].to(device=device)
-        y_lin = torch.mean(x0, dim=1)
+        y_lin = torch.mean(x0, dim=3)
 
         lin_loss += loss_fn(y_lin, y).item()
     return lin_loss/(bn+1), y_lin
 
 
-def evaluate(test_loader, y_lin, transformer, loss_fn, config=None, path=None, seed=None):
+def evaluate(val_loader, y_lin, transformer, loss_fn, config=None, path=None, seed=None):
     #src_mask = generate_square_subsequent_mask(640).cuda()
     with torch.no_grad():
         transformer.eval()
         test_loss = 0
-        for bn, (x0, y, grid, tokens, t) in enumerate(test_loader):
+        for bn, (x0, y, grid, tokens, t) in enumerate(val_loader):
             # Forward pass: compute predictions by passing the input sequence
             # through the transformer.
 
@@ -226,24 +233,24 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 seed=config['seed']
         )
-        print("\nTEST DATA")
-        f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
-        test_data = ElectricTransformerOperatorDataset2D(f,
-                                split="test",
-                                initial_step=config['initial_step'],
-                                reduced_resolution=config['reduced_resolution'],
-                                reduced_resolution_t=config['reduced_resolution_t'],
-                                reduced_batch=config['reduced_batch'],
-                                saved_folder=config['base_path'],
-                                return_text=config['return_text'],
-                                num_t=config['num_t'],
-                                num_x=config['num_x'],
-                                sim_time=config['sim_time'],
-                                num_samples=config['num_samples'],
-                                train_style=config['train_style'],
-                                split_style=config['split_style'],
-                                seed=config['seed']
-        )
+        # print("\nTEST DATA")
+        # f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
+        # test_data = ElectricTransformerOperatorDataset2D(f,
+        #                         split="test",
+        #                         initial_step=config['initial_step'],
+        #                         reduced_resolution=config['reduced_resolution'],
+        #                         reduced_resolution_t=config['reduced_resolution_t'],
+        #                         reduced_batch=config['reduced_batch'],
+        #                         saved_folder=config['base_path'],
+        #                         return_text=config['return_text'],
+        #                         num_t=config['num_t'],
+        #                         num_x=config['num_x'],
+        #                         sim_time=config['sim_time'],
+        #                         num_samples=config['num_samples'],
+        #                         train_style=config['train_style'],
+        #                         split_style=config['split_style'],
+        #                         seed=config['seed']
+        # )
     else:
         f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
         print("\nTRAINING DATA")
@@ -287,43 +294,43 @@ def get_data(f, config):
                                 interval=config['interval'],
                                 seed=config['seed']
         )
-        print("\nTEST DATA")
-        f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
-        test_data = TransformerOperatorDataset2D(f,
-                                split="test",
-                                initial_step=config['initial_step'],
-                                reduced_resolution=config['reduced_resolution'],
-                                reduced_resolution_t=config['reduced_resolution_t'],
-                                reduced_batch=config['reduced_batch'],
-                                saved_folder=config['base_path'],
-                                return_text=config['return_text'],
-                                num_t=config['num_t'],
-                                num_x=config['num_x'],
-                                sim_time=config['sim_time'],
-                                num_samples=config['num_samples'],
-                                train_style=config['train_style'],
-                                split_style=config['split_style'],
-                                samples_per_equation=config['samples_per_equation'],
-                                token_length=config['token_length'],
-                                interval=config['interval'],
-                                seed=config['seed']
-        )
+        # print("\nTEST DATA")
+        # f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
+        # test_data = TransformerOperatorDataset2D(f,
+        #                         split="test",
+        #                         initial_step=config['initial_step'],
+        #                         reduced_resolution=config['reduced_resolution'],
+        #                         reduced_resolution_t=config['reduced_resolution_t'],
+        #                         reduced_batch=config['reduced_batch'],
+        #                         saved_folder=config['base_path'],
+        #                         return_text=config['return_text'],
+        #                         num_t=config['num_t'],
+        #                         num_x=config['num_x'],
+        #                         sim_time=config['sim_time'],
+        #                         num_samples=config['num_samples'],
+        #                         train_style=config['train_style'],
+        #                         split_style=config['split_style'],
+        #                         samples_per_equation=config['samples_per_equation'],
+        #                         token_length=config['token_length'],
+        #                         interval=config['interval'],
+        #                         seed=config['seed']
+        # )
 
     # Check against data leaks
     if(config['split_style'] == 'equation'):
         assert not (bool(set(train_data.data_list) & \
-                         set(val_data.data_list)) | \
-                    bool(set(train_data.data_list) & \
-                         set(test_data.data_list)) & \
-                    bool(set(val_data.data_list) & \
-                         set(test_data.data_list)))
+                         set(val_data.data_list)))
+                    # bool(set(train_data.data_list) & \
+                    #      set(test_data.data_list)) & \
+                    # bool(set(val_data.data_list) & \
+                    #      set(test_data.data_list)))
     elif(config['split_style'] == 'initial_condition'):
         assert not (bool(set(train_data.idxs) & \
-                         set(val_data.idxs)) | \
-                    bool(set(train_data.idxs) & \
-                         set(test_data.idxs)) & \
-                    bool(set(val_data.idxs) & \
-                         set(test_data.idxs)))
+                         set(val_data.idxs)))
+                    # bool(set(train_data.idxs) & \
+                    #      set(test_data.idxs)) & \
+                    # bool(set(val_data.idxs) & \
+                    #      set(test_data.idxs)))
     else:
         raise ValueError("Invalid splitting style. Select initial_condition or equation")
 
@@ -331,9 +338,9 @@ def get_data(f, config):
                                                num_workers=config['num_workers'], shuffle=True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size=config['batch_size'], generator=torch.Generator(device='cuda'),
                                              num_workers=config['num_workers'], shuffle=True)
-    test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
-                                             num_workers=config['num_workers'], shuffle=False)
-    return train_loader, val_loader, test_loader
+    # test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
+    #                                          num_workers=config['num_workers'], shuffle=False)
+    return train_loader, val_loader
 
 
 def get_neural_operator(model_name, config):
@@ -398,7 +405,7 @@ def run_training(config, prefix):
     print(f'Total parameters = {total_params}')
 
     # Get data as loaders
-    train_loader, val_loader, test_loader = get_data(f, config)
+    train_loader, val_loader = get_data(f, config)
 
     ################################################################
     # training and evaluation
@@ -471,7 +478,7 @@ def run_training(config, prefix):
             scheduler.step()
 
             try:
-                if(bn%100 == 0 and len(train_loader) >= 1000):
+                if(bn%1000 == 0):
                     print("Batch: {0}\tloss = {1:.4f}".format(bn, train_loss/(bn+1)))
                     fig, ax = plt.subplots(ncols=3, nrows=2, figsize=(22,15))
                     im0 = ax[0][0].imshow(transformer.query_matrix.detach().cpu()[0], cmap='bwr')
@@ -629,10 +636,10 @@ def run_training(config, prefix):
     # progress_plots(epoch, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
     # val_plots(epoch, val_loader, all_val_preds, seed=seed)
 
-    lin_value, y_lin = lin_interpolation(test_loader, loss_fn)
+    lin_value, y_lin = lin_interpolation(path, val_loader, loss_fn, config=config)
 
     test_vals = []
-    test_value = evaluate(test_loader, y_lin, transformer, loss_fn, config=config, path=path, seed=seed)
+    test_value = evaluate(val_loader, y_lin, transformer, loss_fn, config=config, path=path, seed=seed)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
 

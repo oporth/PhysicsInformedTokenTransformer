@@ -1,10 +1,8 @@
 args:
     if_training: True
     neural_operator: False
-    results_dir: './2D_ns_next_step/'
-    #results_dir: './2D_FF_IC_20/'
-    #results_dir: './2D_FF_IC_30/'
-    #results_dir: './2D_ELECTRIC/'
+    #results_dir: './2D_Euler_interpolate_test/'
+    results_dir: './2D_ns_interpolate_test/'
 
     model: 'pitt' 
     neural_operator: 'fno' # fno, oformer, deeponet
@@ -12,10 +10,10 @@ args:
     embedding: 'standard'
     #embedding: 'novel'
 
-    #split_style: 'equation'
-    split_style: 'initial_condition'
+    split_style: 'equation'
+    #split_style: 'initial_condition'
 
-    train_style: 'next_step'
+    train_style: 'interpolate'
     #train_style: 'fixed_future'
     
     attention_type: 'galerkin'
@@ -27,28 +25,28 @@ args:
     rollout_length: 1
     num_workers: 0
     batch_size: 16
-    initial_step: 1
-    #initial_step: 41
+    initial_step: 2
+    interval: 50
     t_train: 200
     model_update: 1
 
     # Data file
-    #data_name: '2d_ns_1s_256_4eq.h5'
+    #data_name: 'euler_multi_quadrants_periodicBC.h5'
     data_name: '2d_ns_30s_256_370eq.h5'
     #data_name: '2d_electric_100_60.h5'
     
     fno: False
     return_text: True
-    reduced_resolution: 4
+    reduced_resolution: 2
     reduced_resolution_t: 1
     reduced_batch: 1
 
-    epochs: 101
+    epochs: 51
     num_seeds: 2
-    dropout: 0.
+    dropout: 0.2
 
     # Optimizer
-    learning_rate: 1.e-3
+    learning_rate: 1.e-5
     weight_decay: 1.e-8
     scheduler_step: 2
     scheduler_gamma: 0.1
@@ -57,9 +55,9 @@ args:
     #
     #num_x: 60
     #num_y: 100
-    num_x: 64
-    num_y: 64
-    num_t: 100
+    num_x: 128
+    num_y: 128
+    num_t: 121
 
     # Fixed Future
     #sim_time: 80
@@ -68,14 +66,17 @@ args:
     # Next-step
     sim_time: 1000
 
-    num_samples: 
+    #num_samples: 360
     #num_samples: 100
-    #num_samples: 370
+    num_samples: 370
     #num_samples: 5000
     
     # For mixed next step training
-    samples_per_equation: 1
-    #samples_per_equation: 5
+    #samples_per_equation: 10
+    samples_per_equation: 5
+    
+    #token_length: 250
+    token_length: 100
 
     # Transformer
     hidden: 64

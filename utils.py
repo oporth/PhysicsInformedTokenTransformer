@@ -663,7 +663,7 @@ class TransformerOperatorDataset2D(Dataset):
                  num_x=200,
                  sim_time=-1,
                  split="train",
-                 test_ratio=0.2,
+                 test_ratio=0.0,
                  val_ratio=0.2,
                  num_samples=None,
                  return_text=False,
@@ -765,7 +765,7 @@ class TransformerOperatorDataset2D(Dataset):
         if('10s' in self.h5_file.filename):
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,201)).float()
         elif('30s' in self.h5_file.filename):
-            self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,121,1)).float()
+            self.data = torch.empty((len(self.data_list),self.samples_per_equation,128,128,121,1)).float()
         elif('1s' in self.h5_file.filename):
             #print(len(self.data_list))
             self.data = torch.empty((len(self.data_list),self.samples_per_equation,64,64,201)).float()
@@ -791,13 +791,15 @@ class TransformerOperatorDataset2D(Dataset):
             else:
                 w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
                 complete_data = np.concatenate((w0, data), axis=3)
-                print('data shape', complete_data.shape)
+                # print('data shape', complete_data.shape)
 
                 complete_data = np.expand_dims(complete_data, axis=-1)
-                print('complete shape', complete_data.shape)
+                # print('complete shape', complete_data.shape)
                 self.data[i] = torch.Tensor(complete_data[:self.samples_per_equation])
 
                 time.insert(0, 0.0)
+
+                del complete_data
 
             self.time.append(time)
 
@@ -818,7 +820,7 @@ class TransformerOperatorDataset2D(Dataset):
             #raise
             self.temp_tokens.append(base_tokens)
             #print("\nGOT SAMPLE {}\n".format(i))
-            # del complete_data
+            
 
         # Arrange data
         print("ARRANGING DATA")
@@ -875,7 +877,8 @@ class TransformerOperatorDataset2D(Dataset):
         self.tokens = []
         self.tokens = torch.empty(len(self.time), self.data.shape[1], self.token_length)
         for idx, token in enumerate(self.temp_tokens):
-            token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
+            if('euler' in self.h5_file.filename):
+                token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
             for jdx, time in enumerate(self.time[idx]):
                 # Tokenize time
                 slice_tokens = self._encode_tokens("&" + str(time))
@@ -1002,7 +1005,7 @@ class TransformerOperatorDataset2D(Dataset):
             except KeyError: # Numerical values
                 if(isinstance(all_tokens[i], str)):
                     for v in all_tokens[i]:
-                        print(i, all_tokens[i])
+                        # print(i, all_tokens[i])
                         try:
                             encoded_tokens.append(self.word2id[v])
                         except KeyError:

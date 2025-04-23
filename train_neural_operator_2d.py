@@ -12,6 +12,7 @@ from functools import reduce
 from functools import partial
 
 from timeit import default_timer
+import csv
 
 # torch.manual_seed(0)
 # np.random.seed(0)
@@ -28,27 +29,29 @@ from tqdm import tqdm
 import h5py
 from matplotlib import pyplot as plt
 
+seed_test_loss = []
+seed_val_loss = []
+
 def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path="progress_plots", seed=None):
     ncols = 4
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-    ax[0][0].imshow(y_train_true[0].detach().cpu())
-    ax[0][1].imshow(y_train_true[1].detach().cpu())
-    ax[0][2].imshow(y_val_true[0].detach().cpu())
-    ax[0][3].imshow(y_val_true[1].detach().cpu())
+    ax[0][0].imshow(y_train_true[0,:,:,0].detach().cpu())
+    ax[0][1].imshow(y_train_true[1,:,:,0].detach().cpu())
+    ax[0][2].imshow(y_val_true[0,:,:,0].detach().cpu())
+    ax[0][3].imshow(y_val_true[1,:,:,0].detach().cpu())
 
-    ax[1][0].imshow(y_train_pred[0].detach().cpu())
-    ax[1][1].imshow(y_train_pred[1].detach().cpu())
-    ax[1][2].imshow(y_val_pred[0].detach().cpu())
-    ax[1][3].imshow(y_val_pred[1].detach().cpu())
+    ax[1][0].imshow(y_train_pred[0,:,:,0].detach().cpu())
+    ax[1][1].imshow(y_train_pred[1,:,:,0].detach().cpu())
+    ax[1][2].imshow(y_val_pred[0,:,:,0].detach().cpu())
+    ax[1][3].imshow(y_val_pred[1,:,:,0].detach().cpu())
 
-    ax[0][0].set_xlabel("VALIDATION SET TRUE")
-    ax[1][0].set_xlabel("VALIDATION SET PRED")
-    #ax[0][2].set_title("VALIDATION SET PRED")
-    #ax[0][3].set_title("VALIDATION SET PRED")
+    ax[0][0].set_ylabel("VALIDATION SET TRUE")
+    ax[1][0].set_ylabel("VALIDATION SET PRED")
     fname = str(ep)
+    plt.tight_layout()
     while(len(fname) < 8):
         fname = '0' + fname
-    if(seed is not None):
+    if(seed is not None): 
         plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
     else:
         plt.savefig("./{}/{}.png".format(path, fname))
@@ -161,24 +164,24 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 seed=config['seed'],
         )
-        print("\nTEST DATA")
-        f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
-        test_data = ElectricTransformerOperatorDataset2D(f,
-                                split="test",
-                                initial_step=config['initial_step'],
-                                reduced_resolution=config['reduced_resolution'],
-                                reduced_resolution_t=config['reduced_resolution_t'],
-                                reduced_batch=config['reduced_batch'],
-                                saved_folder=config['base_path'],
-                                return_text=config['return_text'],
-                                num_t=config['num_t'],
-                                num_x=config['num_x'],
-                                sim_time=config['sim_time'],
-                                num_samples=config['num_samples'],
-                                train_style=config['train_style'],
-                                split_style=config['split_style'],
-                                seed=config['seed'],
-        )
+        # print("\nTEST DATA")
+        # f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
+        # test_data = ElectricTransformerOperatorDataset2D(f,
+        #                         split="test",
+        #                         initial_step=config['initial_step'],
+        #                         reduced_resolution=config['reduced_resolution'],
+        #                         reduced_resolution_t=config['reduced_resolution_t'],
+        #                         reduced_batch=config['reduced_batch'],
+        #                         saved_folder=config['base_path'],
+        #                         return_text=config['return_text'],
+        #                         num_t=config['num_t'],
+        #                         num_x=config['num_x'],
+        #                         sim_time=config['sim_time'],
+        #                         num_samples=config['num_samples'],
+        #                         train_style=config['train_style'],
+        #                         split_style=config['split_style'],
+        #                         seed=config['seed'],
+        # )
     else:
         train_data = TransformerOperatorDataset2D(f,
                                 split="train",
@@ -195,6 +198,7 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                interval=config['interval'],
                                 seed=config['seed'],
         )
         print("\nVALIDATION DATA")
@@ -214,42 +218,43 @@ def get_data(f, config):
                                 train_style=config['train_style'],
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
+                                interval=config['interval'],
                                 seed=config['seed'],
         )
-        print("\nTEST DATA")
-        f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
-        test_data = TransformerOperatorDataset2D(f,
-                                split="test",
-                                initial_step=config['initial_step'],
-                                reduced_resolution=config['reduced_resolution'],
-                                reduced_resolution_t=config['reduced_resolution_t'],
-                                reduced_batch=config['reduced_batch'],
-                                saved_folder=config['base_path'],
-                                return_text=config['return_text'],
-                                num_t=config['num_t'],
-                                num_x=config['num_x'],
-                                sim_time=config['sim_time'],
-                                num_samples=config['num_samples'],
-                                train_style=config['train_style'],
-                                split_style=config['split_style'],
-                                samples_per_equation=config['samples_per_equation'],
-                                seed=config['seed'],
-        )
+        # print("\nTEST DATA")
+        # f = h5py.File("{}/{}".format(config['base_path'], config['data_name']), 'r')
+        # test_data = TransformerOperatorDataset2D(f,
+        #                         split="test",
+        #                         initial_step=config['initial_step'],
+        #                         reduced_resolution=config['reduced_resolution'],
+        #                         reduced_resolution_t=config['reduced_resolution_t'],
+        #                         reduced_batch=config['reduced_batch'],
+        #                         saved_folder=config['base_path'],
+        #                         return_text=config['return_text'],
+        #                         num_t=config['num_t'],
+        #                         num_x=config['num_x'],
+        #                         sim_time=config['sim_time'],
+        #                         num_samples=config['num_samples'],
+        #                         train_style=config['train_style'],
+        #                         split_style=config['split_style'],
+        #                         samples_per_equation=config['samples_per_equation'],
+        #                         seed=config['seed'],
+        # )
 
     if(config['split_style'] == 'equation'):
         assert not (bool(set(train_data.data_list) & \
-                         set(val_data.data_list)) | \
-                    bool(set(train_data.data_list) & \
-                         set(test_data.data_list)) & \
-                    bool(set(val_data.data_list) & \
-                         set(test_data.data_list)))
+                         set(val_data.data_list)))
+                    # bool(set(train_data.data_list) & \
+                    #      set(test_data.data_list)) & \
+                    # bool(set(val_data.data_list) & \
+                    #      set(test_data.data_list)))
     elif(config['split_style'] == 'initial_condition'):
         assert not (bool(set(train_data.idxs) & \
-                         set(val_data.idxs)) | \
-                    bool(set(train_data.idxs) & \
-                         set(test_data.idxs)) & \
-                    bool(set(val_data.idxs) & \
-                         set(test_data.idxs)))
+                         set(val_data.idxs)))
+                    # bool(set(train_data.idxs) & \
+                    #      set(test_data.idxs)) & \
+                    # bool(set(val_data.idxs) & \
+                    #      set(test_data.idxs)))
     else:
         raise ValueError("Invalid splitting style. Select initial_condition or equation")
 
@@ -259,10 +264,10 @@ def get_data(f, config):
     val_loader = torch.utils.data.DataLoader(val_data, batch_size=config['batch_size'],
                                              num_workers=config['num_workers'], shuffle=True,
                                              generator=torch.Generator(device='cuda'))
-    test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
-                                             num_workers=config['num_workers'], shuffle=False,
-                                             generator=torch.Generator(device='cuda'))
-    return train_loader, val_loader, test_loader
+    # test_loader = torch.utils.data.DataLoader(test_data, batch_size=config['batch_size'],
+    #                                          num_workers=config['num_workers'], shuffle=False,
+                                            #  generator=torch.Generator(device='cuda'))
+    return train_loader, val_loader
 
 
 def evaluate(test_loader, model, loss_fn, navier_stokes=True):
@@ -313,7 +318,7 @@ def run_training(model, config, prefix):
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f'Total parameters = {total_params}')
 
-    train_loader, val_loader, test_loader = get_data(f, config)
+    train_loader, val_loader = get_data(f, config)
     #train_plots(train_loader, 'train', 0)
     #train_plots(val_loader, 'val', 0)
     #raise
@@ -338,8 +343,8 @@ def run_training(model, config, prefix):
     else:
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=config['scheduler_step'], gamma=config['scheduler_gamma'])
     
-    loss_fn = nn.L1Loss(reduction="mean")
-    loss_val_min = np.infty
+    loss_fn = nn.MSELoss(reduction="mean")
+    loss_val_min = np.inf
     
     start_epoch = 0
 
@@ -478,14 +483,17 @@ def run_training(model, config, prefix):
         progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path, seed=seed)
 
     test_vals = []
-    test_value = evaluate(test_loader, model, loss_fn, navier_stokes)
+    test_value = evaluate(val_loader, model, loss_fn, navier_stokes)
     test_vals.append(test_value)
     print("TEST VALUE FROM LAST EPOCH: {0:5f}".format(test_value))
-    model.load_state_dict(torch.load(model_path)['model_state_dict'])
-    test_value = evaluate(test_loader, model, loss_fn, navier_stokes)
-    test_vals.append(test_value)
-    print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
+    # model.load_state_dict(torch.load(model_path)['model_state_dict'])
+    # test_value = evaluate(val_loader, model, loss_fn, navier_stokes)
+    # test_vals.append(test_value)
+    # print("TEST VALUE BEST LAST EPOCH: {0:5f}".format(test_value))
     np.save("./{}/test_vals_{}.npy".format(path, seed), test_vals)
+
+    seed_test_loss.append(test_value)
+    seed_val_loss.append(val_l2_full/(bn+1))
 
             
 if __name__ == "__main__":
@@ -509,7 +517,7 @@ if __name__ == "__main__":
     train_args = config['args']
     train_args['model_name'] = model_name
     device = train_args['device']#torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style']
+    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + str(train_args['interval'])
     if('electric' in train_args['data_name']):
         prefix = 'electric_' + prefix
     os.makedirs("{}{}_{}".format(train_args['results_dir'], model_name, prefix), exist_ok=True)
@@ -525,6 +533,13 @@ if __name__ == "__main__":
 
         model = get_model(model_name, train_args)
         run_training(model, train_args, prefix)
+
+    csv_file_path = "{}{}_{}/test_vals_int{}_test.csv".format(train_args['results_dir'], model_name, prefix, train_args['interval'])
+
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(seed_test_loss)
+        writer.writerow(seed_val_loss)
     print("Done.")
 
 

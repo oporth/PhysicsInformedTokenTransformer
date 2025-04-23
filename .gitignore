@@ -7,8 +7,12 @@
 2D_ns_interpolate
 2D_ns_interpolate_test
 2D_Euler_interpolate
+2D_ns_interpolate_highres
+2D_Euler_interpolate_test
 err
 out
 test.ipynb
+test_2D.ipynb
+.ipynb_checkpoints
 __pycache__
 configs
