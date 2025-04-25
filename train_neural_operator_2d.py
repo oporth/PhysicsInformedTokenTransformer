@@ -199,6 +199,7 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
                                 interval=config['interval'],
+                                token_length=config['token_length'],
                                 seed=config['seed'],
         )
         print("\nVALIDATION DATA")
@@ -219,6 +220,7 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
                                 interval=config['interval'],
+                                token_length=config['token_length'],
                                 seed=config['seed'],
         )
         # print("\nTEST DATA")

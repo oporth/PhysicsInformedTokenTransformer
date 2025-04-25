@@ -686,7 +686,7 @@ if __name__ == '__main__':
         train_args['seed'] = seed
         run_training(train_args, prefix)
 
-    csv_file_path = "{}{}_{}_{}/test_vals_int{}_test.csv".format(train_args['results_dir'], train_args['model'], train_args['neural_operator'], prefix, train_args['interval'])
+    csv_file_path = "{}{}_{}_{}/test_vals_int{}.csv".format(train_args['results_dir'], train_args['model'], train_args['neural_operator'], prefix, train_args['interval'])
 
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)

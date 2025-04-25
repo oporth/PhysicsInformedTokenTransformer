@@ -779,10 +779,10 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.kh2_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
 
         # Query and value processing
-        self.q_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
-        self.v_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
-        self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2*num_channels, token_len, bias=False)
-        self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2*num_channels, bias=False)
+        # self.q_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
+        self.v_embedding_layer = nn.Linear(num_channels, hidden_dim, bias=False)
+        self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2, token_len, bias=False)
+        self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
 
         self.output_layer = nn.Linear(hidden_dim, output_dim1)
 
@@ -846,7 +846,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
                      nn.Linear(hidden_dim, hidden_dim),
                      nn.GELU(),
                      nn.Dropout(dropout),
-                     nn.Linear(hidden_dim, 1)
+                     nn.Linear(hidden_dim, num_channels)
         )
 
         # This needs to vary based on other model. Might take out for default training.
@@ -869,6 +869,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
 
         # Get difference between physics model output and input
         dx = x - values[...,-1,:]
+        dx = dx.permute(0,3,1,2)
         dx = dx.unsqueeze(-1)
 
         # Embedding
@@ -897,9 +898,10 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             kh3 = ah.clone()
 
         # Embed Values
-        dx = dx.flatten(1,3)[...,0]
-        vh = self.vh_embedding_layer(dx).unsqueeze(-1)
+        dx = dx.flatten(2,3)[...,0]
+        vh = self.vh_embedding_layer(dx)
         # print(vh.shape)
+        vh = vh.permute(0,2,1)
         vh = self.v_embedding_layer(vh)
         # print(vh.shape)
 
@@ -932,6 +934,6 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             t_frac = t_frac + t/self.num_layers
 
         vh = torch.swapaxes(self.vh_unembedding_layer(torch.swapaxes(vh, 1, 2)), 1, 2)
-        out = self.output_layers(vh)[...,0].reshape((x.shape[0], x.shape[1], x.shape[2], x.shape[3]))
+        out = self.output_layers(vh).reshape((x.shape[0], self.output_dim1, self.output_dim2, self.num_channels))
         return x + out
 

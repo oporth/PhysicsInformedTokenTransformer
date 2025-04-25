@@ -268,7 +268,7 @@ class FNO2d(nn.Module):
         x = self.dropout(x)
         x = self.fc2(x)
 
-        return x.unsqueeze(-2)
+        return x.unsqueeze(-1)
 
 
     def get_loss(self, x, y, grid, loss_fn):
