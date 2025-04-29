@@ -702,7 +702,7 @@ class TransformerOperatorDataset2D(Dataset):
         # Time steps used as initial conditions
         self.initial_step = initial_step
 
-        self.WORDS = ['(', ')', '+', '-', '*', '/', '=', 'Derivative', 'sin', 'cos', 't', 'u', 'v', 'x', 'w', 'y', 'p', 'rho', 
+        self.WORDS = ['(', ')', '+', '-', '*', '/', '=', '^', 'Derivative', 'sin', 'cos', 't', 'u', 'v', 'x', 'w', 'y', 'p', 'rho', 
                       'pi', 'Delta', 'nabla', 'dot', "None", '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10^',
                       'E', 'e', ',', '.', '&']
         self.word2id = {w: i for i, w in enumerate(self.WORDS)}
@@ -787,6 +787,27 @@ class TransformerOperatorDataset2D(Dataset):
             time = list(seed_group['t'][:])
 
             if('euler' in self.h5_file.filename):
+                parts = self.data_list[i].split('_')
+                gamma = f"{float(parts[1]):.3f}"
+                base_tokens = ["Derivative", "(", "rho", ",", "t", ")", "+",
+                        "Derivative", "(", "rho", "*", "u", ",", "x", ")", "+",
+                        "Derivative", "(", "rho", "*", "v", ",", "y", ")", "=", "0",
+                        "&",
+                        "Derivative", "(", "rho", "*", "u", ",", "t", ")", "+",
+                        "Derivative", "(", "rho", "*", "u", "^", "2", "+", "p", ",", "x", ")", "+",
+                        "Derivative", "(", "rho", "*", "u", "*", "v", ",", "y", ")", "=", "0",
+                        "&",
+                        "Derivative", "(", "rho", "*", "v", ",", "t", ")", "+",
+                        "Derivative", "(", "rho", "*", "u", "*", "v", ",", "x", ")", "+",
+                        "Derivative", "(", "rho", "*", "v", "^", "2", "+", "p", ",", "y", ")", "=", "0",
+                        "&",
+                        "Derivative", "(", "e", ",", "t", ")", "+",
+                        "Derivative", "(", "u", "*", "(", "e", "+", "p", ")", ",", "x", ")", "+",
+                        "Derivative", "(", "v", "*", "(", "e", "+", "p", ")", ",", "y", ")", "=", "0",
+                        "&",
+                        "e", "=", "p", "/", "(", gamma, "-", "1", ")", "+",
+                        "rho", "*", "(", "u", "^", "2", "+", "v", "^", "2", ")", "/", "2"
+                        ]
                 self.data[i] = torch.Tensor(data[:self.samples_per_equation])
             else:
                 w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]

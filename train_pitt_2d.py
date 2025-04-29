@@ -371,7 +371,7 @@ def get_transformer(model_name, config):
         print("\n USING STANDARD EMBEDDING")
         neural_operator = get_neural_operator(config['neural_operator'], config)
         transformer = StandardPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], dropout=config['dropout'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], embedding_type=config['embedding_type'], dropout=config['dropout'],
                                         neural_operator=neural_operator).to(device=device)
     elif(config['embedding'] == "novel"):
         print("\n USING NOVEL EMBEDDING")
@@ -666,7 +666,7 @@ if __name__ == '__main__':
 
     # Get arguments and get rid of unnecessary ones
     train_args = config['args']
-    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval'])
+    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval']) + train_args['embedding_type']
     if('electric' in train_args['data_name']):
         prefix = "electric_" + prefix
     train_args['prefix'] = prefix
@@ -686,7 +686,7 @@ if __name__ == '__main__':
         train_args['seed'] = seed
         run_training(train_args, prefix)
 
-    csv_file_path = "{}{}_{}_{}/test_vals_int{}.csv".format(train_args['results_dir'], train_args['model'], train_args['neural_operator'], prefix, train_args['interval'])
+    csv_file_path = "{}{}_{}_{}/test_vals_int{}_{}.csv".format(train_args['results_dir'], train_args['model'], train_args['neural_operator'], prefix, train_args['interval'], train_args['embedding_type'])
 
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)

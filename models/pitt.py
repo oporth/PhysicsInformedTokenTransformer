@@ -13,6 +13,7 @@ import os
 import shutil
 from torch.nn.init import xavier_uniform_, constant_, xavier_normal_, orthogonal_
 from einops import rearrange, repeat, reduce
+from einops.layers.torch import Rearrange
 
 from .fno import SpectralConv1d, FNO1d, SpectralConv2d_fast, FNO2d
 
@@ -753,9 +754,8 @@ class PhysicsInformedTokenTransformer2D(nn.Module):
         out = self.output_layers(vh)[...,0].reshape((x.shape[0], x.shape[1], x.shape[2]))
         return x + out 
 
-
 class StandardPhysicsInformedTokenTransformer2D(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, neural_operator, dropout=0.1):
+    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, embedding_type, neural_operator, dropout=0.1):
         super().__init__()
 
         self.temp = nn.Linear(100, 100, bias=False)
@@ -765,6 +765,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.num_channels = num_channels
         self.hidden_dim = hidden_dim
         self.token_len = token_len
+        self.embedding_type = embedding_type
 
         self.embedding = torch.nn.Embedding(token_len, hidden_dim)
         self.pos_encoding = PositionalEncoding(hidden_dim, dropout)
@@ -784,6 +785,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2, token_len, bias=False)
         self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
 
+        self.convolution_layer = nn.Conv2d(num_channels, hidden_dim, kernel_size=3, padding=1, groups=num_channels, bias=False)
         self.output_layer = nn.Linear(hidden_dim, output_dim1)
 
         # Internal Physics Model
@@ -870,7 +872,6 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         # Get difference between physics model output and input
         dx = x - values[...,-1,:]
         dx = dx.permute(0,3,1,2)
-        dx = dx.unsqueeze(-1)
 
         # Embedding
         keys = self.embedding(keys.long()) * np.sqrt(self.hidden_dim)
@@ -898,13 +899,18 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             kh3 = ah.clone()
 
         # Embed Values
-        dx = dx.flatten(2,3)[...,0]
-        vh = self.vh_embedding_layer(dx)
-        # print(vh.shape)
-        vh = vh.permute(0,2,1)
-        vh = self.v_embedding_layer(vh)
-        # print(vh.shape)
-
+        if self.embedding_type == 'standard':
+            dx = dx.flatten(2,3)
+            vh = self.vh_embedding_layer(dx)
+            # print(vh.shape)
+            vh = vh.permute(0,2,1)
+            vh = self.v_embedding_layer(vh)
+        elif self.embedding_type == 'conv':
+            dx = self.convolution_layer(dx)
+            dx = dx.flatten(2,3)
+            vh = self.vh_embedding_layer(dx)
+            # print(vh.shape)
+            vh = vh.permute(0,2,1)
 
         # Use FNO embedding
         vh_old = vh.clone()
