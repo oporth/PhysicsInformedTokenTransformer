@@ -72,8 +72,8 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
 
 def progress_plots_test(y_test_true, y_test_pred, x0, t, path="progress_plots", seed=None):
     for i in range(y_test_pred.shape[3]):
-        max = y_test_pred[0,:,:,i].max()
-        min = y_test_pred[0,:,:,i].min()
+        max = y_test_true[0,:,:,i].max()
+        min = y_test_true[0,:,:,i].min()
 
         ncols = 3
         fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
@@ -87,7 +87,8 @@ def progress_plots_test(y_test_true, y_test_pred, x0, t, path="progress_plots", 
 
         fname = 'test' + str(i)
         plt.tight_layout()
-        plt.title(f't={t}')
+        fig.suptitle(f't={t[0].detach().cpu()}')
+        fig.subplots_adjust(top=0.88)
         while(len(fname) < 8):
             fname = '0' + fname
         if(seed is not None): 
@@ -106,10 +107,10 @@ def progress_plots_test(y_test_true, y_test_pred, x0, t, path="progress_plots", 
         ax[1].set_title("PITT")
         ax[2].set_title("Residual")
 
-
         fname = 'delta' + str(i)
         plt.tight_layout()
-        plt.title(f't={t}')
+        fig.suptitle(f't={t[0].detach().cpu()}')
+        fig.subplots_adjust(top=0.88)
         while(len(fname) < 8):
             fname = '0' + fname
         if(seed is not None): 

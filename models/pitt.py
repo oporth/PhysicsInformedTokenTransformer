@@ -753,6 +753,34 @@ class PhysicsInformedTokenTransformer2D(nn.Module):
         vh = torch.swapaxes(self.vh_unembedding_layer(torch.swapaxes(vh, 1, 2)), 1, 2)
         out = self.output_layers(vh)[...,0].reshape((x.shape[0], x.shape[1], x.shape[2]))
         return x + out 
+    
+def encode_tokens(all_tokens):
+    words = ['(', ')', '+', '-', '*', '/', '=', '^', 'Derivative', 'sin', 'cos', 't', 'u', 'v', 'x', 'w', 'y', 'p', 'rho', 
+                      'pi', 'Delta', 'nabla', 'dot', "None", '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10^',
+                      'E', 'e', ',', '.', '&']
+    word2id = {w: i for i, w in enumerate(words)}
+    encoded_tokens = []
+    num_concat = 0
+    for i in range(len(all_tokens)):
+        try: # All the operators, bcs, regular symbols
+            encoded_tokens.append(word2id[all_tokens[i]])
+            if(all_tokens[i] == "&"): # 5 concatenations before we get to lists of sampled values
+                num_concat += 1
+        except KeyError: # Numerical values
+            if(isinstance(all_tokens[i], str)):
+                for v in all_tokens[i]:
+                    # print(i, all_tokens[i])
+                    try:
+                        encoded_tokens.append(word2id[v])
+                    except KeyError:
+                        print(all_tokens)
+                        raise
+                if(num_concat >= 5): # We're in a list of sampled parameters
+                    encoded_tokens.append(word2id[","])
+            else:
+                raise KeyError("Unrecognized token: {}".format(all_tokens[i]))
+
+    return encoded_tokens
 
 class StandardPhysicsInformedTokenTransformer2D(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, embedding_type, neural_operator, dropout=0.1):
@@ -770,23 +798,15 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.embedding = torch.nn.Embedding(token_len, hidden_dim)
         self.pos_encoding = PositionalEncoding(hidden_dim, dropout)
 
-        # Get input processing
-        self.k_embedding_layer = nn.Linear(input_dim, hidden_dim, bias=False)
-        self.embedding_layer1 = nn.Linear(1, hidden_dim, bias=False)
-        self.embedding_layer2 = nn.Linear(1, hidden_dim, bias=False)
-        self.embedding_layer3 = nn.Linear(1, hidden_dim, bias=False)
-
         self.kh1_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
         self.kh2_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
 
         # Query and value processing
-        # self.q_embedding_layer = nn.Linear(1, hidden_dim, bias=False)
-        self.v_embedding_layer = nn.Linear(num_channels, hidden_dim, bias=False)
+        self.v_embedding_layer = nn.Linear(2*num_channels, hidden_dim, bias=False)
         self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2, token_len, bias=False)
         self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
 
-        self.convolution_layer = nn.Conv2d(num_channels, hidden_dim, kernel_size=3, padding=1, groups=num_channels, bias=False)
-        self.output_layer = nn.Linear(hidden_dim, output_dim1)
+        self.convolution_layer = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, bias=False)
 
         # Internal Physics Model
         self.neural_operator = neural_operator
@@ -829,16 +849,14 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
 
             # NN Update
             self.updates_h.append(nn.Sequential(
-                                       nn.Linear(token_len+1, 100),
+                                       nn.Linear(token_len+1, 200),
                                        nn.GELU(),
                                        nn.Dropout(dropout),
-                                       nn.Linear(100, 100),
+                                       nn.Linear(200, 200),
                                        nn.GELU(),
                                        nn.Dropout(dropout),
-                                       nn.Linear(100, token_len)
+                                       nn.Linear(200, token_len)
             ))
-
-        self.project_in = nn.Linear(100, 1)
 
         # Output decoding layer
         self.output_layers = nn.Sequential(
@@ -870,15 +888,20 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         x = x.reshape(x.shape[0], self.output_dim1, self.output_dim2, self.num_channels)
 
         # Get difference between physics model output and input
-        dx = x - values[...,-1,:]
+        dx1 = x - values[...,-1,:]
+        dx2 = x - values[...,-2,:]
+        dx = torch.cat((dx1,dx2), dim=3)
         dx = dx.permute(0,3,1,2)
 
         # Embedding
+        slice_tokens = [encode_tokens("&" + f"{float(i):.3f}") for i in t.tolist()]
+        slice_tokens = torch.tensor(slice_tokens, device='cuda:0')
+        keys = torch.cat((keys, slice_tokens), dim=1)
         keys = self.embedding(keys.long()) * np.sqrt(self.hidden_dim)
         keys = self.pos_encoding(keys)
 
-        ## Scale and shift the keys
-        #keys = (keys - keys.max())/keys.max()
+        # # Scale and shift the keys
+        # keys = (keys - keys.max())/keys.max()
 
         ## Keys
         kh1 = keys.clone()

@@ -13,10 +13,11 @@ err
 out
 test.ipynb
 test_2D.ipynb
+Untitled.ipynb
 .ipynb_checkpoints
 __pycache__
 configs
-2D_Euler_interpolate_12modes/
+2D_Euler_interpolate_16modes/
 2D_Euler_interpolate_new/
 2D_Euler_interpolate_time_cont/
 FNO_mode_performance/
@@ -25,4 +26,5 @@ PITT_movie.ipynb
 err-pitt2d
 models/film.py
 out-pitt2d
+figures
 

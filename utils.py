@@ -789,28 +789,28 @@ class TransformerOperatorDataset2D(Dataset):
             time = list(seed_group['t'][:])
 
             if('euler' in self.h5_file.filename):
-                parts = self.data_list[i].split('_')
-                gamma = f"{float(parts[1]):.3f}"
-                base_tokens = ["Derivative", "(", "rho", ",", "t", ")", "+",
-                        "Derivative", "(", "rho", "*", "u", ",", "x", ")", "+",
-                        "Derivative", "(", "rho", "*", "v", ",", "y", ")", "=", "0",
-                        "&",
-                        "Derivative", "(", "rho", "*", "u", ",", "t", ")", "+",
-                        "Derivative", "(", "rho", "*", "u", "^", "2", "+", "p", ",", "x", ")", "+",
-                        "Derivative", "(", "rho", "*", "u", "*", "v", ",", "y", ")", "=", "0",
-                        "&",
-                        "Derivative", "(", "rho", "*", "v", ",", "t", ")", "+",
-                        "Derivative", "(", "rho", "*", "u", "*", "v", ",", "x", ")", "+",
-                        "Derivative", "(", "rho", "*", "v", "^", "2", "+", "p", ",", "y", ")", "=", "0",
-                        "&",
-                        "Derivative", "(", "e", ",", "t", ")", "+",
-                        "Derivative", "(", "u", "*", "(", "e", "+", "p", ")", ",", "x", ")", "+",
-                        "Derivative", "(", "v", "*", "(", "e", "+", "p", ")", ",", "y", ")", "=", "0",
-                        "&",
-                        "e", "=", "p", "/", "(", gamma, "-", "1", ")", "+",
-                        "rho", "*", "(", "u", "^", "2", "+", "v", "^", "2", ")", "/", "2"
-                        ]
-                base_tokens = self._encode_tokens(base_tokens)
+                # parts = self.data_list[i].split('_')
+                # gamma = f"{float(parts[1]):.3f}"
+                # base_tokens = ["Derivative", "(", "rho", ",", "t", ")", "+",
+                #         "Derivative", "(", "rho", "*", "u", ",", "x", ")", "+",
+                #         "Derivative", "(", "rho", "*", "v", ",", "y", ")", "=", "0",
+                #         "&",
+                #         "Derivative", "(", "rho", "*", "u", ",", "t", ")", "+",
+                #         "Derivative", "(", "rho", "*", "u", "^", "2", "+", "p", ",", "x", ")", "+",
+                #         "Derivative", "(", "rho", "*", "u", "*", "v", ",", "y", ")", "=", "0",
+                #         "&",
+                #         "Derivative", "(", "rho", "*", "v", ",", "t", ")", "+",
+                #         "Derivative", "(", "rho", "*", "u", "*", "v", ",", "x", ")", "+",
+                #         "Derivative", "(", "rho", "*", "v", "^", "2", "+", "p", ",", "y", ")", "=", "0",
+                #         "&",
+                #         "Derivative", "(", "e", ",", "t", ")", "+",
+                #         "Derivative", "(", "u", "*", "(", "e", "+", "p", ")", ",", "x", ")", "+",
+                #         "Derivative", "(", "v", "*", "(", "e", "+", "p", ")", ",", "y", ")", "=", "0",
+                #         "&",
+                #         "e", "=", "p", "/", "(", gamma, "-", "1", ")", "+",
+                #         "rho", "*", "(", "u", "^", "2", "+", "v", "^", "2", ")", "/", "2"
+                #         ]
+                # base_tokens = self._encode_tokens(base_tokens)
                 self.data[i] = torch.Tensor(data[:self.samples_per_equation])
             else:
                 w0 = seed_group['a'][:][...,::reduced_resolution,::reduced_resolution,np.newaxis]
@@ -901,8 +901,8 @@ class TransformerOperatorDataset2D(Dataset):
         self.tokens = []
         self.tokens = torch.empty(len(self.time), self.data.shape[1], self.token_length-6)
         for idx, token in enumerate(self.temp_tokens):
-            # if('euler' in self.h5_file.filename):
-            #     token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
+            if('euler' in self.h5_file.filename):
+                token = self._encode_tokens(np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in token]))
             for jdx, time in enumerate(self.time[idx]):
                 # Tokenize time
                 if self.train_style == 'interpolate':
@@ -1080,7 +1080,7 @@ class TransformerOperatorDataset2D(Dataset):
         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
         time_shift = 0
         if(self.time_cont):
-            time_shift = random.randrange(-(self.interval-1), (self.interval-1))
+            time_shift = random.randrange(-(self.interval-1), (self.interval))
         time_encoding = 0.5+(time_shift/(2*self.interval))
 
         if(self.train_style == "next_step"):
@@ -1097,31 +1097,12 @@ class TransformerOperatorDataset2D(Dataset):
                        self.grid[idx][self.sim_time]
 
         elif(self.train_style == 'interpolate'):
-            slice_tokens = self._encode_tokens("&" + f"{float(time_encoding):.3f}")
-            # Add tokenized time to equation
-            full_tokens = list(self.tokens[sim_num//self.samples_per_equation][sim_time])
-            full_tokens.extend(list(slice_tokens))
-            # Pad tokens to all have same length
-            full_tokens.extend([len(self.WORDS)]*(self.token_length - len(full_tokens)))
-            full_tokens = torch.Tensor(full_tokens)
-
             if(self.return_text):
                 return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
                         self.data[sim_num][sim_time+time_shift][...,np.newaxis], \
                         self.grid[sim_num//self.samples_per_equation], \
-                        full_tokens, \
+                        self.tokens[sim_num//self.samples_per_equation][sim_time], \
                         time_encoding
-            else:
-                return self.data[idx][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
-                        self.data[idx][sim_time], \
-                        self.grid[idx][sim_time] # ????
-            
-        elif(self.train_style == 'interpolate_rollout'):
-            if(self.return_text):
-                return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
-                        self.data[sim_num][sim_time-self.interval+1:sim_time+self.interval][...,np.newaxis], \
-                        self.grid[sim_num//self.samples_per_equation], \
-                        self.tokens[sim_num//self.samples_per_equation][sim_time]
             else:
                 return self.data[idx][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
                         self.data[idx][sim_time], \
