@@ -18,13 +18,17 @@ Untitled.ipynb
 __pycache__
 configs
 2D_Euler_interpolate_16modes/
+2D_Euler_interpolate_24modes/
 2D_Euler_interpolate_new/
 2D_Euler_interpolate_time_cont/
 FNO_mode_performance/
 Mode_loss.ipynb
 PITT_movie.ipynb
+PITT_inference.ipynb
 err-pitt2d
 models/film.py
 out-pitt2d
 figures
+
+
 

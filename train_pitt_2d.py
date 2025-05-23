@@ -644,7 +644,7 @@ if __name__ == '__main__':
 
     # Get arguments and get rid of unnecessary ones
     train_args = config['args']
-    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval'])
+    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval']) + "_" + train_args['embedding_type']
     if('electric' in train_args['data_name']):
         prefix = "electric_" + prefix
     train_args['prefix'] = prefix

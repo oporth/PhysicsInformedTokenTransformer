@@ -806,7 +806,9 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2, token_len, bias=False)
         self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
 
-        self.convolution_layer = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, bias=False)
+        # self.convolution_layer = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, bias=False)
+        self.convolution_layer1 = nn.Conv2d(2*num_channels, 2*num_channels, kernel_size=1, bias=False)
+        self.convolution_layer2 = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, groups=2*num_channels, bias=False)
 
         # Internal Physics Model
         self.neural_operator = neural_operator
@@ -900,7 +902,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         keys = self.embedding(keys.long()) * np.sqrt(self.hidden_dim)
         keys = self.pos_encoding(keys)
 
-        # # Scale and shift the keys
+        ## Scale and shift the keys
         # keys = (keys - keys.max())/keys.max()
 
         ## Keys
@@ -923,16 +925,15 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
 
         # Embed Values
         if self.embedding_type == 'standard':
-            dx = dx.flatten(2,3)
+            dx = dx.flatten(2)
             vh = self.vh_embedding_layer(dx)
-            # print(vh.shape)
             vh = vh.permute(0,2,1)
             vh = self.v_embedding_layer(vh)
         elif self.embedding_type == 'conv':
-            dx = self.convolution_layer(dx)
-            dx = dx.flatten(2,3)
+            dx = self.convolution_layer1(dx)
+            dx = self.convolution_layer2(dx)
+            dx = dx.flatten(2)
             vh = self.vh_embedding_layer(dx)
-            # print(vh.shape)
             vh = vh.permute(0,2,1)
 
         # Use FNO embedding
