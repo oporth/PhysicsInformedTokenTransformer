@@ -1098,7 +1098,7 @@ class TransformerOperatorDataset2D(Dataset):
 
         elif(self.train_style == 'interpolate'):
             if(self.return_text):
-                return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval], :],\
+                return self.data[sim_num][np.r_[sim_time-self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+self.interval+1:self.interval]],\
                         self.data[sim_num][sim_time+time_shift][...,np.newaxis], \
                         self.grid[sim_num//self.samples_per_equation], \
                         self.tokens[sim_num//self.samples_per_equation][sim_time], \

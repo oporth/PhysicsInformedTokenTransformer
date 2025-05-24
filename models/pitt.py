@@ -803,12 +803,18 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
 
         # Query and value processing
         self.v_embedding_layer = nn.Linear(2*num_channels, hidden_dim, bias=False)
-        self.vh_embedding_layer = nn.Linear(output_dim1*output_dim2, token_len, bias=False)
+        self.vh_embedding_layer = nn.Linear((output_dim1*output_dim2), token_len, bias=False)
+        self.vh_embedding_layer2 = nn.Linear((output_dim1*output_dim2)//(4), token_len, bias=False)
+        self.vh_embedding_layer3 = nn.Linear((output_dim1*output_dim2)//(16), token_len, bias=False)
+        self.vh_embedding_layer4 = nn.Linear((output_dim1*output_dim2)//(64), token_len, bias=False)
         self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
 
         # self.convolution_layer = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, bias=False)
-        self.convolution_layer1 = nn.Conv2d(2*num_channels, 2*num_channels, kernel_size=1, bias=False)
-        self.convolution_layer2 = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=3, padding=1, groups=2*num_channels, bias=False)
+        self.channel_mixing = nn.Conv2d(2*num_channels, 2*num_channels, kernel_size=1, bias=False)
+        self.convolution_layer1 = nn.Conv2d(2*num_channels, hidden_dim//2, kernel_size=1, stride=1, groups=2*num_channels, bias=False)
+        self.convolution_layer2 = nn.Conv2d(2*num_channels, hidden_dim//4, kernel_size=2, stride=2, groups=2*num_channels, bias=False)
+        self.convolution_layer3 = nn.Conv2d(2*num_channels, hidden_dim//8, kernel_size=4, stride=4, groups=2*num_channels, bias=False)
+        self.convolution_layer4 = nn.Conv2d(2*num_channels, hidden_dim//8, kernel_size=8, stride=8, groups=2*num_channels, bias=False)
 
         # Internal Physics Model
         self.neural_operator = neural_operator
@@ -929,11 +935,17 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             vh = self.vh_embedding_layer(dx)
             vh = vh.permute(0,2,1)
             vh = self.v_embedding_layer(vh)
-        elif self.embedding_type == 'conv':
-            dx = self.convolution_layer1(dx)
-            dx = self.convolution_layer2(dx)
-            dx = dx.flatten(2)
-            vh = self.vh_embedding_layer(dx)
+        elif self.embedding_type == 'multi-scale':
+            dx = self.channel_mixing(dx)
+            dx1 = self.convolution_layer1(dx)
+            dx2 = self.convolution_layer2(dx)
+            dx3 = self.convolution_layer3(dx)
+            dx4 = self.convolution_layer4(dx)
+            vh1 = self.vh_embedding_layer(dx1.flatten(2))
+            vh2 = self.vh_embedding_layer2(dx2.flatten(2))
+            vh3 = self.vh_embedding_layer3(dx3.flatten(2))
+            vh4 = self.vh_embedding_layer4(dx4.flatten(2))
+            vh = torch.cat((vh1,vh2,vh3,vh4), dim=1)
             vh = vh.permute(0,2,1)
 
         # Use FNO embedding
