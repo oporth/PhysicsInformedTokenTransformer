@@ -14,7 +14,7 @@ import os
 import shutil
 import csv
 
-from models.pitt import StandardPhysicsInformedTokenTransformer2D
+from models.pitt import StandardPhysicsInformedTokenTransformer2D, CSMAPhysicsInformedTokenTransformer2D, MFEPhysicsInformedTokenTransformer2D
 from models.pitt import PhysicsInformedTokenTransformer2D
 
 from models.oformer import OFormer2D, SpatialTemporalEncoder2D, STDecoder2D, PointWiseDecoder2D
@@ -348,7 +348,19 @@ def get_neural_operator(model_name, config):
 
 def get_transformer(model_name, config):
     # Create the transformer model.
-    if(config['embedding'] == "standard"):
+    if(config['embedding_type'] == "multi-scale"):
+        print("\n USING MULTI-SCALE EMBEDDING")
+        neural_operator = get_neural_operator(config['neural_operator'], config)
+        transformer = CSMAPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], scales=config['scales'], dropout=config['dropout'],
+                                        neural_operator=neural_operator).to(device=device)
+    elif(config['embedding_type'] == "conv"):
+        print("\n USING CONVOLUTION EMBEDDING")
+        neural_operator = get_neural_operator(config['neural_operator'], config)
+        transformer = MFEPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], scales=config['scales'], dropout=config['dropout'],
+                                        neural_operator=neural_operator).to(device=device)
+    elif(config['embedding'] == "standard"):
         print("\n USING STANDARD EMBEDDING")
         neural_operator = get_neural_operator(config['neural_operator'], config)
         transformer = StandardPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],

@@ -178,7 +178,7 @@ class LinearAttention(nn.Module):
 
         queries = self.to_q(queries)
         keys = self.to_k(keys)
-        values = self.to_k(values)
+        values = self.to_v(values)
         queries, keys, values = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h=self.heads), (queries,keys,values))
         if padding_mask is None:
             if self.attn_type == 'galerkin':
@@ -935,7 +935,7 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
             vh = self.vh_embedding_layer(dx)
             vh = vh.permute(0,2,1)
             vh = self.v_embedding_layer(vh)
-        elif self.embedding_type == 'multi-scale':
+        elif self.embedding_type == 'conv':
             dx = self.channel_mixing(dx)
             dx1 = self.convolution_layer1(dx)
             dx2 = self.convolution_layer2(dx)
@@ -979,3 +979,424 @@ class StandardPhysicsInformedTokenTransformer2D(nn.Module):
         out = self.output_layers(vh).reshape((x.shape[0], self.output_dim1, self.output_dim2, self.num_channels))
         return x + out
 
+class CSMAPhysicsInformedTokenTransformer2D(nn.Module):
+    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, scales, neural_operator, dropout=0.1):
+        super().__init__()
+
+        self.temp = nn.Linear(100, 100, bias=False)
+        self.temp.weight.data.copy_(torch.eye(100))
+        self.output_dim1 = output_dim1
+        self.output_dim2 = output_dim2
+        self.num_channels = num_channels
+        self.hidden_dim = hidden_dim
+        self.token_len = token_len
+        self.scales = scales
+
+        self.embedding = torch.nn.Embedding(token_len, hidden_dim)
+        self.pos_encoding = PositionalEncoding(hidden_dim, dropout)
+
+        self.kh1_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
+        self.kh2_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
+
+        # Query and value processing
+        self.v_embedding_layer = nn.Linear(2*num_channels, hidden_dim, bias=False)
+        self.vh_embedding_layer = nn.Linear((output_dim1*output_dim2), token_len, bias=False)
+        self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
+
+        self.PWconvolution = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=1, bias=False)
+        self.DWconvolution = nn.Conv2d(hidden_dim, hidden_dim, kernel_size=3, padding=1, groups=hidden_dim, bias=False)
+
+        # Internal Physics Model
+        self.neural_operator = neural_operator
+
+        # Dropout and layer number specification
+        self.dropout = nn.Dropout(dropout)
+        self.num_layers = num_layers
+
+        # Maybe give the option for multiple layers
+        self.mhls = torch.nn.ModuleList()
+        self.mhls.append(nn.MultiheadAttention(hidden_dim, num_heads, batch_first=True))
+
+        self.feval_mhls = torch.nn.ModuleList()
+        self.t_embeddings = torch.nn.ModuleList()
+        self.updates_h = torch.nn.ModuleList()
+        self.conv = torch.nn.ModuleList()
+        self.vh_embedding_layers = torch.nn.ModuleList()
+        self.vh_unembedding_layers = torch.nn.ModuleList()
+        for s in range(len(self.scales)):
+
+            self.conv.append(nn.Sequential(
+                nn.Conv2d(2*hidden_dim, hidden_dim, kernel_size=1, bias=False),
+                nn.Conv2d(hidden_dim, hidden_dim, kernel_size=3, padding=1, groups=hidden_dim, bias=False)
+            ))
+
+            self.vh_embedding_layers.append(nn.Linear((scales[s]**2), token_len, bias=False))
+
+            self.vh_unembedding_layers.append(nn.Linear(token_len, (scales[s]**2), bias=False))
+
+            # For updating state
+            self.feval_mhls.append(LinearAttention(input_dim=hidden_dim, attn_type='galerkin',
+                                      heads=num_heads, dim_head=hidden_dim, dropout=dropout,
+                                      relative_emb=False,
+                                      init_method='xavier',
+                                      init_gain=1.
+            ))
+
+            # Embedding time
+            self.t_embeddings.append(torch.nn.Linear(1, hidden_dim))
+
+            # NN Update
+            self.updates_h.append(nn.Sequential(
+                                       nn.Linear(token_len+1, 200),
+                                       nn.GELU(),
+                                       nn.Dropout(dropout),
+                                       nn.Linear(200, 200),
+                                       nn.GELU(),
+                                       nn.Dropout(dropout),
+                                       nn.Linear(200, token_len)
+            ))
+
+        # Output decoding layer
+        self.output_layers = nn.Sequential(
+                     nn.Linear(len(self.scales)*hidden_dim, hidden_dim),
+                     nn.GELU(),
+                     nn.Dropout(dropout),
+                     nn.Linear(hidden_dim, hidden_dim),
+                     nn.GELU(),
+                     nn.Dropout(dropout),
+                     nn.Linear(hidden_dim, num_channels)
+        )
+
+        # This needs to vary based on other model. Might take out for default training.
+        self.act = nn.SiLU()
+
+    def window_partition(self, x, window_size):
+        B, C, H, W = x.shape
+        x = x.view(B, C, H // window_size, window_size, W // window_size, window_size)
+        windows = x.permute(0, 2, 4, 1, 3, 5).contiguous().view(-1, C, window_size * window_size)
+        return windows
+    
+    def window_reverse(self, windows, window_size, H, W):
+        # windows: (num_windows * B, C, window_size * window_size)
+        # Output: (B, C, H, W)
+
+        B = int(windows.shape[0] // ((H // window_size) * (W // window_size)))
+        C = windows.shape[1]
+
+        x = windows.view(B, H // window_size, W // window_size, C, window_size, window_size)
+        x = x.permute(0, 3, 1, 4, 2, 5).contiguous()  # (B, C, num_h, wh, num_w, ww)
+        x = x.view(B, C, H, W)
+
+        return x
+
+    def forward(self, queries, keys, values, t):#, mask):
+
+        # Physics Model Forward
+        if(isinstance(self.neural_operator, DeepONet2D)):
+            x = self.neural_operator(values, queries)
+        else:
+            #x = self.neural_operator(values.flatten(1,2), queries.flatten(1,2))
+            if(isinstance(self.neural_operator, FNO2d)):
+                x = self.neural_operator(values, queries)
+            else:
+                x = self.neural_operator(values, queries)
+                #x = self.neural_operator(values.flatten(1,2), queries.flatten(1,2))
+        x = x.reshape(x.shape[0], self.output_dim1, self.output_dim2, self.num_channels)
+
+        # Get difference between physics model output and input
+        dx1 = x - values[...,-1,:]
+        dx2 = x - values[...,-2,:]
+        dx = torch.cat((dx1,dx2), dim=3)
+        dx = dx.permute(0,3,1,2)
+
+        # Embedding
+        slice_tokens = [encode_tokens("&" + f"{float(i):.3f}") for i in t.tolist()]
+        slice_tokens = torch.tensor(slice_tokens, device='cuda:0')
+        keys = torch.cat((keys, slice_tokens), dim=1)
+        keys = self.embedding(keys.long()) * np.sqrt(self.hidden_dim)
+        keys = self.pos_encoding(keys)
+
+        ## Scale and shift the keys
+        # keys = (keys - keys.max())/keys.max()
+
+        ## Keys
+        kh1 = keys.clone()
+        kh2 = keys.clone()
+        kh3 = keys.clone()
+
+        # Process equation
+        for l in range(1):
+
+            # Attention on just equation tokens
+            ah, _ = self.mhls[l](kh1, kh2, kh3)
+            #return _
+            ah = self.dropout(ah)
+
+            # Copy hidden state to input for next layer
+            kh1 = ah.clone()
+            kh2 = ah.clone()
+            kh3 = ah.clone()
+
+        vh = self.PWconvolution(dx)
+        # vh = self.DWconvolution(vh)
+        # vh = self.vh_embedding_layers[0](vh.flatten(2))
+        # vh = vh.permute(0,2,1)
+
+        # Embed time
+        t = t.unsqueeze(1).unsqueeze(1)
+
+        kh1 = self.kh1_embedding(kh1)
+        kh2 = self.kh2_embedding(kh2)
+
+        multi_scale_features = []
+
+        for s in range(0,len(self.scales)):
+            
+            if s != 0:
+                vh_s = torch.cat((vh, vh_s), dim=1)
+                vh_s = self.conv[s](vh_s)
+            else:
+                vh_s = self.DWconvolution(vh)
+
+            vh_windows = self.window_partition(vh_s, self.scales[s])
+            
+            vh_emb = self.vh_embedding_layers[s](vh_windows)
+            vh_emb = vh_emb.permute(0,2,1)
+
+            vh_old = vh_emb.clone()
+
+            B = vh_s.shape[0]
+            num_windows = vh_windows.shape[0] // B
+            kh1_s = kh1.unsqueeze(1).repeat(1, num_windows, 1, 1)
+            kh1_s = kh1_s.view(-1, self.token_len, self.hidden_dim)
+            kh2_s = kh2.unsqueeze(1).repeat(1, num_windows, 1, 1)
+            kh2_s = kh2_s.view(-1, self.token_len, self.hidden_dim)
+
+            update, _ = self.feval_mhls[s](kh1_s, kh2_s, vh_emb)
+            update = self.dropout(update)
+
+            t_h = self.t_embeddings[s](t)
+            t_h = t_h.unsqueeze(1).repeat(1, num_windows, 1, 1)
+            t_h = t_h.view(-1, 1, self.hidden_dim)
+            up_t = torch.swapaxes(torch.cat((update, t_h), dim=1), 1, 2)
+            #print(up_t.shape)
+            up_th = torch.swapaxes(self.updates_h[s](up_t), 1, 2)
+
+            #print(vh_old.shape, up_th.shape)
+            vh_s = vh_old + up_th
+
+            vh_s = vh_s.permute(0,2,1)
+            vh_s = self.vh_unembedding_layers[s](vh_s)
+
+            vh_s = self.window_reverse(vh_s, self.scales[s], 64, 64)
+
+            multi_scale_features.append(vh_s)
+
+        fused = torch.cat(multi_scale_features, dim=1)
+
+        vh = fused.permute(0,2,3,1)
+        out = self.output_layers(vh).reshape((x.shape[0], self.output_dim1, self.output_dim2, self.num_channels))
+        return x + out
+    
+    
+class MFEPhysicsInformedTokenTransformer2D(nn.Module):
+    def __init__(self, input_dim, hidden_dim, num_layers, num_heads, output_dim1, output_dim2, num_channels, token_len, scales, neural_operator, dropout=0.1):
+        super().__init__()
+
+        self.temp = nn.Linear(100, 100, bias=False)
+        self.temp.weight.data.copy_(torch.eye(100))
+        self.output_dim1 = output_dim1
+        self.output_dim2 = output_dim2
+        self.num_channels = num_channels
+        self.hidden_dim = hidden_dim
+        self.token_len = token_len
+        self.scales = scales
+
+        self.embedding = torch.nn.Embedding(token_len, hidden_dim)
+        self.pos_encoding = PositionalEncoding(hidden_dim, dropout)
+
+        self.kh1_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
+        self.kh2_embedding = nn.Linear(hidden_dim, hidden_dim, bias=False)
+
+        # Query and value processing
+        self.v_embedding_layer = nn.Linear(2*num_channels, hidden_dim, bias=False)
+        self.vh_embedding_layer = nn.Linear((output_dim1*output_dim2), token_len, bias=False)
+        self.vh_unembedding_layer = nn.Linear(token_len, output_dim1*output_dim2, bias=False)
+
+        self.PWconvolution = nn.Conv2d(2*num_channels, hidden_dim, kernel_size=1, bias=False)
+        self.DWconvolution = nn.Conv2d(hidden_dim, hidden_dim, kernel_size=3, padding=1, groups=hidden_dim, bias=False)
+
+        # Internal Physics Model
+        self.neural_operator = neural_operator
+
+        # Dropout and layer number specification
+        self.dropout = nn.Dropout(dropout)
+        self.num_layers = num_layers
+
+        # Maybe give the option for multiple layers
+        self.mhls = torch.nn.ModuleList()
+        self.mhls.append(nn.MultiheadAttention(hidden_dim, num_heads, batch_first=True))
+
+        self.feval_mhls = torch.nn.ModuleList()
+        self.t_embeddings = torch.nn.ModuleList()
+        self.updates_h = torch.nn.ModuleList()
+        self.conv = torch.nn.ModuleList()
+        self.vh_embedding_layers = torch.nn.ModuleList()
+        self.vh_unembedding_layers = torch.nn.ModuleList()
+        self.pooling_layers = torch.nn.ModuleList()
+
+        for s in range(len(self.scales)):
+
+            self.pooling_layers.append(nn.AvgPool2d(scales[s]))
+
+            self.conv.append(nn.Sequential(
+                nn.Conv2d(2*hidden_dim, hidden_dim, kernel_size=1, bias=False),
+                nn.Conv2d(hidden_dim, hidden_dim, kernel_size=3, padding=1, groups=hidden_dim, bias=False)
+            ))
+
+            self.vh_embedding_layers.append(nn.Linear((output_dim1*output_dim2)//(scales[s]**2), token_len, bias=False))
+
+            self.vh_unembedding_layers.append(nn.Linear(token_len, (output_dim1*output_dim2)//(scales[s]**2), bias=False))
+
+            # For updating state
+            self.feval_mhls.append(LinearAttention(input_dim=hidden_dim, attn_type='galerkin',
+                                      heads=num_heads, dim_head=hidden_dim, dropout=dropout,
+                                      relative_emb=False,
+                                      init_method='xavier',
+                                      init_gain=1.
+            ))
+
+            # Embedding time
+            self.t_embeddings.append(torch.nn.Linear(1, hidden_dim))
+
+            # NN Update
+            self.updates_h.append(nn.Sequential(
+                                       nn.Linear(token_len+1, 200),
+                                       nn.GELU(),
+                                       nn.Dropout(dropout),
+                                       nn.Linear(200, 200),
+                                       nn.GELU(),
+                                       nn.Dropout(dropout),
+                                       nn.Linear(200, token_len)
+            ))
+
+        self.fusion_layer = torch.nn.ModuleList()
+        for i in range(1, len(scales)):
+            self.fusion_layer.append(nn.Conv2d(2*hidden_dim, hidden_dim, kernel_size=1))
+
+        # Output decoding layer
+        self.output_layers = nn.Sequential(
+                     nn.Linear(hidden_dim, hidden_dim),
+                     nn.GELU(),
+                     nn.Dropout(dropout),
+                     nn.Linear(hidden_dim, hidden_dim),
+                     nn.GELU(),
+                     nn.Dropout(dropout),
+                     nn.Linear(hidden_dim, num_channels)
+        )
+
+        # This needs to vary based on other model. Might take out for default training.
+        self.act = nn.SiLU()
+
+    def forward(self, queries, keys, values, t):#, mask):
+
+        # Physics Model Forward
+        if(isinstance(self.neural_operator, DeepONet2D)):
+            x = self.neural_operator(values, queries)
+        else:
+            #x = self.neural_operator(values.flatten(1,2), queries.flatten(1,2))
+            if(isinstance(self.neural_operator, FNO2d)):
+                x = self.neural_operator(values, queries)
+            else:
+                x = self.neural_operator(values, queries)
+                #x = self.neural_operator(values.flatten(1,2), queries.flatten(1,2))
+        x = x.reshape(x.shape[0], self.output_dim1, self.output_dim2, self.num_channels)
+
+        # Get difference between physics model output and input
+        dx1 = x - values[...,-1,:]
+        dx2 = x - values[...,-2,:]
+        dx = torch.cat((dx1,dx2), dim=3)
+        dx = dx.permute(0,3,1,2)
+
+        # Embedding
+        slice_tokens = [encode_tokens("&" + f"{float(i):.3f}") for i in t.tolist()]
+        slice_tokens = torch.tensor(slice_tokens, device='cuda:0')
+        keys = torch.cat((keys, slice_tokens), dim=1)
+        keys = self.embedding(keys.long()) * np.sqrt(self.hidden_dim)
+        keys = self.pos_encoding(keys)
+
+        ## Scale and shift the keys
+        # keys = (keys - keys.max())/keys.max()
+
+        ## Keys
+        kh1 = keys.clone()
+        kh2 = keys.clone()
+        kh3 = keys.clone()
+
+        # Process equation
+        for l in range(1):
+
+            # Attention on just equation tokens
+            ah, _ = self.mhls[l](kh1, kh2, kh3)
+            #return _
+            ah = self.dropout(ah)
+
+            # Copy hidden state to input for next layer
+            kh1 = ah.clone()
+            kh2 = ah.clone()
+            kh3 = ah.clone()
+
+        vh = self.PWconvolution(dx)
+        # vh = self.DWconvolution(vh)
+        # vh = self.vh_embedding_layers[0](vh.flatten(2))
+        # vh = vh.permute(0,2,1)
+
+        # Embed time
+        t = t.unsqueeze(1).unsqueeze(1)
+
+        kh1 = self.kh1_embedding(kh1)
+        kh2 = self.kh2_embedding(kh2)
+
+        multi_scale_features = []
+
+        for s in range(0,len(self.scales)):
+            
+            if s != 0:
+                vh_pool = self.pooling_layers[s](vh)
+                vh_s = F.interpolate(vh_s, scale_factor=2)
+                vh_s = torch.cat((vh_pool, vh_s), dim=1)
+                vh_s = self.conv[s](vh_s)
+            else:
+                vh_s = self.pooling_layers[s](vh)
+                vh_s = self.DWconvolution(vh_s)
+            
+            vh_emb = self.vh_embedding_layers[s](vh_s.flatten(2))
+            vh_emb = vh_emb.permute(0,2,1)
+
+            vh_old = vh_emb.clone()
+
+            update, _ = self.feval_mhls[s](kh1, kh2, vh_emb)
+            update = self.dropout(update)
+
+            t_h = self.t_embeddings[s](t)
+            up_t = torch.swapaxes(torch.cat((update, t_h), dim=1), 1, 2)
+            #print(up_t.shape)
+            up_th = torch.swapaxes(self.updates_h[s](up_t), 1, 2)
+
+            vh_s = vh_old + up_th
+
+            vh_s = vh_s.permute(0,2,1)
+            vh_s = self.vh_unembedding_layers[s](vh_s)
+            vh_s = vh_s.reshape(vh.shape[0], self.hidden_dim, self.output_dim1//self.scales[s], self.output_dim2//self.scales[s])
+
+            multi_scale_features.append(vh_s)
+
+        fused = multi_scale_features[0]
+        for i in range(1, len(multi_scale_features)):
+            up_sample = F.interpolate(fused, scale_factor=2)
+            fused = torch.cat((up_sample, multi_scale_features[i]), dim=1)
+            fused = self.fusion_layer[i-1](fused)
+
+        vh = fused.permute(0,2,3,1)
+        out = self.output_layers(vh).reshape((x.shape[0], self.output_dim1, self.output_dim2, self.num_channels))
+        return x + out

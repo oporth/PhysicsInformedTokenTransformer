@@ -199,6 +199,7 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
                                 interval=config['interval'],
+                                time_cont = config['time_cont'],
                                 token_length=config['token_length'],
                                 seed=config['seed'],
         )
@@ -220,6 +221,7 @@ def get_data(f, config):
                                 split_style=config['split_style'],
                                 samples_per_equation=config['samples_per_equation'],
                                 interval=config['interval'],
+                                time_cont = config['time_cont'],
                                 token_length=config['token_length'],
                                 seed=config['seed'],
         )
