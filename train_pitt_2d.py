@@ -14,7 +14,7 @@ import os
 import shutil
 import csv
 
-from models.pitt import StandardPhysicsInformedTokenTransformer2D, CSMAPhysicsInformedTokenTransformer2D, MFEPhysicsInformedTokenTransformer2D
+from models.pitt import StandardPhysicsInformedTokenTransformer2D
 from models.pitt import PhysicsInformedTokenTransformer2D
 
 from models.oformer import OFormer2D, SpatialTemporalEncoder2D, STDecoder2D, PointWiseDecoder2D
@@ -71,53 +71,81 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, path=
     plt.close()
 
 def progress_plots_test(y_test_true, y_test_pred, x0, t, path="progress_plots", seed=None):
-    for i in range(y_test_pred.shape[3]):
+    np.savez(f"./{path}/progress_plot_data.npz", y_test_true=y_test_true.detach().cpu().numpy(), y_test_pred=y_test_pred.detach().cpu().numpy(), x0=x0.detach().cpu().numpy(), t=t.detach().cpu().numpy())
+
+    num_var = y_test_pred.shape[3]
+    ncols = 3
+    fig, ax = plt.subplots(ncols=ncols, nrows=num_var, figsize=(5*ncols,5*num_var), layout='compressed')
+    for i in range(num_var):
         max = y_test_true[0,:,:,i].max()
         min = y_test_true[0,:,:,i].min()
 
-        ncols = 3
-        fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
-        ax[0].imshow(x0[0,:,:,0,i].detach().cpu(), vmin=min, vmax=max)
-        ax[1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
-        ax[2].imshow(x0[0,:,:,1,i].detach().cpu(), vmin=min, vmax=max)
+        ax[i][0].imshow(x0[0,:,:,0,i].detach().cpu(), vmin=min, vmax=max)
+        ax[i][1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[i][2].imshow(x0[0,:,:,1,i].detach().cpu(), vmin=min, vmax=max)
 
-        ax[0].set_title("start frame")
-        ax[1].set_title("PITT output")
-        ax[2].set_title("end frame")
-
-        fname = 'test' + str(i)
-        plt.tight_layout()
-        fig.suptitle(f't={t[0].detach().cpu()}')
-        fig.subplots_adjust(top=0.88)
-        while(len(fname) < 8):
-            fname = '0' + fname
-        if(seed is not None): 
-            plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+        if i == 0:
+            ax[i][0].set_title("Start frame", fontsize=16)
+            ax[i][1].set_title("PITT output", fontsize=16)
+            ax[i][2].set_title("End frame", fontsize=16)
+            ax[i][0].set_ylabel('Density', fontsize=16)
+        elif i == 1:
+            ax[i][0].set_ylabel('Energy', fontsize=16)
+        elif i == 2:
+            ax[i][0].set_ylabel(r'Momentum $x$', fontsize=16)
         else:
-            plt.savefig("./{}/{}.png".format(path, fname))
-        plt.close()
+            ax[i][0].set_ylabel(r'Momentum $y$', fontsize=16)
 
-        ncols = 3
-        fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(5*ncols,7))
-        ax[0].imshow(y_test_true[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
-        ax[1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
-        ax[2].imshow(np.absolute(y_test_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()), vmin=min, vmax=max)
+    for axes in ax.flatten():
+        axes.set_xticks([])
+        axes.set_yticks([])
+    
+    fname = 'test'
+    fig.suptitle(f'$t={float(t[0].detach().cpu()):.3f}$', fontsize=16)
+    fig.subplots_adjust(top=0.88)
+    while(len(fname) < 8):
+        fname = '0' + fname
+    if(seed is not None): 
+        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+    else:
+        plt.savefig("./{}/{}.png".format(path, fname))
+    plt.close()
 
-        ax[0].set_title("Target")
-        ax[1].set_title("PITT")
-        ax[2].set_title("Residual")
+    fig, ax = plt.subplots(ncols=ncols, nrows=num_var, figsize=(5*ncols,5*num_var), layout='compressed')
+    for i in range(num_var):
+        max = y_test_true[0,:,:,i].max()
+        min = y_test_true[0,:,:,i].min()
 
-        fname = 'delta' + str(i)
-        plt.tight_layout()
-        fig.suptitle(f't={t[0].detach().cpu()}')
-        fig.subplots_adjust(top=0.88)
-        while(len(fname) < 8):
-            fname = '0' + fname
-        if(seed is not None): 
-            plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+        ax[i][0].imshow(y_test_true[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[i][1].imshow(y_test_pred[0,:,:,i].detach().cpu(), vmin=min, vmax=max)
+        ax[i][2].imshow(np.absolute(y_test_pred[0,:,:,i].detach().cpu()-y_test_true[0,:,:,i].detach().cpu()), vmin=min, vmax=max)
+
+        if i == 0:
+            ax[i][0].set_title("Target", fontsize=16)
+            ax[i][1].set_title("PITT", fontsize=16)
+            ax[i][2].set_title("Residual", fontsize=16)
+            ax[i][0].set_ylabel('Density', fontsize=16)
+        elif i == 1:
+            ax[i][0].set_ylabel('Energy', fontsize=16)
+        elif i == 2:
+            ax[i][0].set_ylabel(r'Momentum $x$', fontsize=16)
         else:
-            plt.savefig("./{}/{}.png".format(path, fname))
-        plt.close()
+            ax[i][0].set_ylabel(r'Momentum $y$', fontsize=16)
+
+    for axes in ax.flatten():
+        axes.set_xticks([])
+        axes.set_yticks([])
+
+    fname = 'delta'
+    fig.suptitle(f'$t={float(t[0].detach().cpu()):.3f}$', fontsize=16)
+    fig.subplots_adjust(top=0.88)
+    while(len(fname) < 8):
+        fname = '0' + fname
+    if(seed is not None): 
+        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+    else:
+        plt.savefig("./{}/{}.png".format(path, fname))
+    plt.close()
 
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
     im_num = 0
@@ -348,23 +376,11 @@ def get_neural_operator(model_name, config):
 
 def get_transformer(model_name, config):
     # Create the transformer model.
-    if(config['embedding_type'] == "multi-scale"):
-        print("\n USING MULTI-SCALE EMBEDDING")
-        neural_operator = get_neural_operator(config['neural_operator'], config)
-        transformer = CSMAPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], scales=config['scales'], dropout=config['dropout'],
-                                        neural_operator=neural_operator).to(device=device)
-    elif(config['embedding_type'] == "conv"):
-        print("\n USING CONVOLUTION EMBEDDING")
-        neural_operator = get_neural_operator(config['neural_operator'], config)
-        transformer = MFEPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], scales=config['scales'], dropout=config['dropout'],
-                                        neural_operator=neural_operator).to(device=device)
-    elif(config['embedding'] == "standard"):
+    if(config['embedding'] == "standard"):
         print("\n USING STANDARD EMBEDDING")
         neural_operator = get_neural_operator(config['neural_operator'], config)
         transformer = StandardPhysicsInformedTokenTransformer2D(100, config['hidden'], config['layers'], config['heads'],
-                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], embedding_type=config['embedding_type'], dropout=config['dropout'],
+                                        output_dim1=config['num_x'], output_dim2=config['num_y'], num_channels=config['num_channels'], token_len=config['token_length'], dropout=config['dropout'],
                                         neural_operator=neural_operator).to(device=device)
     elif(config['embedding'] == "novel"):
         print("\n USING NOVEL EMBEDDING")
@@ -656,7 +672,7 @@ if __name__ == '__main__':
 
     # Get arguments and get rid of unnecessary ones
     train_args = config['args']
-    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval']) + "_" + train_args['embedding_type']
+    prefix = train_args['data_name'].split("_")[0] + "_" + train_args['train_style'] + "_" + train_args['embedding'] + "_" + str(train_args['interval'])
     if('electric' in train_args['data_name']):
         prefix = "electric_" + prefix
     train_args['prefix'] = prefix

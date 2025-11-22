@@ -51,7 +51,7 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_tr
     ncols = 8
     fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
     for i in range(ncols):
-        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu(), label='ground thruth')
+        ax[0][i].plot(y_train_true[i].reshape(100,).detach().cpu(), label='ground truth')
         ax[0][i].plot(y_train_pred[i].reshape(100,).detach().cpu(), label='prediction')
         ax[0][i].plot(x0_train[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
 
@@ -77,30 +77,41 @@ def progress_plots(ep, y_train_true, y_train_pred, y_val_true, y_val_pred, x0_tr
     plt.close()
 
 
-def progress_plot_test(y_test_true, y_test_pred, x0_test, path="progress_plots", seed=None):
-    ncols = 8
-    fig, ax = plt.subplots(ncols=ncols, nrows=2, figsize=(5*ncols,14))
-    for i in range(ncols):
-        ax[0][i].plot(y_test_true[i].reshape(100,).detach().cpu(), label='ground thruth')
-        ax[0][i].plot(y_test_pred[i].reshape(100,).detach().cpu(), label='prediction')
-        ax[0][i].plot(x0_test[i].transpose(0,1).detach().cpu(),'k--',alpha=0.5, label='input frame')
-   
-        ax[1][i].plot(y_test_true[i+ncols].reshape(100,).detach().cpu())
-        ax[1][i].plot(y_test_pred[i+ncols].reshape(100,).detach().cpu())
-        ax[1][i].plot(x0_test[i+ncols].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
+def progress_plot_test(y_test_true, y_test_pred, x0_test, t, path="progress_plots", seed=None):
+    for i in range(10):
+        ncols = 1
+        fig, ax = plt.subplots(ncols=ncols, nrows=1, figsize=(8*ncols,8))
+        for j in range(ncols):
+            print(x0_test[i].shape)
+            y_lin = (1-t[i])*x0_test[i,0] + t[i]*x0_test[i,1]
+            ax.plot(y_test_pred[i].reshape(100,).detach().cpu(), color='blue', label='PITT FNO')
+            ax.plot(y_lin.reshape(100,).detach().cpu(), color='orange', label='Linear')
+            ax.plot(y_test_true[i].reshape(100,).detach().cpu(), 'r--', label='Ground truth')
+            for k, frame in enumerate(x0_test[i]):
+                label = 'Input frames' if k == 0 else None
+                ax.plot(frame.detach().cpu(), 'k--', alpha=0.5, label=label)
+            ax.set_xlabel(r'$x$', fontsize=19)
+            ax.set_ylabel(r'$u$', fontsize=19)
+            ax.legend(fontsize=22)
+    
+            # ax[1][i].plot(y_test_true[i+ncols].reshape(100,).detach().cpu())
+            # ax[1][i].plot(y_test_pred[i+ncols].reshape(100,).detach().cpu())
+            # ax[1][i].plot(x0_test[i+ncols].transpose(0,1).detach().cpu(),'k--',alpha=0.5)
 
-    handles, labels = ax[0][0].get_legend_handles_labels()
+        # handles, labels = ax[0][0].get_legend_handles_labels()
 
-    plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15)) 
-    plt.tight_layout()
-    fname='test'
-    while(len(fname) < 8):
-        fname = '0' + fname
-    if(seed is not None):
-        plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
-    else:
-        plt.savefig("./{}/{}.png".format(path, fname))
-    plt.close()
+        # plt.legend(handles, labels, loc='center left', bbox_to_anchor=(1.05, 1.15))
+        plt.tight_layout()
+        fig.suptitle(f'$t={float(t[i].detach().cpu()):.3f}$', fontsize=22)
+        fig.subplots_adjust(top=0.88)
+        fname=f'test{i}'
+        while(len(fname) < 8):
+            fname = '0' + fname
+        if(seed is not None):
+            plt.savefig("./{}/{}_{}.png".format(path, seed, fname))
+        else:
+            plt.savefig("./{}/{}.png".format(path, fname))
+        plt.close()
 
 
 def val_plots(ep, val_loader, preds, path="progress_plots", seed=None):
@@ -164,7 +175,7 @@ def evaluate(test_loader, transformer, loss_fn, path, plot=False):
             test_loss += loss_fn(y_pred, y).item()
     
     if plot==True:
-        progress_plot_test(y, y_pred, x0, path, seed=seed)
+        progress_plot_test(y, y_pred, x0, t, path, seed=seed)
     return test_loss/(bn+1)
 
 

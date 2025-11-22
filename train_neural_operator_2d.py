@@ -19,7 +19,7 @@ import csv
 
 sys.path.append('.')
 from models.oformer import SpatialTemporalEncoder2D, PointWiseDecoder2D, OFormer2D, STDecoder2D
-from models.fno import FNO2d
+from models.fno import FNO2d, FNO3d
 from models.deeponet import DeepONet2D
 
 from utils import TransformerOperatorDataset2D, ElectricTransformerOperatorDataset2D
@@ -109,6 +109,8 @@ def get_model(model_name, config):
     if(model_name == "fno"):
         model = FNO2d(config['num_channels'], config['modes1'], config['modes2'], config['width'], config['initial_step'],
                       config['dropout'])
+    elif(model_name == "fno3d"):
+        model = FNO3d(config['num_channels'], config['modes1'], config['modes2'], config['modes3'], config['width'], config['initial_step'])
     elif(model_name == "oformer"):
         encoder = SpatialTemporalEncoder2D(input_channels=config['input_channels'], in_emb_dim=config['in_emb_dim'],
                             out_seq_emb_dim=config['out_seq_emb_dim'], depth=config['depth'], heads=config['heads'])
@@ -299,6 +301,18 @@ def evaluate(test_loader, model, loss_fn, navier_stokes=True):
                     x = xx
                 im = model(x, grid)
                 loss = loss_fn(yy[...,0], im)
+            elif(isinstance(model, FNO3d)):
+                if(navier_stokes):
+                    x = torch.swapaxes(xx, 1, 3)
+                    x = torch.swapaxes(x, 1, 2)
+                else:
+                    x = xx
+                x = x.reshape(16,64,64,1,8).repeat([1,1,1,19,1])
+                grid = grid.reshape(16,64,64,1,2).repeat([1,1,1,19,1])
+                idx = (t*20).round().long()-1
+                im = model(x, grid)[...,0,:]
+                im = im[torch.arange(im.shape[0]),:,:,idx,:]
+                loss = loss_fn(yy[...,0], im)
     
             test_l2_step += loss.item()
             test_l2_full += loss.item()
@@ -399,6 +413,21 @@ def run_training(model, config, prefix):
                     x = xx
                 im = model(x, grid)
                 loss = loss_fn(yy[...,0], im)
+            elif(isinstance(model, FNO3d)):
+                if(navier_stokes):
+                    x = torch.swapaxes(xx, 1, 3)
+                    x = torch.swapaxes(x, 1, 2)
+                else:
+                    x = xx
+                x = x.reshape(16,64,64,1,8).repeat([1,1,1,19,1])
+                grid = grid.reshape(16,64,64,1,2).repeat([1,1,1,19,1])
+                idx = (t*20).round().long()-1
+                im = model(x, grid)[...,0,:]
+                print('Image shape', im.shape)
+                print("Index range:", idx.min().item(), idx.max().item())
+                print("Valid dim size:", im.shape[3])
+                im = im[torch.arange(im.shape[0]),:,:,idx,:]
+                loss = loss_fn(yy[...,0], im)
 
             # Guarantees we're able to plot at least a few from first batch
             if(bn == 0):
@@ -444,6 +473,18 @@ def run_training(model, config, prefix):
                         else:
                             x = xx
                         im = model(x, grid)
+                        loss = loss_fn(yy[...,0], im)
+                    elif(isinstance(model, FNO3d)):
+                        if(navier_stokes):
+                            x = torch.swapaxes(xx, 1, 3)
+                            x = torch.swapaxes(x, 1, 2)
+                        else:
+                            x = xx
+                        x = x.reshape(16,64,64,1,8).repeat([1,1,1,19,1])
+                        grid = grid.reshape(16,64,64,1,2).repeat([1,1,1,19,1])
+                        idx = (t*20).round().long()-1
+                        im = model(x, grid)[...,0,:]
+                        im = im[torch.arange(im.shape[0]),:,:,idx,:]
                         loss = loss_fn(yy[...,0], im)
 
                     # Guarantees we're able to plot at least a few from first batch
@@ -508,7 +549,7 @@ if __name__ == "__main__":
         print("Default model is FNO. Training FNO.")
         model_name = "fno"
     try:
-        assert model_name in ['fno', 'deeponet', 'oformer']
+        assert model_name in ['fno', 'deeponet', 'oformer', 'fno3d']
     except AssertionError as e:
         print("\nModel must be one of: fno, deeponet, or oformer. Model selected was: {}\n".format(model_name))
         raise

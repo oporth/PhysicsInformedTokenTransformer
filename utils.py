@@ -567,7 +567,7 @@ class TransformerOperatorDataset(Dataset):
             time_shift = random.randrange(-(self.interval-1), (self.interval-1))
 
             if(self.return_text):
-                return  self.data[sim_num][np.r_[sim_time-(self.initial_step//2)*self.interval:sim_time:self.interval, sim_time+self.interval:sim_time+(self.initial_step//2)*self.interval+1:self.interval], :],\
+                return  self.data[sim_num][np.r_[sim_time - (self.initial_step//2)*self.interval + self.interval//2 : sim_time : self.interval, sim_time + self.interval//2 : sim_time + (self.initial_step//2)*self.interval + 1 : self.interval], :],\
                         self.data[sim_num][sim_time+time_shift][...,np.newaxis], \
                         self.grid[sim_num], \
                         self.all_tokens[idx].to(device=device), \
@@ -778,7 +778,7 @@ class TransformerOperatorDataset2D(Dataset):
         for i in tqdm(range(len(self.data_list))):
             seed_group = self.h5_file[self.data_list[i]]
             #data = seed_group['u'][:]
-            data = seed_group['u'][:][:,::reduced_resolution,::reduced_resolution,...]
+            data = seed_group['u'][:][:,::reduced_resolution,::reduced_resolution,::reduced_resolution_t,...]
             #print(data.shape)
             #raise
 
@@ -786,7 +786,7 @@ class TransformerOperatorDataset2D(Dataset):
             base_tokens = seed_group['tokens'][:]
             x = seed_group['X'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
             y = seed_group['Y'][:][::reduced_resolution,::reduced_resolution,np.newaxis]
-            time = list(seed_group['t'][:])
+            time = list(seed_group['t'][:][::reduced_resolution_t])
 
             if('euler' in self.h5_file.filename):
                 # parts = self.data_list[i].split('_')
@@ -879,12 +879,18 @@ class TransformerOperatorDataset2D(Dataset):
 
                 
                 # Take into account that the first self.initial_step samples can't be used as target
-                if(len(self.available_idxs) != 0): #TODO Make this robust to initial step
-                    idxs += self.available_idxs[-1] + 1 if(self.train_style == 'next_step') else \
-                            self.available_idxs[-1] + 1 + self.rollout_length if(self.train_style == 'rollout') else \
-                            self.available_idxs[-1] + 1 + self.interval if(self.train_style == 'interpolate') else \
-	    					self.available_idxs[-1] + 1
-                self.available_idxs.extend(idxs)
+                if len(self.available_idxs) != 0:
+                    last_idx = self.available_idxs[-1][0] if self.time_cont else self.available_idxs[-1]
+                    idxs += last_idx + 1 if(self.train_style == 'next_step') else \
+                            last_idx + 1 + self.rollout_length if(self.train_style == 'rollout') else \
+                            last_idx + 1 + self.interval if(self.train_style == 'interpolate') else \
+                            last_idx + 1
+                if self.time_cont:
+                    for idx in idxs:
+                        for time_shift in range(-(self.interval - 1), self.interval):
+                            self.available_idxs.append((idx, time_shift))
+                else:
+                    self.available_idxs.extend(idxs)
 
         elif(self.train_style == 'fixed_future'): # Only need to keep track of total number of valid samples
             idxs = np.arange(0, self.data.shape[0]*self.data.shape[1])
@@ -942,6 +948,15 @@ class TransformerOperatorDataset2D(Dataset):
                 raise ValueError("Select train, val, or test split. {} is invalid.".format(split))
             self.idx_to_avail_map = {i[0]: i[1] for i in zip(self.idxs, self.available_idxs)}
             self.sample_to_idx_map = {i[0]: i[1] for i in zip(self.idxs, self.available_idxs)}
+
+        if self.time_cont:
+            np.random.shuffle(self.available_idxs)
+            # filter_idx = int(len(self.available_idxs) * 0.08)
+            if(split == "train"):
+                filter_idx = min(len(self.available_idxs), int(500000*(1-val_ratio)))
+            elif(split == "val"):
+                filter_idx = min(len(self.available_idxs), int(500000*(val_ratio)))
+            self.available_idxs = self.available_idxs[:filter_idx]
 
         self.h5_file.close()
         print("DATA SHAPE: {}".format(self.data.shape))
@@ -1075,12 +1090,13 @@ class TransformerOperatorDataset2D(Dataset):
             return self.data_tuples[idx]
             idx = self.idx_to_avail_map[self.idxs[idx]]
 
-        sim_idx = self.available_idxs[idx]
+        if self.time_cont:
+            sim_idx, time_shift = self.available_idxs[idx]
+        else:
+            sim_idx = self.available_idxs[idx]
+            time_shift = 0 
         sim_num = sim_idx // self.data.shape[1] # Get simulation number
         sim_time = sim_idx % self.data.shape[1] # Get time from that simulation
-        time_shift = 0
-        if(self.time_cont):
-            time_shift = random.randrange(-(self.interval-1), (self.interval))
         time_encoding = 0.5+(time_shift/(2*self.interval))
 
         if(self.train_style == "next_step"):
